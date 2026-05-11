@@ -1,19 +1,11 @@
-# AETERNUS OS — Lista de pacotes
+# AETERNUS OS — Lista de pacotes (OTIMIZADA PARA CI)
 # Kernel: linux-hardened | Repos: Arch oficial + BlackArch
-# Nota: AUR-only e ferramentas que precisam de pip/gem
-#       são instalados pós-boot via install-tools.sh
+# Nota: Pacotes pesados (LibreOffice, Ghidra, etc.) serão instalados pós-boot via install-tools.sh
 
 # ── KERNEL HARDENED ──────────────────────────────────
 linux-hardened
 linux-hardened-headers
 linux-firmware
-linux-firmware-bnx2x
-linux-firmware-liquidio
-linux-firmware-marvell
-linux-firmware-mellanox
-linux-firmware-nfp
-linux-firmware-qlogic
-linux-firmware-qcom
 mkinitcpio
 mkinitcpio-archiso
 
@@ -65,7 +57,6 @@ f2fs-tools
 ntfs-3g
 parted
 gptfdisk
-udftools
 
 # ── REDE ─────────────────────────────────────────────
 networkmanager
@@ -85,15 +76,12 @@ net-tools
 bridge-utils
 dnsmasq
 bind
-dnscrypt-proxy
-libnm
 openssh
 openssl
 libpcap
 openbsd-netcat
 socat
 tcpdump
-wireshark-qt
 wireshark-cli
 iw
 wireless_tools
@@ -103,7 +91,6 @@ aircrack-ng
 hcxtools
 hcxdumptool
 kismet
-wavemon
 
 # ── SHELL / TERMINAL ─────────────────────────────────
 zsh
@@ -134,7 +121,6 @@ yq
 
 # ── X.ORG / DISPLAY ──────────────────────────────────
 xorg-server
-xorg-apps
 xorg-xinit
 xorg-xrandr
 xorg-xdpyinfo
@@ -146,7 +132,6 @@ autorandr
 picom
 feh
 imv
-sxiv
 
 # ── WINDOW MANAGER ───────────────────────────────────
 i3-wm
@@ -167,15 +152,11 @@ ttf-fira-code
 ttf-liberation
 noto-fonts
 noto-fonts-emoji
-terminus-font
 
-# ── APPS GUI ─────────────────────────────────────────
+# ── APPS GUI (MINIMALISTAS) ──────────────────────────
 firefox
 thunar
 tumbler
-evince
-libreoffice-fresh
-vlc
 
 # ── SEGURANÇA BASE ────────────────────────────────────
 apparmor
@@ -198,7 +179,6 @@ sleuthkit
 perl-image-exiftool
 testdisk
 ddrescue
-dc3dd
 
 # ── RECONHECIMENTO / SCANNING ────────────────────────
 nmap
@@ -259,13 +239,11 @@ pixiewps
 # ── BLUETOOTH ─────────────────────────────────────────
 bluez
 bluez-utils
-btlejack
 
-# ── ANÁLISE BINÁRIA / REVERSING ───────────────────────
+# ── ANÁLISE BINÁRIA / REVERSING (LEVE) ────────────────
 radare2
 rizin
 gdb
-ghidra
 binwalk
 ltrace
 strace
@@ -303,22 +281,14 @@ cmake
 meson
 ninja
 nasm
-yasm
-ruby
-ruby-bundler
 perl
 nodejs
 npm
-jdk-openjdk
 
 # ── CONTAINERS / CLOUD ────────────────────────────────
 docker
-docker-compose
 podman
 buildah
-skopeo
-kubectl
-helm
 
 # ── ANÁLISE DE TRÁFEGO ────────────────────────────────
 termshark
@@ -342,7 +312,6 @@ python-httpx
 
 # ── BLACKARCH — RECONHECIMENTO ────────────────────────
 theharvester
-maltego
 recon-ng
 dnsrecon
 fierce
@@ -350,7 +319,6 @@ sublist3r
 dnsenum
 dmitry
 whois
-dnstracer
 
 # ── BLACKARCH — ATAQUES DE REDE ───────────────────────
 yersinia
