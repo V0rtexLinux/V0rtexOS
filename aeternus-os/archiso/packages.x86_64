@@ -140,8 +140,6 @@ xorg-xrandr
 xorg-xdpyinfo
 xorg-xev
 xorg-xwininfo
-xorg-xclip
-xorg-xdotool
 xorg-setxkbmap
 arandr
 autorandr
@@ -160,8 +158,6 @@ rofi
 polybar
 dunst
 xss-lock
-xautolock
-xdotool
 wmctrl
 
 # ── FONTES ───────────────────────────────────────────
@@ -190,7 +186,6 @@ chkrootkit
 lynis
 fail2ban
 ufw
-aide
 audit
 clamav
 yara
@@ -218,7 +213,6 @@ enum4linux-ng
 smbmap
 crackmapexec
 responder
-python-impacket
 
 # ── FUZZING / DISCOVERY ──────────────────────────────
 gobuster
@@ -237,7 +231,6 @@ mitmproxy
 bettercap
 ettercap
 sslsplit
-testssl
 
 # ── EXPLORAÇÃO ────────────────────────────────────────
 metasploit
@@ -272,7 +265,6 @@ btlejack
 radare2
 rizin
 gdb
-pwntools
 ghidra
 binwalk
 ltrace
@@ -287,7 +279,6 @@ keystone
 gnupg
 hashid
 steghide
-zsteg
 outguess
 
 # ── DEV / BUILD ───────────────────────────────────────
@@ -336,7 +327,6 @@ p0f
 
 # ── FORENSE DIGITAL ───────────────────────────────────
 volatility3
-bulk_extractor
 scalpel
 
 # ── PYTHON SECURITY LIBS ──────────────────────────────
@@ -365,15 +355,12 @@ dnstracer
 # ── BLACKARCH — ATAQUES DE REDE ───────────────────────
 yersinia
 dsniff
-arping
 hping
 nemesis
 
 # ── BLACKARCH — WEB ───────────────────────────────────
 wafw00f
 sslyze
-jwt_tool
-beef-xss
 
 # ── BLACKARCH — POST-EXPLOITATION ────────────────────
 bloodhound
