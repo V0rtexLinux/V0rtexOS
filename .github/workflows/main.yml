@@ -2,61 +2,123 @@ name: Build AETERNUS OS ISO
 
 on:
   push:
-    branches: [ "main" ]
-  workflow_dispatch: 
+    branches: ["main"]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 180
     container:
       image: archlinux:latest
-      options: --privileged
+      options: --privileged --cap-add=ALL
     env:
       TERM: xterm
+      DEBIAN_FRONTEND: noninteractive
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Install Dependencies
+      - name: Start entropy daemon (haveged)
         run: |
-          pacman -Syu --noconfirm
-          pacman -S --needed --noconfirm archiso git base-devel libisoburn squashfs-tools dosfstools mtools
+          pacman -Sy --noconfirm --needed archlinux-keyring haveged
+          haveged -w 1024 &
+          sleep 5
+          echo "[*] Entropy pool: $(cat /proc/sys/kernel/random/entropy_avail) bits"
 
-      - name: Prepare AETERNUS Build
+      - name: Update system and initialize pacman keyring
+        run: |
+          pacman -Su --noconfirm
+          pacman-key --init
+          pacman-key --populate archlinux
+          echo "[+] Arch keyring inicializado"
+
+      - name: Install build dependencies
+        run: |
+          pacman -S --noconfirm --needed \
+            archiso git curl wget python3 unzip openssl \
+            dosfstools mtools libisoburn squashfs-tools \
+            erofs-utils e2fsprogs libarchive xorriso grub efibootmgr
+
+      - name: Add BlackArch repository to host
+        run: |
+          curl -fsSL https://blackarch.org/strap.sh -o /tmp/blackarch-strap.sh
+          chmod +x /tmp/blackarch-strap.sh
+          bash /tmp/blackarch-strap.sh
+          rm -f /tmp/blackarch-strap.sh
+          pacman -Sy --noconfirm
+          echo "[+] BlackArch repositório adicionado ao host"
+
+      - name: Verify build source files
+        working-directory: ./aeternus-os
+        run: |
+          echo "=== Estrutura de arquivos ===" && find . -type f | sort
+          required_files=(
+            "build.sh" "amnesia.sh" "archiso/profiledef.sh"
+            "archiso/pacman.conf" "archiso/packages.x86_64"
+            "ghost-protocol/ghost-protocol.sh" "ghost-protocol/ghost-protocol.service"
+            "justice/aet-scan.py" "justice/aet-nuke.py"
+            "kernel/hardened.conf" "kernel/hardened-sysctl.conf"
+            "kernel/mkinitcpio-hardened.conf" "tools/install-tools.sh"
+            "tools/payload-gen.sh" "tools/network-attacks.sh"
+            "tools/ad-attack.sh" "tools/wireless-attack.sh"
+            "tools/post-exploit.sh" "tools/privesc-linux.sh"
+            "tools/web-enum.sh" "tools/shell-gen.sh" "tools/tunnel-setup.sh"
+          )
+          missing=0
+          for f in "${required_files[@]}"; do
+            [[ -f "$f" ]] && echo "  [+] $f" || { echo "  [!] FALTANDO: $f"; missing=$((missing+1)); }
+          done
+          [[ $missing -gt 0 ]] && echo "[!] $missing faltando" || echo "[+] Todos presentes"
+
+      - name: Build AETERNUS OS ISO
         working-directory: ./aeternus-os
         run: |
           chmod +x build.sh
-          chmod +x tools/install-tools.sh
-          
-          # FORÇAR CRIAÇÃO DOS DIRETÓRIOS FALTANTES
-          mkdir -p aeternus-profile/airootfs/etc/default/
-          mkdir -p aeternus-profile/airootfs/etc/systemd/system/
-          
-          # Executa o instalador de ferramentas
-          cd tools && ./install-tools.sh && cd ..
-          
-          rm -rf work/
-          
-      - name: Run Build Script
-        working-directory: ./aeternus-os
-        run: |
-          ./build.sh
+          CI=true bash build.sh 2>&1
 
-      - name: Generate Checksum
+      - name: Generate checksums
         working-directory: ./aeternus-os
-        if: always()
+        if: success()
         run: |
-          mkdir -p release
-          cd release/
-          sha256sum *.iso > checksum.txt || echo "Nenhuma ISO gerada"
+          cd release
+          sha256sum *.iso > checksum.sha256
+          md5sum    *.iso > checksum.md5
+          ls -lh *.iso && cat checksum.sha256
 
-      - name: Upload ISO Artifact
+      - name: Show build log on failure
+        if: failure()
+        run: |
+          cat /tmp/aeternus-build.log 2>/dev/null || echo "(log não encontrado)"
+
+      - name: Upload ISO artifact
         uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: Aeternus-OS-ISO
+          name: AETERNUS-OS-${{ github.run_number }}-${{ github.sha }}
           path: |
             aeternus-os/release/*.iso
-            aeternus-os/release/checksum.txt
-          retention-days: 5
+            aeternus-os/release/checksum.sha256
+            aeternus-os/release/checksum.md5
+          retention-days: 7
+          if-no-files-found: warn
+
+      - name: Job summary
+        if: always()
+        working-directory: ./aeternus-os
+        run: |
+          ISO=$(find release/ -name "*.iso" 2>/dev/null | head -1)
+          if [[ -n "$ISO" ]]; then
+            SIZE=$(du -sh "$ISO" | cut -f1)
+            SHA=$(sha256sum "$ISO" | awk '{print $1}')
+            echo "## AETERNUS OS Build Concluído" >> $GITHUB_STEP_SUMMARY
+            echo "| Campo | Valor |" >> $GITHUB_STEP_SUMMARY
+            echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+            echo "| ISO | \`$(basename "$ISO")\` |" >> $GITHUB_STEP_SUMMARY
+            echo "| Tamanho | $SIZE |" >> $GITHUB_STEP_SUMMARY
+            echo "| SHA256 | \`$SHA\` |" >> $GITHUB_STEP_SUMMARY
+            echo "| Run | #${{ github.run_number }} |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## Build FALHOU — nenhuma ISO gerada" >> $GITHUB_STEP_SUMMARY
+          fi
