@@ -147,6 +147,9 @@ populate_airootfs() {
         "$air/opt/cve" \
         "$air/opt/exploits" \
         "$air/opt/scripts" \
+        "$air/etc/default" \
+        "$air/etc/modprobe.d" \
+        "$air/etc/sysctl.d" \
         "$air/etc/systemd/system/multi-user.target.wants" \
         "$air/etc/systemd/system/halt.target.wants" \
         "$air/etc/tor" \
