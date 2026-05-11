@@ -1,0 +1,52 @@
+name: Build AETERNUS OS ISO
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch: 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # O archiso exige privilégios de container para montar sistemas de arquivos
+    container:
+      image: archlinux:latest
+      options: --privileged
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: |
+          pacman -Syu --noconfirm
+          pacman -S --needed --noconfirm archiso git base-devel libisoburn squashfs-tools
+
+      - name: Prepare AETERNUS Build
+        working-directory: ./aeternus-os
+        run: |
+          chmod +x build.sh
+          
+      - name: Run Build Script
+        working-directory: ./aeternus-os
+        run: |
+          # O script deve rodar dentro da pasta onde os arquivos estão
+          ./build.sh
+
+      - name: Generate Checksum
+        working-directory: ./aeternus-os
+        run: |
+          # Garante que a pasta existe e gera o hash
+          mkdir -p release
+          cd release/
+          # O comando abaixo evita erro se a ISO ainda não existir
+          sha256sum *.iso > checksum.txt || echo "ISO não encontrada para checksum"
+
+      - name: Upload ISO Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Aeternus-OS-ISO
+          path: |
+            aeternus-os/release/*.iso
+            aeternus-os/release/checksum.txt
+          retention-days: 5
