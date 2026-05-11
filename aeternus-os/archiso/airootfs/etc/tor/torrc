@@ -1,0 +1,53 @@
+# AETERNUS OS — Tor Configuration
+# /etc/tor/torrc — Configuração para Ghost Protocol (Tor-over-VPN)
+
+# Portas de controle e SOCKS
+SocksPort 9050
+SocksPolicy accept 127.0.0.1
+SocksPolicy reject *
+ControlPort 9051
+HashedControlPassword ""
+
+# TransPort — Redirecionar todo TCP para o Tor
+TransPort 9040 IsolateClientAddr IsolateClientProtocol IsolateDestAddr IsolateDestPort
+TransListenAddress 127.0.0.1
+
+# DNSPort — Resolver DNS via Tor
+DNSPort 5353
+DNSListenAddress 127.0.0.1
+AutomapHostsOnResolve 1
+AutomapHostsSuffixes .exit,.onion
+
+# Log mínimo (privacidade)
+Log notice syslog
+Log warn file /var/log/tor/warnings.log
+
+# Segurança
+DataDirectory /var/lib/tor
+CookieAuthentication 1
+DisableAllSwap 1
+HardwareAccel 1
+AvoidDiskWrites 1
+
+# Circuitos mais rápidos
+MaxCircuitDirtiness 600
+NewCircuitPeriod 30
+CircuitBuildTimeout 10
+LearnCircuitBuildTimeout 0
+
+# Nós de saída — excluir países de vigilância (Five Eyes + parceiros)
+ExcludeExitNodes {us},{gb},{au},{ca},{nz},{de},{fr},{nl},{be},{se},{no},{dk},{fi},{it},{es},{jp},{kr},{sg}
+StrictNodes 1
+
+# Entry guards — priorizar nós em países neutros
+EntryNodes {ch},{is},{ro},{bg},{md},{rs},{cz},{pl}
+StrictNodes 0
+
+# Hidden Service se necessário (comentado por padrão)
+# HiddenServiceDir /var/lib/tor/hidden_service/
+# HiddenServicePort 80 127.0.0.1:8080
+
+# Bridge (descomentar se Tor estiver bloqueado)
+# UseBridges 1
+# Bridge obfs4 <bridge_address>
+# ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy

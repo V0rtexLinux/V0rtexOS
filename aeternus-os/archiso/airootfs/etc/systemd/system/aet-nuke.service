@@ -1,0 +1,21 @@
+[Unit]
+Description=AETERNUS Active Defense Monitor (aet-nuke)
+After=network.target ghost-protocol.service
+Wants=ghost-protocol.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/aet-nuke monitor
+Restart=always
+RestartSec=10s
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=aet-nuke
+
+# Limitar uso de recursos
+CPUQuota=10%
+MemoryMax=256M
+TasksMax=50
+
+[Install]
+WantedBy=multi-user.target

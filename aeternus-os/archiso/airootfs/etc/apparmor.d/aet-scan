@@ -1,0 +1,37 @@
+# AETERNUS OS — AppArmor profile para aet-scan
+#include <tunables/global>
+
+/usr/local/bin/aet-scan {
+  #include <abstractions/base>
+  #include <abstractions/python>
+  #include <abstractions/nameservice>
+
+  capability net_raw,
+  capability net_admin,
+
+  # Permitir execução do nmap
+  /usr/bin/nmap                    Cx -> child_nmap,
+  /usr/bin/python3*                mix,
+
+  # Leitura
+  /etc/nmap/**                     r,
+  /usr/share/nmap/**               r,
+  /proc/net/**                     r,
+
+  # Escrita — apenas em /tmp
+  /tmp/aeternus-scans/**           rw,
+  /tmp/                            rw,
+
+  profile child_nmap /usr/bin/nmap {
+    #include <abstractions/base>
+    capability net_raw,
+    capability net_admin,
+    network raw,
+    network packet,
+    /usr/bin/nmap                  mr,
+    /usr/share/nmap/**             r,
+    /etc/nmap/**                   r,
+    /proc/net/**                   r,
+    /tmp/aeternus-scans/**         rw,
+  }
+}

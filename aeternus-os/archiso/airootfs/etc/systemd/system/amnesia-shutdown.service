@@ -1,0 +1,14 @@
+[Unit]
+Description=AETERNUS Amnesia — RAM wipe before poweroff
+DefaultDependencies=no
+Before=shutdown.target reboot.target halt.target
+Requires=shutdown.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/amnesia --confirm
+TimeoutStartSec=120
+RemainAfterExit=yes
+
+[Install]
+WantedBy=halt.target reboot.target shutdown.target

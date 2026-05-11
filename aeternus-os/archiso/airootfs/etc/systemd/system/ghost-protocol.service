@@ -1,0 +1,21 @@
+[Unit]
+Description=AETERNUS Ghost Protocol — VPN+Tor Kill Switch
+After=network-online.target tor.service
+Wants=network-online.target tor.service
+Requires=tor.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+Environment="TUN_IFACE=tun0"
+ExecStart=/usr/local/bin/ghost-protocol.sh start
+ExecStop=/usr/local/bin/ghost-protocol.sh stop
+ExecReload=/usr/local/bin/ghost-protocol.sh stop && /usr/local/bin/ghost-protocol.sh start
+NoNewPrivileges=no
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_RAW CAP_SYS_ADMIN
+AmbientCapabilities=CAP_NET_ADMIN CAP_NET_RAW
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

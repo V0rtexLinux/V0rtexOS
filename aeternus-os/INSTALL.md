@@ -1,6 +1,59 @@
-# AETERNUS OS — Guia de Implantação
+# AETERNUS OS — Guia de Build e Instalação
 
-## Estrutura de Arquivos
+> Grey Hat Linux — linux-hardened · Ghost Protocol · BlackArch · i3wm
+
+---
+
+## Requisitos para Build
+
+| Item | Mínimo |
+|------|--------|
+| Host | Arch Linux (live ou instalado) |
+| CPU | x86_64, 4+ cores recomendado |
+| RAM | 4GB+ (8GB para build rápido) |
+| Disco | 30GB livres em `/tmp` |
+| Rede | Necessária para baixar pacotes |
+
+### Dependências do host
+
+```bash
+pacman -Sy --needed archiso git curl python3 unzip openssl
+```
+
+---
+
+## Build
+
+```bash
+sudo bash build.sh
+# ISO → ./release/aeternus-os-YYYY.MM.DD-x86_64.iso
+```
+
+---
+
+## Gravar em USB
+
+```bash
+sudo dd if=release/aeternus-os-*.iso of=/dev/sdX bs=4M status=progress && sync
+```
+
+---
+
+## Primeiros Passos
+
+```bash
+sudo install-tools all      # instala 100+ ferramentas via curl
+check-anon                  # verifica anonimização Tor
+sudo aet-scan -p vuln <IP>  # scan de vulnerabilidades
+payload-gen <LHOST> <LPORT> # gera payloads msfvenom
+shell-gen <LHOST> <LPORT>   # cheatsheet de shells reversos
+sudo aet-nuke monitor       # active defense / auto-ban
+safe-off                    # amnésia + desligar
+```
+
+---
+
+## Estrutura Completa
 
 ```
 aeternus-os/
