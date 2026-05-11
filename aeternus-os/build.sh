@@ -138,8 +138,15 @@ populate_airootfs() {
     sec "POPULANDO AIROOTFS"
     local air="$PROFILE_DIR/airootfs"
 
-    # Estrutura de diretórios
-    log "Criando estrutura de diretórios..."
+    # ── 1. Copiar TODA a árvore airootfs de uma vez ───────
+    # Elimina cp individuais que quebram se um arquivo faltar.
+    # cp -rT: copia o CONTEÚDO de archiso/airootfs/ dentro de $air/
+    log "Copiando árvore airootfs completa..."
+    mkdir -p "$air"
+    cp -rT "$SCRIPT_DIR/archiso/airootfs/" "$air/"
+    ok "Airootfs base copiado"
+
+    # ── 2. Diretórios extras não cobertos pelo airootfs ───
     mkdir -p \
         "$air/usr/local/bin" \
         "$air/opt/aeternus" \
@@ -147,83 +154,63 @@ populate_airootfs() {
         "$air/opt/cve" \
         "$air/opt/exploits" \
         "$air/opt/scripts" \
-        "$air/etc/default" \
-        "$air/etc/modprobe.d" \
-        "$air/etc/sysctl.d" \
-        "$air/etc/systemd/system/multi-user.target.wants" \
-        "$air/etc/systemd/system/halt.target.wants" \
-        "$air/etc/tor" \
-        "$air/etc/dnscrypt-proxy" \
-        "$air/etc/apparmor.d" \
-        "$air/etc/profile.d" \
-        "$air/root/.config/i3" \
-        "$air/root/.config/alacritty" \
-        "$air/root/.config/picom" \
-        "$air/root/.config/nvim" \
-        "$air/root/.config/starship" \
         "$air/var/lib/aeternus" \
         "$air/var/log/aeternus"
 
-    # ── Binários principais ───────────────────────
+    # ── 3. Configs extras de config/ ─────────────────────
+    # (arquivos não presentes em archiso/airootfs/)
+    log "Copiando configs extras..."
+    install -Dm644 "$SCRIPT_DIR/config/i3/i3status.conf" \
+        "$air/root/.config/i3/i3status.conf"
+    install -Dm644 "$SCRIPT_DIR/config/i3/picom.conf" \
+        "$air/root/.config/picom/picom.conf"
+    install -Dm644 "$SCRIPT_DIR/config/alacritty/alacritty.toml" \
+        "$air/root/.config/alacritty/alacritty.toml"
+    ok "Configs extras copiados"
+
+    # ── 4. Binários principais ────────────────────────────
+    # install -Dm755 cria diretório pai automaticamente
     log "Instalando binários principais..."
     install -Dm755 "$SCRIPT_DIR/ghost-protocol/ghost-protocol.sh" \
         "$air/usr/local/bin/ghost-protocol.sh"
-    install -Dm755 "$SCRIPT_DIR/justice/aet-scan.py"  "$air/usr/local/bin/aet-scan"
-    install -Dm755 "$SCRIPT_DIR/justice/aet-nuke.py"  "$air/usr/local/bin/aet-nuke"
-    install -Dm755 "$SCRIPT_DIR/amnesia.sh"            "$air/usr/local/bin/amnesia"
-    install -Dm755 "$SCRIPT_DIR/tools/install-tools.sh" "$air/usr/local/bin/install-tools"
-    install -Dm755 "$SCRIPT_DIR/tools/payload-gen.sh"   "$air/usr/local/bin/payload-gen"
-    install -Dm755 "$SCRIPT_DIR/tools/network-attacks.sh" "$air/usr/local/bin/net-attack"
-    install -Dm755 "$SCRIPT_DIR/tools/privesc-linux.sh"  "$air/usr/local/bin/privesc"
-    install -Dm755 "$SCRIPT_DIR/tools/web-enum.sh"       "$air/usr/local/bin/web-enum"
-    install -Dm755 "$SCRIPT_DIR/tools/ad-attack.sh"        "$air/usr/local/bin/ad-attack"
-    install -Dm755 "$SCRIPT_DIR/tools/wireless-attack.sh"  "$air/usr/local/bin/wireless-attack"
-    install -Dm755 "$SCRIPT_DIR/tools/post-exploit.sh"     "$air/usr/local/bin/post-exploit"
-    install -Dm755 "$SCRIPT_DIR/tools/shell-gen.sh"        "$air/usr/local/bin/shell-gen"
-    install -Dm755 "$SCRIPT_DIR/tools/tunnel-setup.sh"     "$air/usr/local/bin/tunnel-setup"
-    install -Dm755 "$SCRIPT_DIR/tools/exploit-db-search.py" "$air/usr/local/bin/exploit-search"
+    install -Dm755 "$SCRIPT_DIR/justice/aet-scan.py"         "$air/usr/local/bin/aet-scan"
+    install -Dm755 "$SCRIPT_DIR/justice/aet-nuke.py"         "$air/usr/local/bin/aet-nuke"
+    install -Dm755 "$SCRIPT_DIR/amnesia.sh"                  "$air/usr/local/bin/amnesia"
+    install -Dm755 "$SCRIPT_DIR/tools/install-tools.sh"      "$air/usr/local/bin/install-tools"
+    install -Dm755 "$SCRIPT_DIR/tools/payload-gen.sh"        "$air/usr/local/bin/payload-gen"
+    install -Dm755 "$SCRIPT_DIR/tools/network-attacks.sh"    "$air/usr/local/bin/net-attack"
+    install -Dm755 "$SCRIPT_DIR/tools/privesc-linux.sh"      "$air/usr/local/bin/privesc"
+    install -Dm755 "$SCRIPT_DIR/tools/web-enum.sh"           "$air/usr/local/bin/web-enum"
+    install -Dm755 "$SCRIPT_DIR/tools/ad-attack.sh"          "$air/usr/local/bin/ad-attack"
+    install -Dm755 "$SCRIPT_DIR/tools/wireless-attack.sh"    "$air/usr/local/bin/wireless-attack"
+    install -Dm755 "$SCRIPT_DIR/tools/post-exploit.sh"       "$air/usr/local/bin/post-exploit"
+    install -Dm755 "$SCRIPT_DIR/tools/shell-gen.sh"          "$air/usr/local/bin/shell-gen"
+    install -Dm755 "$SCRIPT_DIR/tools/tunnel-setup.sh"       "$air/usr/local/bin/tunnel-setup"
+    install -Dm755 "$SCRIPT_DIR/tools/exploit-db-search.py"  "$air/usr/local/bin/exploit-search"
     ok "Binários instalados"
 
-    # ── Serviços systemd ──────────────────────────
+    # ── 5. Serviços systemd ───────────────────────────────
+    # ghost-protocol e amnesia-shutdown vêm de ghost-protocol/
+    # Os outros já foram copiados pelo cp -rT acima
     log "Instalando serviços systemd..."
     install -Dm644 "$SCRIPT_DIR/ghost-protocol/ghost-protocol.service" \
         "$air/etc/systemd/system/ghost-protocol.service"
     install -Dm644 "$SCRIPT_DIR/ghost-protocol/amnesia-shutdown.service" \
         "$air/etc/systemd/system/amnesia-shutdown.service"
-    install -Dm644 "$SCRIPT_DIR/archiso/airootfs/etc/systemd/system/aet-nuke.service" \
-        "$air/etc/systemd/system/aet-nuke.service"
-    install -Dm644 "$SCRIPT_DIR/archiso/airootfs/etc/systemd/system/dnscrypt-proxy.service" \
-        "$air/etc/systemd/system/dnscrypt-proxy.service"
 
-    # Habilitar serviços
+    # Habilitar serviços no multi-user.target
+    mkdir -p \
+        "$air/etc/systemd/system/multi-user.target.wants" \
+        "$air/etc/systemd/system/halt.target.wants"
     for svc in ghost-protocol aet-nuke NetworkManager tor apparmor; do
         ln -sf "/etc/systemd/system/${svc}.service" \
             "$air/etc/systemd/system/multi-user.target.wants/${svc}.service" 2>/dev/null || true
     done
-    for svc in amnesia-shutdown; do
-        ln -sf "/etc/systemd/system/${svc}.service" \
-            "$air/etc/systemd/system/halt.target.wants/${svc}.service" 2>/dev/null || true
-    done
+    ln -sf "/etc/systemd/system/amnesia-shutdown.service" \
+        "$air/etc/systemd/system/halt.target.wants/amnesia-shutdown.service" 2>/dev/null || true
     ok "Serviços configurados"
 
-    # ── Configurações ─────────────────────────────
-    log "Copiando configurações..."
-    cp "$SCRIPT_DIR/archiso/airootfs/etc/tor/torrc" "$air/etc/tor/torrc"
-    cp "$SCRIPT_DIR/archiso/airootfs/etc/dnscrypt-proxy/dnscrypt-proxy.toml" \
-        "$air/etc/dnscrypt-proxy/dnscrypt-proxy.toml"
-    cp "$SCRIPT_DIR/archiso/airootfs/etc/proxychains.conf" "$air/etc/proxychains.conf"
-    cp "$SCRIPT_DIR/archiso/airootfs/etc/profile.d/aeternus.sh" \
-        "$air/etc/profile.d/aeternus.sh"
-    cp "$SCRIPT_DIR/archiso/airootfs/etc/default/grub"  "$air/etc/default/grub"
-    cp "$SCRIPT_DIR/archiso/airootfs/etc/hostname"       "$air/etc/hostname"
-    cp "$SCRIPT_DIR/archiso/airootfs/etc/locale.gen"     "$air/etc/locale.gen"
-    cp "$SCRIPT_DIR/archiso/airootfs/etc/locale.conf"    "$air/etc/locale.conf"
-    cp "$SCRIPT_DIR/archiso/airootfs/etc/vconsole.conf"  "$air/etc/vconsole.conf"
-    cp "$SCRIPT_DIR/archiso/airootfs/etc/apparmor.d/aet-scan" \
-        "$air/etc/apparmor.d/aet-scan" 2>/dev/null || true
-    ok "Configurações copiadas"
-
-    # ── Kernel e sysctl ───────────────────────────
+    # ── 6. Kernel hardening ───────────────────────────────
     log "Configurando hardening de kernel..."
     install -Dm644 "$SCRIPT_DIR/kernel/hardened.conf" \
         "$air/etc/modprobe.d/aeternus-blacklist.conf"
@@ -233,25 +220,9 @@ populate_airootfs() {
         "$air/etc/mkinitcpio.conf"
     ok "Kernel hardening configurado"
 
-    # ── dotfiles do root ──────────────────────────
-    log "Configurando dotfiles..."
-    cp "$SCRIPT_DIR/archiso/airootfs/root/.zshrc"              "$air/root/.zshrc"
-    cp "$SCRIPT_DIR/archiso/airootfs/root/.tmux.conf"          "$air/root/.tmux.conf"
-    cp "$SCRIPT_DIR/archiso/airootfs/root/.config/starship.toml" \
-        "$air/root/.config/starship.toml"
-    cp "$SCRIPT_DIR/archiso/airootfs/root/.config/nvim/init.lua" \
-        "$air/root/.config/nvim/init.lua"
-    cp "$SCRIPT_DIR/archiso/airootfs/root/.config/i3/config"   \
-        "$air/root/.config/i3/config"
-    cp "$SCRIPT_DIR/config/i3/i3status.conf"   "$air/root/.config/i3/i3status.conf"
-    cp "$SCRIPT_DIR/config/i3/picom.conf"       "$air/root/.config/picom/picom.conf"
-    cp "$SCRIPT_DIR/config/alacritty/alacritty.toml" \
-        "$air/root/.config/alacritty/alacritty.toml"
-
-    # Shell padrão para root = zsh
+    # ── 7. Shell padrão root + Banner + MOTD ─────────────
     echo "chsh -s /bin/zsh root" >> "$air/etc/profile.d/aeternus.sh"
 
-    # Banner ASCII
     cat > "$air/etc/aeternus-banner" <<'BANNER'
     ___   _____________________  _   ____  _______
    /   | / ____/_  __/ ____/ \ | | / / / / / ___/
@@ -261,7 +232,6 @@ populate_airootfs() {
                           Grey Hat Linux — Hardened
 BANNER
 
-    # MOTD
     cat > "$air/etc/motd" <<'MOTD'
 ╔══════════════════════════════════════════════════════════╗
 ║  AETERNUS OS — Grey Hat Security Distribution           ║
@@ -276,7 +246,7 @@ BANNER
 ╚══════════════════════════════════════════════════════════╝
 MOTD
 
-    ok "Dotfiles e configs configurados"
+    ok "Dotfiles, banner e MOTD configurados"
 }
 
 # ════════════════════════════════════════════════

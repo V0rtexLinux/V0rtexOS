@@ -1,5 +1,7 @@
-# AETERNUS OS — Lista completa de pacotes
-# Kernel + Base + BlackArch tools
+# AETERNUS OS — Lista de pacotes
+# Kernel: linux-hardened | Repos: Arch oficial + BlackArch
+# Nota: AUR-only e ferramentas que precisam de pip/gem
+#       são instalados pós-boot via install-tools.sh
 
 # ── KERNEL HARDENED ──────────────────────────────────
 linux-hardened
@@ -19,7 +21,6 @@ mkinitcpio-archiso
 base
 base-devel
 archlinux-keyring
-filesystem
 bash
 bzip2
 coreutils
@@ -50,20 +51,17 @@ grub
 efibootmgr
 efitools
 os-prober
-sbsigntools
-refind
+syslinux
 
 # ── CRIPTOGRAFIA / DISCO ─────────────────────────────
 cryptsetup
 lvm2
-dm-crypt
 device-mapper
 dosfstools
 e2fsprogs
 exfatprogs
 btrfs-progs
 f2fs-tools
-nilfs-utils
 ntfs-3g
 parted
 gptfdisk
@@ -83,25 +81,20 @@ proxychains-ng
 iptables-nft
 nftables
 ipset
-iproute2
-iputils
 net-tools
 bridge-utils
 dnsmasq
 bind
-bind-tools
 dnscrypt-proxy
 libnm
 openssh
 openssl
 libpcap
-ncat
+openbsd-netcat
 socat
-netcat
 tcpdump
 wireshark-qt
 wireshark-cli
-termshark
 iw
 wireless_tools
 wpa_supplicant
@@ -110,7 +103,6 @@ aircrack-ng
 hcxtools
 hcxdumptool
 kismet
-horst
 wavemon
 
 # ── SHELL / TERMINAL ─────────────────────────────────
@@ -128,7 +120,6 @@ vim
 nano
 ranger
 nnn
-lf
 bat
 eza
 fd
@@ -186,11 +177,9 @@ terminus-font
 firefox
 thunar
 tumbler
-geeqie
 evince
 libreoffice-fresh
 vlc
-obs-studio
 
 # ── SEGURANÇA BASE ────────────────────────────────────
 apparmor
@@ -202,18 +191,16 @@ lynis
 fail2ban
 ufw
 aide
-auditd
+audit
 clamav
 yara
 
 # ── SECURE DELETE / FORENSE ──────────────────────────
 secure-delete
 wipe
-shred
-srm
 foremost
 sleuthkit
-exiftool
+perl-image-exiftool
 testdisk
 ddrescue
 dc3dd
@@ -227,22 +214,20 @@ arp-scan
 netdiscover
 nbtscan
 onesixtyone
-snmpcheck
-enum4linux
+enum4linux-ng
 smbmap
 crackmapexec
 responder
-impacket
+python-impacket
 
 # ── FUZZING / DISCOVERY ──────────────────────────────
 gobuster
 ffuf
 feroxbuster
 wfuzz
-dirbuster
+dirb
 
 # ── WEB / PROXY ──────────────────────────────────────
-burpsuite
 nikto
 whatweb
 curl
@@ -252,12 +237,11 @@ mitmproxy
 bettercap
 ettercap
 sslsplit
-sslsniff
+testssl
 
 # ── EXPLORAÇÃO ────────────────────────────────────────
 metasploit
 exploitdb
-beef
 sqlmap
 hydra
 medusa
@@ -268,39 +252,26 @@ crowbar
 hashcat
 hashcat-utils
 john
-johnny
 crunch
 cewl
 wordlistctl
-hcxtools
-hcxdumptool
-pyrit
 
 # ── WIRELESS ─────────────────────────────────────────
-aircrack-ng
 airgeddon
 wifite
 reaver
 bully
 pixiewps
-kismet
-iw
-wireless_tools
-wpa_supplicant
 
 # ── BLUETOOTH ─────────────────────────────────────────
 bluez
 bluez-utils
 btlejack
-bettercap
 
 # ── ANÁLISE BINÁRIA / REVERSING ───────────────────────
 radare2
 rizin
-cutter
 gdb
-pwndbg
-peda
 pwntools
 ghidra
 binwalk
@@ -309,52 +280,37 @@ strace
 valgrind
 checksec
 patchelf
-capstone
+python-capstone
 keystone
-
-# ── EXPLORAÇÃO BINÁRIA ────────────────────────────────
-pwntools
-ropper
-ropgadget
-one_gadget
-angr
 
 # ── CRYPTO / ESTEGANOGRAFIA ───────────────────────────
 gnupg
-openssl
 hashid
-hash-identifier
 steghide
-stegsolve
 zsteg
 outguess
-openstego
 
 # ── DEV / BUILD ───────────────────────────────────────
 python
 python-pip
 python-setuptools
 python-wheel
-python-virtualenv
 python-requests
 python-scapy
-python-impacket
 python-cryptography
 python-paramiko
 python-pexpect
-python-docopt
+python-pyjwt
 go
 rust
 cargo
 gcc
-g++
 clang
 llvm
 make
 cmake
 meson
 ninja
-gdb
 nasm
 yasm
 ruby
@@ -367,38 +323,62 @@ jdk-openjdk
 # ── CONTAINERS / CLOUD ────────────────────────────────
 docker
 docker-compose
-kubectl
-helm
 podman
 buildah
 skopeo
+kubectl
+helm
 
 # ── ANÁLISE DE TRÁFEGO ────────────────────────────────
-tcpdump
-wireshark-qt
-tshark
 termshark
-zeek
 suricata
-snort
 p0f
-xplico
-netflow
 
 # ── FORENSE DIGITAL ───────────────────────────────────
-autopsy
-sleuthkit
 volatility3
 bulk_extractor
-guymager
-exiftool
-foremost
 scalpel
-extundelete
 
-# ── COMUNICAÇÃO SEGURA ────────────────────────────────
-signal-desktop
-element-desktop
+# ── PYTHON SECURITY LIBS ──────────────────────────────
+python-dnspython
+python-netaddr
+python-psutil
+python-ldap3
+python-pyotp
+python-bs4
+python-lxml
+python-aiohttp
+python-httpx
+
+# ── BLACKARCH — RECONHECIMENTO ────────────────────────
+theharvester
+maltego
+recon-ng
+dnsrecon
+fierce
+sublist3r
+dnsenum
+dmitry
+whois
+dnstracer
+
+# ── BLACKARCH — ATAQUES DE REDE ───────────────────────
+yersinia
+dsniff
+arping
+hping
+nemesis
+
+# ── BLACKARCH — WEB ───────────────────────────────────
+wafw00f
+sslyze
+jwt_tool
+beef-xss
+
+# ── BLACKARCH — POST-EXPLOITATION ────────────────────
+bloodhound
+evil-winrm
+kerbrute
 
 # ── UTILIDADES ────────────────────────────────────────
 htop
@@ -429,9 +409,6 @@ parallel
 expect
 inotify-tools
 lsof
-strace
-ltrace
-perf
 sysstat
 acpi
 dmidecode
@@ -439,59 +416,5 @@ hwinfo
 lshw
 smartmontools
 stress-ng
-sysbench
-
-# ── PYTHON SECURITY LIBS ──────────────────────────────
-python-dnspython
-python-netaddr
-python-psutil
-python-ldap3
-python-pyotp
-python-jwt
-python-bs4
-python-lxml
-python-aiohttp
-python-httpx
-
-# ── BLACKARCH TOOLS SELECIONADAS ─────────────────────
-# (subset curado — instalar via install-tools.sh para o resto)
-theharvester
-maltego
-recon-ng
-dnsrecon
-fierce
-sublist3r
-dnsenum
-dnstracer
-whois
-dmitry
-
-# Network attacks
-yersinia
-macof
-tcpkill
-arping
-hping
-nemesis
-packetsender
-
-# Web
-whatweb
-wafw00f
-sslyze
-testssl.sh
-jwt-hack
-jwt_tool
-
-# Post
-bloodhound
-neo4j
-crackmapexec
-evil-winrm
-smbmap
-kerbrute
-
-# Misc
-tldr
-cheat
 tealdeer
+tldr
