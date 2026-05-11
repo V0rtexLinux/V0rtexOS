@@ -12,7 +12,7 @@ jobs:
       image: archlinux:latest
       options: --privileged
     env:
-      TERM: xterm  # CORREÇÃO DO ERRO DA IMAGEM
+      TERM: xterm
 
     steps:
       - name: Checkout Code
@@ -26,19 +26,24 @@ jobs:
       - name: Prepare AETERNUS Build
         working-directory: ./aeternus-os
         run: |
+          # Dá permissão aos scripts
           chmod +x build.sh
-          # Limpa resíduos de builds anteriores se existirem
+          chmod +x tools/install-tools.sh
+          
+          # Entra em tools para rodar o instalador e volta
+          cd tools && ./install-tools.sh && cd ..
+          
+          # Limpa resíduos de builds anteriores
           rm -rf work/
           
       - name: Run Build Script
         working-directory: ./aeternus-os
         run: |
-          # Roda o build ignorando avisos de terminal
           ./build.sh
 
       - name: Generate Checksum
         working-directory: ./aeternus-os
-        if: always() # Roda mesmo se o build falhar para vermos o que foi gerado
+        if: always()
         run: |
           mkdir -p release
           cd release/
@@ -53,3 +58,4 @@ jobs:
             aeternus-os/release/*.iso
             aeternus-os/release/checksum.txt
           retention-days: 5
+          
