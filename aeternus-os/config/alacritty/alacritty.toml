@@ -1,0 +1,184 @@
+# AETERNUS OS — Alacritty Terminal Configuration
+# Caminho: ~/.config/alacritty/alacritty.toml
+# Documentação: https://alacritty.org/config-alacritty.html
+
+# ─────────────────────────────────────────────────
+# JANELA
+# ─────────────────────────────────────────────────
+[window]
+dimensions       = { columns = 120, lines = 36 }
+padding          = { x = 8, y = 6 }
+decorations      = "None"           # Sem barra de título
+opacity          = 0.92             # Leve transparência — picom faz o blur
+blur             = true
+startup_mode     = "Windowed"
+title            = "AETERNUS"
+dynamic_title    = true
+class            = { instance = "alacritty", general = "alacritty" }
+
+# ─────────────────────────────────────────────────
+# SCROLLBACK
+# ─────────────────────────────────────────────────
+[scrolling]
+history    = 50000
+multiplier = 5
+
+# ─────────────────────────────────────────────────
+# FONTE — JetBrains Mono Nerd Font
+# ─────────────────────────────────────────────────
+[font]
+size = 12.0
+
+[font.normal]
+family = "JetBrainsMono Nerd Font"
+style  = "Regular"
+
+[font.bold]
+family = "JetBrainsMono Nerd Font"
+style  = "Bold"
+
+[font.italic]
+family = "JetBrainsMono Nerd Font"
+style  = "Italic"
+
+[font.bold_italic]
+family = "JetBrainsMono Nerd Font"
+style  = "Bold Italic"
+
+[font.offset]
+x = 0
+y = 1
+
+[font.glyph_offset]
+x = 0
+y = 0
+
+# ─────────────────────────────────────────────────
+# CORES — Matrix Dark / Cyber Green
+# ─────────────────────────────────────────────────
+[colors]
+draw_bold_text_with_bright_colors = true
+
+[colors.primary]
+background = "#0d0d0d"
+foreground = "#00ff41"
+dim_foreground    = "#4d8c57"
+bright_foreground = "#00ff41"
+
+[colors.cursor]
+text   = "#0d0d0d"
+cursor = "#00ff41"
+
+[colors.vi_mode_cursor]
+text   = "#0d0d0d"
+cursor = "#ffaa00"
+
+[colors.selection]
+text       = "#0d0d0d"
+background = "#00ff41"
+
+[colors.search.matches]
+foreground = "#0d0d0d"
+background = "#00ff41"
+
+[colors.search.focused_match]
+foreground = "#0d0d0d"
+background = "#ffaa00"
+
+[colors.normal]
+black   = "#0d0d0d"
+red     = "#ff0040"
+green   = "#00ff41"
+yellow  = "#ffaa00"
+blue    = "#0066ff"
+magenta = "#cc00ff"
+cyan    = "#00ffff"
+white   = "#c0c0c0"
+
+[colors.bright]
+black   = "#1a1a1a"
+red     = "#ff3366"
+green   = "#39ff14"
+yellow  = "#ffcc00"
+blue    = "#3399ff"
+magenta = "#dd44ff"
+cyan    = "#00ffff"
+white   = "#ffffff"
+
+[colors.dim]
+black   = "#0d0d0d"
+red     = "#880022"
+green   = "#006620"
+yellow  = "#887700"
+blue    = "#003388"
+magenta = "#660088"
+cyan    = "#007788"
+white   = "#6c6c6c"
+
+# ─────────────────────────────────────────────────
+# CURSOR
+# ─────────────────────────────────────────────────
+[cursor]
+style    = { shape = "Block", blinking = "On" }
+vi_mode_style = { shape = "Underline", blinking = "On" }
+blink_interval  = 500
+blink_timeout   = 0    # 0 = nunca para de piscar
+unfocused_hollow = true
+thickness = 0.15
+
+# ─────────────────────────────────────────────────
+# TERMINAL
+# ─────────────────────────────────────────────────
+[terminal]
+osc52 = "CopyPaste"    # Permite copiar via OSC52 (SSH-friendly)
+
+# ─────────────────────────────────────────────────
+# MOUSE
+# ─────────────────────────────────────────────────
+[mouse]
+hide_when_typing = true
+bindings = [
+    { mouse = "Middle", action = "PasteSelection" }
+]
+
+# ─────────────────────────────────────────────────
+# KEYBINDINGS — Otimizados para múltiplos terminais
+# ─────────────────────────────────────────────────
+[keyboard]
+bindings = [
+    # Copiar / Colar
+    { key = "C",         mods = "Control|Shift", action = "Copy" },
+    { key = "V",         mods = "Control|Shift", action = "Paste" },
+    { key = "Insert",    mods = "Shift",          action = "PasteSelection" },
+
+    # Scroll
+    { key = "PageUp",    mods = "Shift",  action = "ScrollPageUp" },
+    { key = "PageDown",  mods = "Shift",  action = "ScrollPageDown" },
+    { key = "Home",      mods = "Shift",  action = "ScrollToTop" },
+    { key = "End",       mods = "Shift",  action = "ScrollToBottom" },
+
+    # Zoom de fonte
+    { key = "Plus",      mods = "Control", action = "IncreaseFontSize" },
+    { key = "Minus",     mods = "Control", action = "DecreaseFontSize" },
+    { key = "Key0",      mods = "Control", action = "ResetFontSize" },
+
+    # Busca
+    { key = "F",         mods = "Control|Shift", action = "SearchForward" },
+    { key = "B",         mods = "Control|Shift", action = "SearchBackward" },
+
+    # Vi Mode (navegação sem mouse)
+    { key = "Space",     mods = "Control|Shift", action = "ToggleViMode" },
+
+    # Novo terminal no mesmo diretório (via i3 exec)
+    { key = "Return",    mods = "Control|Shift",
+      command = { program = "i3-msg", args = ["exec", "alacritty"] } },
+]
+
+# ─────────────────────────────────────────────────
+# PERFORMANCE
+# ─────────────────────────────────────────────────
+[debug]
+render_timer    = false
+persistent_logging = false
+log_level       = "Warn"
+print_events    = false

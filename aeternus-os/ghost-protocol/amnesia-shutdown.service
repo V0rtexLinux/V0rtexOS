@@ -1,0 +1,17 @@
+[Unit]
+Description=AETERNUS Amnesia — Limpeza de memória e logs antes do poweroff
+DefaultDependencies=no
+Before=shutdown.target reboot.target halt.target
+Requires=shutdown.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/amnesia --confirm
+TimeoutStartSec=120
+RemainAfterExit=yes
+
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=halt.target reboot.target shutdown.target

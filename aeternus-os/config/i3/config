@@ -1,0 +1,249 @@
+# AETERNUS OS — i3wm Configuration
+# Foco em produtividade com múltiplas colunas de comando
+# Instale: i3-wm i3status i3lock picom dmenu feh dunst alacritty
+
+# ─────────────────────────────────────────────────
+# VARIÁVEIS
+# ─────────────────────────────────────────────────
+set $mod Mod4
+set $alt Mod1
+
+# Fontes
+font pango:JetBrains Mono Nerd Font 10
+
+# Terminal principal
+set $term alacritty
+
+# Launcher
+set $launcher dmenu_run -nb "#0d0d0d" -nf "#00ff41" -sb "#00ff41" -sf "#0d0d0d" -fn "JetBrains Mono-11"
+
+# Workspaces nomeados (8 terminais + 1 browser + 1 monitor)
+set $ws1  "1:TERM-A"
+set $ws2  "2:TERM-B"
+set $ws3  "3:TERM-C"
+set $ws4  "4:RECON"
+set $ws5  "5:EXPLOIT"
+set $ws6  "6:WEB"
+set $ws7  "7:NETWORK"
+set $ws8  "8:FORENSE"
+set $ws9  "9:MONITOR"
+set $ws10 "10:MISC"
+
+# ─────────────────────────────────────────────────
+# APARÊNCIA — Matrix Dark Theme
+# ─────────────────────────────────────────────────
+# class                 border  backgr  text    indicator child_border
+client.focused          #00ff41 #0d0d0d #00ff41 #00ff41   #00ff41
+client.focused_inactive #1a1a1a #0d0d0d #4d4d4d #1a1a1a   #1a1a1a
+client.unfocused        #1a1a1a #0d0d0d #333333 #1a1a1a   #1a1a1a
+client.urgent           #ff0040 #0d0d0d #ff0040 #ff0040   #ff0040
+client.placeholder      #0d0d0d #0d0d0d #00ff41 #0d0d0d   #0d0d0d
+client.background       #0d0d0d
+
+# Gaps entre janelas (i3-gaps ou i3 >= 4.22)
+gaps inner 8
+gaps outer 4
+smart_gaps on
+smart_borders on
+
+# Borda fina nas janelas
+default_border pixel 2
+default_floating_border pixel 2
+hide_edge_borders smart
+
+# ─────────────────────────────────────────────────
+# COMPORTAMENTO
+# ─────────────────────────────────────────────────
+focus_follows_mouse no
+mouse_warping none
+focus_on_window_activation smart
+workspace_layout default
+popup_during_fullscreen smart
+force_display_urgency_hint 500 ms
+
+# ─────────────────────────────────────────────────
+# KEYBINDINGS — Movimento / Layout
+# ─────────────────────────────────────────────────
+# Foco entre janelas (vim keys)
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# Mover janelas
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# Split horizontal / vertical
+bindsym $mod+b split h
+bindsym $mod+v split v
+
+# Fullscreen
+bindsym $mod+f fullscreen toggle
+
+# Layouts: tabbed / stacking / split
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# Float toggle
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+space        focus mode_toggle
+
+# Pai / filho
+bindsym $mod+a focus parent
+bindsym $mod+d focus child
+
+# ─────────────────────────────────────────────────
+# WORKSPACES
+# ─────────────────────────────────────────────────
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
+
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10
+
+# Navegar entre workspaces adjacentes
+bindsym $mod+Tab         workspace next
+bindsym $mod+Shift+Tab   workspace prev
+
+# ─────────────────────────────────────────────────
+# LAYOUT MULTI-COLUNA DE COMANDO
+# ─────────────────────────────────────────────────
+# Super + T: 2 terminais lado a lado (split horizontal)
+bindsym $mod+t exec --no-startup-id \
+    i3-msg "split h; exec $term; exec $term"
+
+# Super + Y: 3 colunas de terminal (layout padrão para recon)
+bindsym $mod+y exec --no-startup-id bash -c '\
+    i3-msg "split h" && \
+    sleep 0.1 && alacritty & \
+    sleep 0.3 && i3-msg "split v" && \
+    sleep 0.1 && alacritty & \
+    sleep 0.3 && i3-msg "focus left; split v" && \
+    sleep 0.1 && alacritty &'
+
+# Super + U: 4 terminais em grade (2x2)
+bindsym $mod+u exec --no-startup-id bash -c '\
+    i3-msg "split h" && sleep 0.1 && alacritty & \
+    sleep 0.3 && i3-msg "split v" && sleep 0.1 && alacritty & \
+    sleep 0.3 && i3-msg "focus left; split v" && sleep 0.1 && alacritty &'
+
+# ─────────────────────────────────────────────────
+# APLICAÇÕES — Atalhos rápidos
+# ─────────────────────────────────────────────────
+bindsym $mod+Return exec $term
+bindsym $mod+p      exec $launcher
+bindsym $mod+F2     exec firefox
+bindsym $mod+F3     exec thunar
+
+# Screenshot
+bindsym Print exec scrot -q 95 ~/Pictures/screenshot-%Y%m%d-%H%M%S.png
+
+# i3lock com tela preta
+bindsym $mod+Shift+x exec i3lock -c 000000
+
+# ─────────────────────────────────────────────────
+# SISTEMA
+# ─────────────────────────────────────────────────
+bindsym $mod+Shift+q kill
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r restart
+
+# Menu de saída seguro
+set $mode_system (l)ock  (e)xit  (s)uspend  (r)eboot  (p)oweroff+amnesia
+mode "$mode_system" {
+    bindsym l exec --no-startup-id i3lock -c 000000, mode "default"
+    bindsym e exec --no-startup-id i3-msg exit, mode "default"
+    bindsym s exec --no-startup-id systemctl suspend, mode "default"
+    bindsym r exec --no-startup-id systemctl reboot, mode "default"
+    # poweroff com amnésia — apaga RAM e /tmp antes de desligar
+    bindsym p exec --no-startup-id "sudo /usr/local/bin/amnesia && systemctl poweroff", mode "default"
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+Shift+e mode "$mode_system"
+
+# Redimensionar janelas
+mode "resize" {
+    bindsym h resize shrink width  10 px or 10 ppt
+    bindsym j resize grow   height 10 px or 10 ppt
+    bindsym k resize shrink height 10 px or 10 ppt
+    bindsym l resize grow   width  10 px or 10 ppt
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+# ─────────────────────────────────────────────────
+# STATUS BAR
+# ─────────────────────────────────────────────────
+bar {
+    position top
+    status_command i3status --config ~/.config/i3/i3status.conf
+    font pango:JetBrains Mono Nerd Font 10
+    separator_symbol " | "
+    workspace_buttons yes
+    binding_mode_indicator yes
+
+    colors {
+        background #0d0d0d
+        statusline #00ff41
+        separator  #1a1a1a
+
+        # class            border  backgr  text
+        focused_workspace  #00ff41 #0d0d0d #00ff41
+        active_workspace   #1a1a1a #0d0d0d #4d4d4d
+        inactive_workspace #0d0d0d #0d0d0d #333333
+        urgent_workspace   #ff0040 #0d0d0d #ff0040
+        binding_mode       #ffaa00 #0d0d0d #ffaa00
+    }
+}
+
+# ─────────────────────────────────────────────────
+# FLOATING — Janelas que devem flutuar
+# ─────────────────────────────────────────────────
+for_window [class="Yad"]             floating enable
+for_window [class="feh"]             floating enable
+for_window [class="Arandr"]         floating enable
+for_window [title="File Transfer*"] floating enable
+for_window [class="Wireshark" title="^(?!Wireshark).*"] floating enable
+
+# ─────────────────────────────────────────────────
+# ASSIGN — Workspaces para apps
+# ─────────────────────────────────────────────────
+assign [class="firefox"]    $ws6
+assign [class="Wireshark"]  $ws7
+assign [class="Burpsuite"]  $ws5
+assign [class="Ghidra"]     $ws8
+
+# ─────────────────────────────────────────────────
+# AUTOSTART
+# ─────────────────────────────────────────────────
+exec_always --no-startup-id picom --config ~/.config/picom/picom.conf -b
+exec_always --no-startup-id feh --bg-scale ~/.config/i3/wallpaper.png
+exec_always --no-startup-id dunst
+exec --no-startup-id systemctl --user start ghost-protocol.service
+# Iniciar 3 terminais na ws1 ao abrir (layout de recon padrão)
+exec --no-startup-id i3-msg "workspace $ws1; append_layout ~/.config/i3/workspace-recon.json"
+exec --no-startup-id $term
+exec --no-startup-id $term
+exec --no-startup-id $term
