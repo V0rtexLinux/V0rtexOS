@@ -15,6 +15,11 @@ OUT_DIR="$SCRIPT_DIR/release"
 LOG_FILE="/tmp/aeternus-build.log"
 FAST_MODE="${1:-}"
 
+# Detectar CI (GitHub Actions, GitLab CI, etc.)
+CI="${CI:-false}"
+[[ -n "${GITHUB_ACTIONS:-}" ]] && CI="true"
+[[ -n "${GITLAB_CI:-}"      ]] && CI="true"
+
 RED='\033[1;31m' GRN='\033[1;32m' YEL='\033[1;33m' CYN='\033[1;36m'
 BOLD='\033[1m' DIM='\033[2m' RST='\033[0m'
 
@@ -49,10 +54,16 @@ preflight() {
             err "Falha ao instalar: ${missing[*]}"
     }
 
-    # Verificar espaço em disco (mínimo 20GB)
+    # Verificar espaço em disco
+    # Em CI o /tmp pode ter menos que 20GB — apenas avisa, não bloqueia
     local free_gb
-    free_gb=$(df /tmp --output=avail -BG | tail -1 | tr -d 'G ')
-    [[ "$free_gb" -lt 20 ]] && warn "Espaço livre em /tmp: ${free_gb}GB (recomendado 20GB+)"
+    free_gb=$(df /tmp --output=avail -BG 2>/dev/null | tail -1 | tr -d 'G ' || echo "0")
+    local threshold=20
+    [[ "$CI" == "true" ]] && threshold=8
+    if [[ "$free_gb" -lt "$threshold" ]]; then
+        warn "Espaço livre em /tmp: ${free_gb}GB (recomendado ${threshold}GB+)"
+        [[ "$CI" != "true" ]] && err "Espaço insuficiente. Libere espaço em /tmp e tente novamente."
+    fi
     ok "Espaço disponível: ${free_gb}GB"
     ok "Pre-flight OK"
 }
@@ -63,21 +74,30 @@ preflight() {
 setup_keys() {
     sec "CONFIGURANDO CHAVES GPG"
 
-    log "Inicializando pacman-key..."
-    pacman-key --init
-    pacman-key --populate archlinux
+    # Em CI o workflow já inicializou o keyring com haveged.
+    # Fora do CI, inicializa aqui mesmo.
+    if [[ "$CI" != "true" ]]; then
+        log "Inicializando pacman-key..."
+        pacman-key --init
+        pacman-key --populate archlinux
+    else
+        log "CI detectado — keyring já inicializado pelo workflow. Pulando init."
+    fi
 
-    # Chave BlackArch
-    if ! pacman-key --list-keys 4345771566D76038C7FEB43863EC0ADBEA87E4E3 &>/dev/null; then
-        log "Adicionando chave GPG BlackArch..."
+    # Verificar se BlackArch já está configurado no pacman.conf do host
+    if grep -q "\[blackarch\]" /etc/pacman.conf 2>/dev/null; then
+        ok "Repositório BlackArch já presente no host"
+    else
+        log "Adicionando repositório BlackArch ao host..."
         curl -fsSL https://blackarch.org/strap.sh -o /tmp/blackarch-strap.sh
         chmod +x /tmp/blackarch-strap.sh
         bash /tmp/blackarch-strap.sh
         rm -f /tmp/blackarch-strap.sh
-        ok "Chave BlackArch adicionada"
-    else
-        ok "Chave BlackArch já presente"
+        pacman -Sy --noconfirm
+        ok "BlackArch adicionado"
     fi
+
+    ok "Chaves GPG configuradas"
 }
 
 # ════════════════════════════════════════════════
@@ -153,9 +173,12 @@ populate_airootfs() {
     install -Dm755 "$SCRIPT_DIR/tools/network-attacks.sh" "$air/usr/local/bin/net-attack"
     install -Dm755 "$SCRIPT_DIR/tools/privesc-linux.sh"  "$air/usr/local/bin/privesc"
     install -Dm755 "$SCRIPT_DIR/tools/web-enum.sh"       "$air/usr/local/bin/web-enum"
-    install -Dm755 "$SCRIPT_DIR/tools/ad-attack.sh"      "$air/usr/local/bin/ad-attack"
-    install -Dm755 "$SCRIPT_DIR/tools/wireless-attack.sh" "$air/usr/local/bin/wireless-attack"
-    install -Dm755 "$SCRIPT_DIR/tools/post-exploit.sh"   "$air/usr/local/bin/post-exploit"
+    install -Dm755 "$SCRIPT_DIR/tools/ad-attack.sh"        "$air/usr/local/bin/ad-attack"
+    install -Dm755 "$SCRIPT_DIR/tools/wireless-attack.sh"  "$air/usr/local/bin/wireless-attack"
+    install -Dm755 "$SCRIPT_DIR/tools/post-exploit.sh"     "$air/usr/local/bin/post-exploit"
+    install -Dm755 "$SCRIPT_DIR/tools/shell-gen.sh"        "$air/usr/local/bin/shell-gen"
+    install -Dm755 "$SCRIPT_DIR/tools/tunnel-setup.sh"     "$air/usr/local/bin/tunnel-setup"
+    install -Dm755 "$SCRIPT_DIR/tools/exploit-db-search.py" "$air/usr/local/bin/exploit-search"
     ok "Binários instalados"
 
     # ── Serviços systemd ──────────────────────────
@@ -261,7 +284,8 @@ configure_boot() {
 
     local air="$PROFILE_DIR/airootfs"
 
-    # GRUB theme
+    # archiso espera o grub.cfg em $PROFILE_DIR/grub/grub.cfg
+    mkdir -p "$PROFILE_DIR/grub"
     mkdir -p "$air/boot/grub"
     cat > "$PROFILE_DIR/grub/grub.cfg" <<'GRUBCFG'
 set default=0
@@ -386,7 +410,8 @@ post_build() {
 # MAIN
 # ════════════════════════════════════════════════
 main() {
-    clear
+    # clear só em terminal interativo — não em CI
+    [[ "$CI" != "true" ]] && clear
     echo -e "${CYN}${BOLD}"
     cat <<'HEADER'
     ___   _____________________  _   ____  _______
