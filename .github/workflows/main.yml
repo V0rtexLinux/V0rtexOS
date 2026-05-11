@@ -20,13 +20,16 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Clean up disk space
+      - name: Clean up disk space (container is root)
         run: |
-          sudo swapoff -a
-          sudo rm -f /swapfile
-          sudo apt-get clean
-          docker rmi $(docker images -q) 2>/dev/null || true
+          # Remove cache and temp files
+          pacman -Sc --noconfirm || true
+          rm -rf /tmp/* /var/tmp/* || true
+          rm -rf /var/cache/pacman/pkg/* || true
+          
+          # Show disk space
           df -h
+          echo "[+] Disk space cleaned"
 
       - name: Start entropy daemon (haveged)
         run: |
