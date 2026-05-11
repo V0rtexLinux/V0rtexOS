@@ -20,6 +20,14 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Clean up disk space
+        run: |
+          sudo swapoff -a
+          sudo rm -f /swapfile
+          sudo apt-get clean
+          docker rmi $(docker images -q) 2>/dev/null || true
+          df -h
+
       - name: Start entropy daemon (haveged)
         run: |
           pacman -Sy --noconfirm --needed archlinux-keyring haveged
