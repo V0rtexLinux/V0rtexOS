@@ -26,14 +26,16 @@ jobs:
       - name: Prepare AETERNUS Build
         working-directory: ./aeternus-os
         run: |
-          # Dá permissão aos scripts
           chmod +x build.sh
           chmod +x tools/install-tools.sh
           
-          # Entra em tools para rodar o instalador e volta
+          # FORÇAR CRIAÇÃO DOS DIRETÓRIOS FALTANTES
+          mkdir -p aeternus-profile/airootfs/etc/default/
+          mkdir -p aeternus-profile/airootfs/etc/systemd/system/
+          
+          # Executa o instalador de ferramentas
           cd tools && ./install-tools.sh && cd ..
           
-          # Limpa resíduos de builds anteriores
           rm -rf work/
           
       - name: Run Build Script
@@ -58,4 +60,3 @@ jobs:
             aeternus-os/release/*.iso
             aeternus-os/release/checksum.txt
           retention-days: 5
-          
