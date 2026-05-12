@@ -9,91 +9,106 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 180
-    container:
-      image: archlinux:latest
-      options: --privileged --cap-add=ALL
     env:
       TERM: xterm
-      DEBIAN_FRONTEND: noninteractive
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Clean up disk space (container is root)
+      - name: Free disk space (host Ubuntu)
         run: |
-          # Remove cache and temp files
-          pacman -Sc --noconfirm || true
-          rm -rf /tmp/* /var/tmp/* || true
-          rm -rf /var/cache/pacman/pkg/* || true
-          
-          # Show disk space
+          echo "[*] Disco antes da limpeza:"
           df -h
-          echo "[+] Disk space cleaned"
 
-      - name: Start entropy daemon (haveged)
-        run: |
-          pacman -Sy --noconfirm --needed archlinux-keyring haveged
-          haveged -w 1024 &
-          sleep 5
-          echo "[*] Entropy pool: $(cat /proc/sys/kernel/random/entropy_avail) bits"
+          # Remover ferramentas pré-instaladas que não precisamos
+          sudo rm -rf \
+            /usr/share/dotnet \
+            /usr/local/lib/android \
+            /opt/ghc \
+            /opt/hostedtoolcache/CodeQL \
+            /usr/local/share/boost \
+            /usr/share/swift \
+            /usr/local/.ghcup \
+            /usr/lib/jvm \
+            /usr/share/java \
+            /opt/microsoft \
+            /usr/local/graalvm \
+            /usr/share/miniconda \
+            /usr/local/share/chromium \
+            /usr/local/share/powershell \
+            /usr/share/az_9.3.0 \
+            /usr/local/lib/node_modules \
+            /usr/lib/firefox \
+            /usr/share/mysql \
+            /usr/share/php* \
+            /opt/pipx \
+            /usr/local/bin/phpunit \
+            || true
 
-      - name: Update system and initialize pacman keyring
-        run: |
-          pacman -Su --noconfirm
-          pacman-key --init
-          pacman-key --populate archlinux
-          echo "[+] Arch keyring inicializado"
+          sudo apt-get clean -y
+          sudo apt-get autoremove -y
 
-      - name: Install build dependencies
-        run: |
-          pacman -S --noconfirm --needed \
-            archiso git curl wget python3 unzip openssl \
-            dosfstools mtools libisoburn squashfs-tools \
-            erofs-utils e2fsprogs libarchive xorriso grub efibootmgr
+          # Limpar imagens Docker pré-carregadas
+          docker system prune -af --volumes || true
 
-      - name: Add BlackArch repository to host
-        run: |
-          curl -fsSL https://blackarch.org/strap.sh -o /tmp/blackarch-strap.sh
-          chmod +x /tmp/blackarch-strap.sh
-          bash /tmp/blackarch-strap.sh
-          rm -f /tmp/blackarch-strap.sh
-          pacman -Sy --noconfirm
-          echo "[+] BlackArch repositório adicionado ao host"
+          echo "[+] Disco após limpeza:"
+          df -h
 
-      - name: Verify build source files
-        working-directory: ./aeternus-os
-        run: |
-          echo "=== Estrutura de arquivos ===" && find . -type f | sort
-          required_files=(
-            "build.sh" "amnesia.sh" "archiso/profiledef.sh"
-            "archiso/pacman.conf" "archiso/packages.x86_64"
-            "ghost-protocol/ghost-protocol.sh" "ghost-protocol/ghost-protocol.service"
-            "justice/aet-scan.py" "justice/aet-nuke.py"
-            "kernel/hardened.conf" "kernel/hardened-sysctl.conf"
-            "kernel/mkinitcpio-hardened.conf" "tools/install-tools.sh"
-            "tools/payload-gen.sh" "tools/network-attacks.sh"
-            "tools/ad-attack.sh" "tools/wireless-attack.sh"
-            "tools/post-exploit.sh" "tools/privesc-linux.sh"
-            "tools/web-enum.sh" "tools/shell-gen.sh" "tools/tunnel-setup.sh"
-          )
-          missing=0
-          for f in "${required_files[@]}"; do
-            [[ -f "$f" ]] && echo "  [+] $f" || { echo "  [!] FALTANDO: $f"; missing=$((missing+1)); }
-          done
-          [[ $missing -gt 0 ]] && echo "[!] $missing faltando" || echo "[+] Todos presentes"
+      - name: Pull Arch Linux image
+        run: docker pull archlinux:latest
 
-      - name: Build AETERNUS OS ISO
-        working-directory: ./aeternus-os
+      - name: Build AETERNUS OS ISO (Arch container)
         run: |
-          chmod +x build.sh
-          CI=true bash build.sh 2>&1
+          docker run \
+            --privileged \
+            --cap-add=ALL \
+            --rm \
+            -v "${{ github.workspace }}:/build" \
+            -e CI=true \
+            -e TERM=xterm \
+            archlinux:latest \
+            bash -c "
+              set -euo pipefail
+              echo '[*] Espaço disponível no início:'
+              df -h
+
+              # Instalar dependências base
+              pacman -Sy --noconfirm --needed archlinux-keyring haveged
+              haveged -w 1024 &
+              sleep 3
+
+              pacman -Su --noconfirm
+              pacman-key --init
+              pacman-key --populate archlinux
+
+              pacman -S --noconfirm --needed \
+                archiso git curl wget python3 unzip openssl \
+                dosfstools mtools libisoburn squashfs-tools \
+                erofs-utils e2fsprogs libarchive xorriso grub efibootmgr
+
+              # Adicionar BlackArch
+              curl -fsSL https://blackarch.org/strap.sh -o /tmp/blackarch-strap.sh
+              chmod +x /tmp/blackarch-strap.sh
+              bash /tmp/blackarch-strap.sh
+              rm -f /tmp/blackarch-strap.sh
+              pacman -Sy --noconfirm
+
+              echo '[*] Espaço antes do build:'
+              df -h
+
+              cd /build/aeternus-os
+              chmod +x build.sh
+              CI=true bash build.sh 2>&1
+
+              echo '[*] Espaço após build:'
+              df -h
+            "
 
       - name: Generate checksums
-        working-directory: ./aeternus-os
         if: success()
         run: |
-          cd release
+          cd aeternus-os/release
           sha256sum *.iso > checksum.sha256
           md5sum    *.iso > checksum.md5
           ls -lh *.iso && cat checksum.sha256
@@ -101,7 +116,9 @@ jobs:
       - name: Show build log on failure
         if: failure()
         run: |
-          cat /tmp/aeternus-build.log 2>/dev/null || echo "(log não encontrado)"
+          cat /tmp/aeternus-build.log 2>/dev/null || \
+          docker run --rm -v "${{ github.workspace }}:/build" archlinux:latest \
+            cat /tmp/aeternus-build.log 2>/dev/null || echo "(log não encontrado)"
 
       - name: Upload ISO artifact
         uses: actions/upload-artifact@v4
@@ -117,9 +134,8 @@ jobs:
 
       - name: Job summary
         if: always()
-        working-directory: ./aeternus-os
         run: |
-          ISO=$(find release/ -name "*.iso" 2>/dev/null | head -1)
+          ISO=$(find aeternus-os/release/ -name "*.iso" 2>/dev/null | head -1)
           if [[ -n "$ISO" ]]; then
             SIZE=$(du -sh "$ISO" | cut -f1)
             SHA=$(sha256sum "$ISO" | awk '{print $1}')

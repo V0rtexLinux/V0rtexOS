@@ -1,6 +1,7 @@
-# AETERNUS OS — Lista de pacotes (OTIMIZADA PARA CI)
+# AETERNUS OS — Lista de pacotes da ISO (SLIM)
 # Kernel: linux-hardened | Repos: Arch oficial + BlackArch
-# Nota: Pacotes pesados (LibreOffice, Ghidra, etc.) serão instalados pós-boot via install-tools.sh
+# REGRA: pacotes pesados vão para install-tools.sh (pós-boot)
+# Ferramentas de dev/compiladores/frameworks ficam no install-tools
 
 # ── KERNEL HARDENED ──────────────────────────────────
 linux-hardened
@@ -90,7 +91,6 @@ macchanger
 aircrack-ng
 hcxtools
 hcxdumptool
-kismet
 
 # ── SHELL / TERMINAL ─────────────────────────────────
 zsh
@@ -98,7 +98,6 @@ zsh-completions
 zsh-syntax-highlighting
 zsh-autosuggestions
 bash-completion
-fish
 alacritty
 tmux
 screen
@@ -106,7 +105,6 @@ neovim
 vim
 nano
 ranger
-nnn
 bat
 eza
 fd
@@ -114,10 +112,7 @@ ripgrep
 fzf
 starship
 zoxide
-atuin
-direnv
 jq
-yq
 
 # ── X.ORG / DISPLAY ──────────────────────────────────
 xorg-server
@@ -128,10 +123,8 @@ xorg-xev
 xorg-xwininfo
 xorg-setxkbmap
 arandr
-autorandr
 picom
 feh
-imv
 
 # ── WINDOW MANAGER ───────────────────────────────────
 i3-wm
@@ -143,62 +136,52 @@ rofi
 polybar
 dunst
 xss-lock
-wmctrl
 
 # ── FONTES ───────────────────────────────────────────
 ttf-jetbrains-mono-nerd
 ttf-hack-nerd
-ttf-fira-code
 ttf-liberation
 noto-fonts
 noto-fonts-emoji
 
-# ── APPS GUI (MINIMALISTAS) ──────────────────────────
+# ── APPS GUI ─────────────────────────────────────────
 firefox
 thunar
-tumbler
 
 # ── SEGURANÇA BASE ────────────────────────────────────
 apparmor
 firejail
 libseccomp
 rkhunter
-chkrootkit
 lynis
 fail2ban
 ufw
 audit
-clamav
 yara
 
-# ── SECURE DELETE / FORENSE ──────────────────────────
+# ── SECURE DELETE / FORENSE LEVE ──────────────────────
 secure-delete
 wipe
 foremost
 sleuthkit
 perl-image-exiftool
 testdisk
-ddrescue
 
 # ── RECONHECIMENTO / SCANNING ────────────────────────
 nmap
 masscan
 rustscan
-zmap
 arp-scan
 netdiscover
 nbtscan
 onesixtyone
 enum4linux-ng
 smbmap
-crackmapexec
-responder
 
 # ── FUZZING / DISCOVERY ──────────────────────────────
 gobuster
 ffuf
 feroxbuster
-wfuzz
 dirb
 
 # ── WEB / PROXY ──────────────────────────────────────
@@ -208,30 +191,18 @@ curl
 wget
 httpie
 mitmproxy
-bettercap
-ettercap
 sslsplit
 
-# ── EXPLORAÇÃO ────────────────────────────────────────
-metasploit
-exploitdb
+# ── EXPLORAÇÃO (LEVE) ─────────────────────────────────
 sqlmap
 hydra
 medusa
-patator
-crowbar
-
-# ── CRACKING ─────────────────────────────────────────
 hashcat
 hashcat-utils
 john
 crunch
-cewl
-wordlistctl
 
-# ── WIRELESS ─────────────────────────────────────────
-airgeddon
-wifite
+# ── WIRELESS (LEVE) ──────────────────────────────────
 reaver
 bully
 pixiewps
@@ -240,26 +211,21 @@ pixiewps
 bluez
 bluez-utils
 
-# ── ANÁLISE BINÁRIA / REVERSING (LEVE) ────────────────
-radare2
-rizin
+# ── ANÁLISE BINÁRIA LEVE ──────────────────────────────
 gdb
 binwalk
 ltrace
 strace
-valgrind
 checksec
 patchelf
 python-capstone
-keystone
 
 # ── CRYPTO / ESTEGANOGRAFIA ───────────────────────────
 gnupg
 hashid
 steghide
-outguess
 
-# ── DEV / BUILD ───────────────────────────────────────
+# ── DEV ESSENCIAL (LEVE) ──────────────────────────────
 python
 python-pip
 python-setuptools
@@ -270,59 +236,27 @@ python-cryptography
 python-paramiko
 python-pexpect
 python-pyjwt
-go
-rust
-cargo
 gcc
-clang
-llvm
 make
 cmake
-meson
-ninja
 nasm
 perl
-nodejs
-npm
-
-# ── CONTAINERS / CLOUD ────────────────────────────────
-docker
-podman
-buildah
-
-# ── ANÁLISE DE TRÁFEGO ────────────────────────────────
-termshark
-suricata
-p0f
-
-# ── FORENSE DIGITAL ───────────────────────────────────
-volatility3
-scalpel
 
 # ── PYTHON SECURITY LIBS ──────────────────────────────
 python-dnspython
 python-netaddr
 python-psutil
-python-ldap3
-python-pyotp
 python-bs4
 python-lxml
 python-aiohttp
 python-httpx
 
-# ── BLACKARCH — RECONHECIMENTO ────────────────────────
-theharvester
-recon-ng
+# ── BLACKARCH — RECONHECIMENTO (LEVE) ─────────────────
 dnsrecon
 fierce
-sublist3r
-dnsenum
-dmitry
 whois
 
 # ── BLACKARCH — ATAQUES DE REDE ───────────────────────
-yersinia
-dsniff
 hping
 nemesis
 
@@ -330,46 +264,28 @@ nemesis
 wafw00f
 sslyze
 
-# ── BLACKARCH — POST-EXPLOITATION ────────────────────
-bloodhound
-evil-winrm
-kerbrute
-
 # ── UTILIDADES ────────────────────────────────────────
 htop
 btop
-glances
 iotop
 nethogs
-iftop
-bandwhich
 duf
 ncdu
 tree
 rsync
 git
-git-crypt
 git-lfs
 p7zip
 unzip
 zip
 unrar
-lzop
 zstd
 pigz
 pv
-progress
 bc
-parallel
-expect
-inotify-tools
 lsof
 sysstat
-acpi
 dmidecode
-hwinfo
 lshw
 smartmontools
-stress-ng
 tealdeer
-tldr
