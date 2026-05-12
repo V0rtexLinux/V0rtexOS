@@ -283,14 +283,15 @@ menuentry "AETERNUS OS" --class aeternus --class gnu-linux --class gnu --class o
     linux /arch/boot/x86_64/vmlinuz-linux-hardened \
         archisobasedir=arch \
         archisolabel=AETERNUS_OS \
-        quiet loglevel=0 \
+        quiet splash loglevel=0 \
         apparmor=1 security=apparmor \
         page_poison=1 slab_nomerge \
         pti=on vsyscall=none \
         spectre_v2=on spec_store_bypass_disable=on \
         l1tf=full,force mds=full,nosmt \
         mitigations=auto,nosmt \
-        rd.systemd.show_status=auto
+        rd.systemd.show_status=auto \
+        plymouth.enable=1
     initrd /arch/boot/x86_64/initramfs-linux-hardened.img
 }
 

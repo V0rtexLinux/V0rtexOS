@@ -1,0 +1,117 @@
+// ══════════════════════════════════════════════════════
+//  AETERNUS OS — Plymouth Boot Animation
+// ══════════════════════════════════════════════════════
+
+// Background gradient: near-black with subtle blue tint
+Window.SetBackgroundTopColor(0.04, 0.04, 0.07);
+Window.SetBackgroundBottomColor(0.0, 0.0, 0.0);
+
+screen_w = Window.GetWidth();
+screen_h = Window.GetHeight();
+
+// ── Logo ──────────────────────────────────────────────
+logo_img   = Image("logo.png");
+logo_w     = logo_img.GetWidth();
+logo_h     = logo_img.GetHeight();
+
+// Scale logo to 180px max dimension
+max_size = 180;
+if (logo_w >= logo_h) {
+    scale = max_size / logo_w;
+} else {
+    scale = max_size / logo_h;
+}
+logo_img = logo_img.Scale(logo_w * scale, logo_h * scale);
+logo_w   = logo_img.GetWidth();
+logo_h   = logo_img.GetHeight();
+
+logo_sprite = Sprite(logo_img);
+logo_sprite.SetX((screen_w - logo_w) / 2);
+logo_sprite.SetY(screen_h / 2 - logo_h / 2 - 60);
+logo_sprite.SetZ(10);
+logo_sprite.SetOpacity(0);
+
+// ── Title text ────────────────────────────────────────
+title_img    = Image.Text("AETERNUS OS", 1.0, 1.0, 1.0, 1.0);
+title_sprite = Sprite(title_img);
+title_sprite.SetX((screen_w - title_img.GetWidth()) / 2);
+title_sprite.SetY(logo_sprite.GetY() + logo_h + 20);
+title_sprite.SetZ(10);
+title_sprite.SetOpacity(0);
+
+// ── Subtitle ──────────────────────────────────────────
+sub_img    = Image.Text("Grey Hat Linux — Hardened", 0.0, 0.85, 0.4, 1.0);
+sub_sprite = Sprite(sub_img);
+sub_sprite.SetX((screen_w - sub_img.GetWidth()) / 2);
+sub_sprite.SetY(title_sprite.GetY() + title_img.GetHeight() + 8);
+sub_sprite.SetZ(10);
+sub_sprite.SetOpacity(0);
+
+// ── Animated dots (5 pulsing dots as progress indicator) ──
+num_dots  = 5;
+dot_gap   = 18;
+dot_total = num_dots * dot_gap;
+dots      = [];
+
+for (i = 0; i < num_dots; i++) {
+    d_img    = Image.Text("●", 0.0, 0.85, 0.4, 1.0);
+    d_sprite = Sprite(d_img);
+    d_sprite.SetX((screen_w - dot_total) / 2 + i * dot_gap);
+    d_sprite.SetY(sub_sprite.GetY() + sub_img.GetHeight() + 30);
+    d_sprite.SetZ(10);
+    d_sprite.SetOpacity(0.1);
+    dots[i] = d_sprite;
+}
+
+// ── Status message ────────────────────────────────────
+msg_sprite = Sprite();
+msg_sprite.SetZ(10);
+
+// ── Animation state ───────────────────────────────────
+frame = 0;
+
+fun refresh_callback() {
+    frame++;
+
+    // Phase 1: fade everything in over ~1.5 s (90 frames @ 60 fps)
+    if (frame <= 90) {
+        t = frame / 90.0;
+        logo_sprite.SetOpacity(t);
+        title_sprite.SetOpacity(t);
+        sub_sprite.SetOpacity(t * 0.75);
+    } else {
+        // Phase 2: pulse logo + animate dots
+        pulse = 0.85 + 0.15 * Math.Sin((frame - 90) * Math.Pi / 75);
+        logo_sprite.SetOpacity(pulse);
+        title_sprite.SetOpacity(1.0);
+        sub_sprite.SetOpacity(0.75);
+    }
+
+    // Dot wave: each dot offset by 12 frames
+    for (i = 0; i < num_dots; i++) {
+        wave = 0.15 + 0.85 * Math.Abs(Math.Sin((frame + i * 12) * Math.Pi / 40));
+        dots[i].SetOpacity(wave);
+    }
+}
+
+Plymouth.SetRefreshFunction(refresh_callback);
+
+// ── Message callback ──────────────────────────────────
+fun message_callback(text) {
+    if (text != "") {
+        img = Image.Text(text, 0.4, 0.4, 0.4, 1.0);
+        msg_sprite.SetImage(img);
+        msg_sprite.SetX((screen_w - img.GetWidth()) / 2);
+        msg_sprite.SetY(screen_h - 55);
+    }
+}
+
+Plymouth.SetMessageFunction(message_callback);
+
+// ── Quit (transition to desktop) ─────────────────────
+fun quit_callback() {
+    logo_sprite.SetOpacity(1.0);
+    title_sprite.SetOpacity(1.0);
+}
+
+Plymouth.SetQuitFunction(quit_callback);

@@ -45,6 +45,7 @@ efibootmgr
 efitools
 os-prober
 syslinux
+plymouth
 
 # ── CRIPTOGRAFIA / DISCO ─────────────────────────────
 cryptsetup
