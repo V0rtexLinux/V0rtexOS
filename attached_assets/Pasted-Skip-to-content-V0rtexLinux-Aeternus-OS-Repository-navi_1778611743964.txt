@@ -1,0 +1,105 @@
+Skip to content
+V0rtexLinux
+Aeternus-OS
+Repository navigation
+Code
+Issues
+Pull requests
+Agents
+Actions
+Projects
+Security and quality
+Insights
+Settings
+Build AETERNUS OS ISO
+Fixes issues preventing the operating system from booting and building #13
+All jobs
+Run details
+build
+Started 8m 29s ago
+Search logs
+1s
+1s
+2m 0s
+7s
+6m 19s
+==> Using drop-in configuration file: 'archiso.conf'
+==> Starting build: '6.19.14-hardened1-2-hardened'
+  -> Running build hook: [base]
+  -> Running build hook: [udev]
+  -> Running build hook: [microcode]
+  -> Running build hook: [modconf]
+  -> Running build hook: [kms]
+==> WARNING: Possibly missing firmware for module: 'ast'
+  -> Running build hook: [memdisk]
+  -> Running build hook: [archiso]
+  -> Running build hook: [archiso_loop_mnt]
+  -> Running build hook: [archiso_pxe_common]
+==> WARNING: Possibly missing firmware for module: 'qed'
+==> WARNING: Possibly missing firmware for module: 'nfp'
+==> WARNING: Possibly missing firmware for module: 'liquidio'
+==> WARNING: Possibly missing firmware for module: 'bna'
+==> WARNING: Possibly missing firmware for module: 'mlxsw_spectrum'
+==> WARNING: Possibly missing firmware for module: 'softing_cs'
+==> WARNING: Possibly missing firmware for module: 'adf7242'
+==> ERROR: file not found: '/usr/lib/initcpio/ipconfig'
+  -> Running build hook: [archiso_pxe_nbd]
+==> ERROR: binary not found: 'nbd-client'
+  -> Running build hook: [archiso_pxe_http]
+  -> Running build hook: [archiso_pxe_nfs]
+==> ERROR: file not found: '/usr/lib/initcpio/nfsmount'
+  -> Running build hook: [block]
+==> WARNING: Possibly missing firmware for module: 'qla1280'
+==> WARNING: Possibly missing firmware for module: 'aic94xx'
+==> WARNING: Possibly missing firmware for module: 'bfa'
+==> WARNING: Possibly missing firmware for module: 'wd719x'
+==> WARNING: Possibly missing firmware for module: 'qla2xxx'
+==> WARNING: Possibly missing firmware for module: 'xhci_pci_renesas'
+  -> Running build hook: [filesystems]
+  -> Running build hook: [keyboard]
+==> ERROR: module not found: 'aes_x86_64'
+==> ERROR: module not found: 'crypto_simd'
+==> Generating module dependencies
+==> Creating xz-compressed initcpio image: '/boot/initramfs-linux-hardened.img'
+==> WARNING: errors were encountered during the build. The image may not be complete.
+==> Building image from preset: /etc/mkinitcpio.d/linux.preset: 'archiso'
+==> Using configuration file: '/etc/mkinitcpio.conf.d/archiso.conf'
+  -> -k /boot/vmlinuz-linux -c /etc/mkinitcpio.conf.d/archiso.conf -g /boot/initramfs-linux.img
+==> ERROR: Invalid option -k -- '/boot/vmlinuz-linux' must be readable
+error: command failed to execute correctly
+(15/26) Reloading system bus configuration...
+  Skipped: Running in chroot.
+(16/26) Checking for old perl modules...
+(17/26) Updating fontconfig cache...
+(18/26) Updating GIO module cache...
+(19/26) Compiling GSettings XML schema files...
+(20/26) Probing GTK3 input method modules...
+(21/26) Updating icon theme caches...
+(22/26) Updating the info directory file...
+(23/26) Uncommenting HTTPS mirrors in /etc/pacman.d/mirrorlist...
+(24/26) Updating the desktop file MIME type cache...
+(25/26) Updating Vim help tags...
+(26/26) Work around FS#49347 by removing custom pacman hooks that are only required during ISO build...
+[mkarchiso] INFO: Done! Packages installed successfully.
+[mkarchiso] INFO: Creating version files...
+[mkarchiso] INFO: Done!
+[mkarchiso] INFO: Copying /etc/skel/* to user homes...
+[mkarchiso] INFO: Done!
+[mkarchiso] INFO: Creating a list of installed packages on live-enviroment...
+[mkarchiso] INFO: Done!
+[mkarchiso] INFO: Initramfs file does not contain microcode update files. External microcode initramfs images will be copied.
+[mkarchiso] INFO: Preparing kernel and initramfs for the ISO 9660 file system...
+[mkarchiso] INFO: Done!
+[mkarchiso] INFO: Setting up SYSLINUX for BIOS booting...
+[mkarchiso] INFO: Done! SYSLINUX set up for BIOS booting successfully.
+[mkarchiso] INFO: Setting up GRUB for UEFI booting...
+[mkarchiso] INFO: Creating FAT image of size: 22 MiB...
+mkfs.fat 4.2 (2021-01-31)
+[mkarchiso] INFO: Done! GRUB set up for UEFI booting successfully.
+[mkarchiso] INFO: Cleaning up in pacstrap location...
+[mkarchiso] INFO: Done!
+[mkarchiso] INFO: Creating SquashFS image, this may take some time...
+Parallel mksquashfs: Using 4 processors
+Creating 4.0 filesystem on /tmp/aeternus-build-work/iso/arch/x86_64/airootfs.sfs, block size 1048576.
+[/                                                           ]     0/32669   0%
+[=-                                                        ]   4200/143913   2%
