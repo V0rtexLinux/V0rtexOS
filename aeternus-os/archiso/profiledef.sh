@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # AETERNUS OS — ArchISO Profile Definition
 iso_name="aeternus-os"
-iso_label="AETERNUS_OS_$(date +%Y%m)"
+iso_label="AETERNUS_OS"
 iso_publisher="AETERNUS Security"
 iso_application="AETERNUS OS — Grey Hat Linux Hardened"
 iso_version="$(date +%Y.%m.%d)"

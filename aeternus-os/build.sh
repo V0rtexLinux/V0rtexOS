@@ -129,6 +129,11 @@ init_profile() {
     local pkg_count
     pkg_count=$(grep -cE "^[^#[:space:]]" "$PROFILE_DIR/packages.x86_64")
     ok "Lista de pacotes: $pkg_count pacotes"
+
+    # Syslinux (boot BIOS) — sobrescreve o releng padrão com o nosso label
+    mkdir -p "$PROFILE_DIR/syslinux"
+    cp -rT "$SCRIPT_DIR/archiso/syslinux/" "$PROFILE_DIR/syslinux/"
+    ok "Syslinux configurado (archisolabel=AETERNUS_OS)"
 }
 
 # ════════════════════════════════════════════════
