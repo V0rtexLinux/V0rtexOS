@@ -275,15 +275,14 @@ menuentry "V0rtexOS" --class v0rtex --class gnu-linux --class gnu --class os {
     linux /arch/boot/x86_64/vmlinuz-linux-hardened \
         archisobasedir=arch \
         archisolabel=V0RTEX_OS \
-        quiet splash loglevel=0 \
+        quiet loglevel=0 nomodeset plymouth.enable=0 \
         apparmor=1 security=apparmor \
         page_poison=1 slab_nomerge \
         pti=on vsyscall=none \
         spectre_v2=on spec_store_bypass_disable=on \
         l1tf=full,force mds=full,nosmt \
         mitigations=auto,nosmt \
-        rd.systemd.show_status=auto \
-        plymouth.enable=1
+        rd.systemd.show_status=auto
     initrd /arch/boot/x86_64/initramfs-linux-hardened.img
 }
 
