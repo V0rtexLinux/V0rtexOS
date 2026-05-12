@@ -1,31 +1,24 @@
-# AETERNUS OS — Alacritty Terminal Configuration
-# Caminho: ~/.config/alacritty/alacritty.toml
-# Documentação: https://alacritty.org/config-alacritty.html
+# ══════════════════════════════════════════════════════
+#  AETERNUS OS — Alacritty Terminal
+#  Theme: Black / Gray / White | JetBrainsMono Nerd Font
+# ══════════════════════════════════════════════════════
 
-# ─────────────────────────────────────────────────
-# JANELA
-# ─────────────────────────────────────────────────
 [window]
 dimensions       = { columns = 120, lines = 36 }
-padding          = { x = 8, y = 6 }
-decorations      = "None"           # Sem barra de título
-opacity          = 0.92             # Leve transparência — picom faz o blur
+padding          = { x = 10, y = 8 }
+decorations      = "None"
+opacity          = 0.93
 blur             = true
 startup_mode     = "Windowed"
 title            = "AETERNUS"
 dynamic_title    = true
 class            = { instance = "alacritty", general = "alacritty" }
 
-# ─────────────────────────────────────────────────
-# SCROLLBACK
-# ─────────────────────────────────────────────────
 [scrolling]
 history    = 50000
 multiplier = 5
 
-# ─────────────────────────────────────────────────
-# FONTE — JetBrains Mono Nerd Font
-# ─────────────────────────────────────────────────
+# ── Font (monospace stays JetBrains for readability) ──
 [font]
 size = 12.0
 
@@ -49,136 +42,105 @@ style  = "Bold Italic"
 x = 0
 y = 1
 
-[font.glyph_offset]
-x = 0
-y = 0
-
-# ─────────────────────────────────────────────────
-# CORES — Matrix Dark / Cyber Green
-# ─────────────────────────────────────────────────
+# ── Colors: Black / Gray / White ──────────────────────
 [colors]
 draw_bold_text_with_bright_colors = true
 
 [colors.primary]
-background = "#0d0d0d"
-foreground = "#00ff41"
-dim_foreground    = "#4d8c57"
-bright_foreground = "#00ff41"
+background        = "#000000"
+foreground        = "#e0e0e0"
+dim_foreground    = "#888888"
+bright_foreground = "#ffffff"
 
 [colors.cursor]
-text   = "#0d0d0d"
-cursor = "#00ff41"
+text   = "#000000"
+cursor = "#aaaaaa"
 
 [colors.vi_mode_cursor]
-text   = "#0d0d0d"
-cursor = "#ffaa00"
+text   = "#000000"
+cursor = "#ffffff"
 
 [colors.selection]
-text       = "#0d0d0d"
-background = "#00ff41"
+text       = "#000000"
+background = "#888888"
 
 [colors.search.matches]
-foreground = "#0d0d0d"
-background = "#00ff41"
+foreground = "#000000"
+background = "#888888"
 
 [colors.search.focused_match]
-foreground = "#0d0d0d"
-background = "#ffaa00"
+foreground = "#000000"
+background = "#ffffff"
 
 [colors.normal]
-black   = "#0d0d0d"
-red     = "#ff0040"
-green   = "#00ff41"
-yellow  = "#ffaa00"
-blue    = "#0066ff"
-magenta = "#cc00ff"
-cyan    = "#00ffff"
-white   = "#c0c0c0"
+black   = "#000000"
+red     = "#cc2233"
+green   = "#aaaaaa"
+yellow  = "#cccccc"
+blue    = "#888888"
+magenta = "#999999"
+cyan    = "#bbbbbb"
+white   = "#e0e0e0"
 
 [colors.bright]
-black   = "#1a1a1a"
-red     = "#ff3366"
-green   = "#39ff14"
-yellow  = "#ffcc00"
-blue    = "#3399ff"
-magenta = "#dd44ff"
-cyan    = "#00ffff"
+black   = "#333333"
+red     = "#dd3344"
+green   = "#cccccc"
+yellow  = "#ffffff"
+blue    = "#aaaaaa"
+magenta = "#bbbbbb"
+cyan    = "#dddddd"
 white   = "#ffffff"
 
 [colors.dim]
 black   = "#0d0d0d"
-red     = "#880022"
-green   = "#006620"
-yellow  = "#887700"
-blue    = "#003388"
-magenta = "#660088"
-cyan    = "#007788"
-white   = "#6c6c6c"
+red     = "#881122"
+green   = "#555555"
+yellow  = "#777777"
+blue    = "#444444"
+magenta = "#555555"
+cyan    = "#666666"
+white   = "#888888"
 
-# ─────────────────────────────────────────────────
-# CURSOR
-# ─────────────────────────────────────────────────
+# ── Cursor ────────────────────────────────────────────
 [cursor]
-style    = { shape = "Block", blinking = "On" }
-vi_mode_style = { shape = "Underline", blinking = "On" }
-blink_interval  = 500
-blink_timeout   = 0    # 0 = nunca para de piscar
-unfocused_hollow = true
-thickness = 0.15
+style             = { shape = "Block", blinking = "On" }
+vi_mode_style     = { shape = "Underline", blinking = "On" }
+blink_interval    = 500
+blink_timeout     = 0
+unfocused_hollow  = true
+thickness         = 0.15
 
-# ─────────────────────────────────────────────────
-# TERMINAL
-# ─────────────────────────────────────────────────
 [terminal]
-osc52 = "CopyPaste"    # Permite copiar via OSC52 (SSH-friendly)
+osc52 = "CopyPaste"
 
-# ─────────────────────────────────────────────────
-# MOUSE
-# ─────────────────────────────────────────────────
 [mouse]
 hide_when_typing = true
 bindings = [
     { mouse = "Middle", action = "PasteSelection" }
 ]
 
-# ─────────────────────────────────────────────────
-# KEYBINDINGS — Otimizados para múltiplos terminais
-# ─────────────────────────────────────────────────
 [keyboard]
 bindings = [
-    # Copiar / Colar
-    { key = "C",         mods = "Control|Shift", action = "Copy" },
-    { key = "V",         mods = "Control|Shift", action = "Paste" },
-    { key = "Insert",    mods = "Shift",          action = "PasteSelection" },
-
-    # Scroll
-    { key = "PageUp",    mods = "Shift",  action = "ScrollPageUp" },
-    { key = "PageDown",  mods = "Shift",  action = "ScrollPageDown" },
-    { key = "Home",      mods = "Shift",  action = "ScrollToTop" },
-    { key = "End",       mods = "Shift",  action = "ScrollToBottom" },
-
-    # Zoom de fonte
-    { key = "Plus",      mods = "Control", action = "IncreaseFontSize" },
-    { key = "Minus",     mods = "Control", action = "DecreaseFontSize" },
-    { key = "Key0",      mods = "Control", action = "ResetFontSize" },
-
-    # Busca
-    { key = "F",         mods = "Control|Shift", action = "SearchForward" },
-    { key = "B",         mods = "Control|Shift", action = "SearchBackward" },
-
-    # Vi Mode (navegação sem mouse)
-    { key = "Space",     mods = "Control|Shift", action = "ToggleViMode" },
-
-    # Novo terminal no mesmo diretório (via i3 exec)
-    { key = "Return",    mods = "Control|Shift",
+    { key = "C",        mods = "Control|Shift", action = "Copy" },
+    { key = "V",        mods = "Control|Shift", action = "Paste" },
+    { key = "Insert",   mods = "Shift",          action = "PasteSelection" },
+    { key = "PageUp",   mods = "Shift",  action = "ScrollPageUp" },
+    { key = "PageDown", mods = "Shift",  action = "ScrollPageDown" },
+    { key = "Home",     mods = "Shift",  action = "ScrollToTop" },
+    { key = "End",      mods = "Shift",  action = "ScrollToBottom" },
+    { key = "Plus",     mods = "Control", action = "IncreaseFontSize" },
+    { key = "Minus",    mods = "Control", action = "DecreaseFontSize" },
+    { key = "Key0",     mods = "Control", action = "ResetFontSize" },
+    { key = "F",        mods = "Control|Shift", action = "SearchForward" },
+    { key = "B",        mods = "Control|Shift", action = "SearchBackward" },
+    { key = "Space",    mods = "Control|Shift", action = "ToggleViMode" },
+    { key = "Return",   mods = "Control|Shift",
       command = { program = "i3-msg", args = ["exec", "alacritty"] } },
 ]
 
-# ─────────────────────────────────────────────────
-# PERFORMANCE
-# ─────────────────────────────────────────────────
 [debug]
-render_timer    = false
+render_timer       = false
 persistent_logging = false
-log_level       = "Warn"
-print_events    = false
+log_level          = "Warn"
+print_events       = false

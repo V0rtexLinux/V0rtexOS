@@ -32,14 +32,23 @@ export TORSOCKS_CONF="/etc/tor/torsocks.conf"
 export HTTP_PROXY="socks5://127.0.0.1:9050"
 export HTTPS_PROXY="socks5://127.0.0.1:9050"
 
+# ── GTK / UI Theme ────────────────────────────
+export GTK_THEME="Adwaita:dark"
+export GTK2_RC_FILES="$HOME/.gtkrc-2.0"
+export QT_STYLE_OVERRIDE="Adwaita-dark"
+export QT_QPA_PLATFORMTHEME="gtk3"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CACHE_HOME="$HOME/.cache"
+
+# ── Font rendering ────────────────────────────
+export FREETYPE_PROPERTIES="truetype:interpreter-version=40"
+
 # ── Cores ANSI para scripts ────────────────────
 export C_RED='\033[1;31m'
 export C_GREEN='\033[1;32m'
 export C_CYAN='\033[1;36m'
 export C_RESET='\033[0m'
-
-# ── Desativar swap em produção (privacidade) ───
-# swapoff -a 2>/dev/null &
 
 # ── Proteger ptrace por padrão ─────────────────
 [[ -f /proc/sys/kernel/yama/ptrace_scope ]] && \
