@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# AETERNUS OS — Root .zshrc
+# V0rtexOS — Root .zshrc
 
 HISTFILE=""
 HISTSIZE=500
@@ -19,14 +19,14 @@ command -v starship &>/dev/null && eval "$(starship init zsh)"
     source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 [[ -f /usr/share/fzf/key-bindings.zsh ]] && source /usr/share/fzf/key-bindings.zsh
 
-export FZF_DEFAULT_OPTS="--color=bg:#0d0d0d,bg+:#1a1a1a,fg:#00ff41,fg+:#00ff41 --color=hl:#ffaa00,hl+:#ffcc00,prompt:#00ff41,pointer:#ff0040 --border rounded --height 40% --layout reverse"
+export FZF_DEFAULT_OPTS="--color=bg:#000000,bg+:#1a1a1a,fg:#aaaaaa,fg+:#ffffff --color=hl:#ffffff,hl+:#ffffff,prompt:#aaaaaa,pointer:#ffffff --border rounded --height 40% --layout reverse"
 export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --exclude .git"
 export EDITOR=nvim VISUAL=nvim PAGER=less
 
 # PATH
-export PATH="$PATH:/usr/local/bin:/opt/aeternus/bin:$HOME/.local/bin:$HOME/go/bin:/usr/share/exploitdb"
+export PATH="$PATH:/usr/local/bin:/opt/vortex/bin:$HOME/.local/bin:$HOME/go/bin:/usr/share/exploitdb"
 export GOPATH="$HOME/go" GOBIN="$HOME/go/bin"
-export TOOLS=/opt/aeternus EXPLOITS=/opt/exploits CVE=/opt/cve WORDLISTS=/opt/wordlists
+export TOOLS=/opt/vortex EXPLOITS=/opt/exploits CVE=/opt/cve WORDLISTS=/opt/wordlists
 
 # ── Aliases sistema ────────────────────────────
 alias ls='eza --icons --color=always'
@@ -56,20 +56,20 @@ alias vuln-scan='sudo aet-scan -p vuln -s critical,smb,http,ssl,database'
 alias stealth-scan='sudo aet-scan -p stealth'
 alias full-scan='sudo aet-scan -p full'
 alias nuke='sudo aet-nuke monitor'
-alias linpeas='sudo /opt/aeternus/PEASS/linpeas.sh'
+alias linpeas='sudo /opt/vortex/PEASS/linpeas.sh'
 alias les='sudo perl /usr/local/bin/les2.pl'
 
 # ── Impacket shortcuts ─────────────────────────
-alias psexec='python3 /opt/aeternus/impacket/examples/psexec.py'
-alias smbclient-imp='python3 /opt/aeternus/impacket/examples/smbclient.py'
-alias secretsdump='python3 /opt/aeternus/impacket/examples/secretsdump.py'
-alias getuserspns='python3 /opt/aeternus/impacket/examples/GetUserSPNs.py'
-alias getnpusers='python3 /opt/aeternus/impacket/examples/GetNPUsers.py'
-alias ticketer='python3 /opt/aeternus/impacket/examples/ticketer.py'
-alias lookupsid='python3 /opt/aeternus/impacket/examples/lookupsid.py'
-alias ntlmrelayx='python3 /opt/aeternus/impacket/examples/ntlmrelayx.py'
-alias wmiexec='python3 /opt/aeternus/impacket/examples/wmiexec.py'
-alias dcomexec='python3 /opt/aeternus/impacket/examples/dcomexec.py'
+alias psexec='python3 /opt/vortex/impacket/examples/psexec.py'
+alias smbclient-imp='python3 /opt/vortex/impacket/examples/smbclient.py'
+alias secretsdump='python3 /opt/vortex/impacket/examples/secretsdump.py'
+alias getuserspns='python3 /opt/vortex/impacket/examples/GetUserSPNs.py'
+alias getnpusers='python3 /opt/vortex/impacket/examples/GetNPUsers.py'
+alias ticketer='python3 /opt/vortex/impacket/examples/ticketer.py'
+alias lookupsid='python3 /opt/vortex/impacket/examples/lookupsid.py'
+alias ntlmrelayx='python3 /opt/vortex/impacket/examples/ntlmrelayx.py'
+alias wmiexec='python3 /opt/vortex/impacket/examples/wmiexec.py'
+alias dcomexec='python3 /opt/vortex/impacket/examples/dcomexec.py'
 
 # ── Wordlists rápidos ──────────────────────────
 alias wl-web='ls /opt/wordlists/SecLists/Discovery/Web-Content/'
@@ -140,15 +140,14 @@ extract() {
 
 # Banner
 if [[ $- == *i* ]]; then
-    printf "\033[1;32m"
-    cat /etc/aeternus-banner 2>/dev/null || cat <<'B'
-    ___   _____________________  _   ____  _______
-   /   | / ____/_  __/ ____/ \ | | / / / / / ___/
-  / /| |/ __/   / / / __/ /  \| |/ / / / /\__ \
- / ___ / /___  / / / /___/ /|  / /_/ / /___/ __/
-/_/  |_/_____/ /_/ /_____/_/ |_/\____/\____/____/
+    printf "\033[1;37m"
+    cat /etc/v0rtex-banner 2>/dev/null || cat <<'B'
+ __   ___  ____  ____  _______  __    ___  ___ 
+ \ \ / / \| _ \|_  _||   __\ \/ /   / _ \/ __|
+  \ V /| o| v /  | |   | |_  >  <  | |_| \__ \
+   \_/ |___|_|_\ |_|  |____/_/\_\  \___/ |___/
 B
-    printf "\033[2;32m  kernel: %s | tor: %s | ghost: %s\033[0m\n" \
+    printf "\033[2;37m  kernel: %s | tor: %s | ghost: %s\033[0m\n" \
         "$(uname -r)" \
         "$(systemctl is-active tor 2>/dev/null)" \
         "$(systemctl is-active ghost-protocol 2>/dev/null)"

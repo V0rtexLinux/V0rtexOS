@@ -1,5 +1,5 @@
 [Unit]
-Description=AETERNUS Amnesia — RAM wipe before poweroff
+Description=V0RTEX Amnesia — RAM wipe before poweroff
 DefaultDependencies=no
 Before=shutdown.target reboot.target halt.target
 Requires=shutdown.target

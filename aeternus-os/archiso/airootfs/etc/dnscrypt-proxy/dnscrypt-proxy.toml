@@ -1,4 +1,4 @@
-# AETERNUS OS — DNSCrypt-proxy config
+# V0rtexOS — DNSCrypt-proxy config
 # Criptografa DNS sobre Tor via SOCKS5
 
 listen_addresses = ['127.0.0.1:53', '[::1]:53']

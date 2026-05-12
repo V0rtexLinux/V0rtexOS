@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# AETERNUS OS — ArchISO Profile Definition
-iso_name="aeternus-os"
-iso_label="AETERNUS_OS"
-iso_publisher="AETERNUS Security"
-iso_application="AETERNUS OS — Grey Hat Linux Hardened"
+# V0rtexOS — ArchISO Profile Definition
+iso_name="v0rtex-os"
+iso_label="V0RTEX_OS"
+iso_publisher="V0rtex Security"
+iso_application="V0rtexOS — Grey Hat Linux Hardened"
 iso_version="$(date +%Y.%m.%d)"
 install_dir="arch"
 buildmodes=('iso')
@@ -31,6 +31,6 @@ file_permissions=(
     ["/usr/local/bin/aet-nuke"]="0:0:755"
     ["/usr/local/bin/amnesia"]="0:0:755"
     ["/usr/local/bin/install-tools.sh"]="0:0:755"
-    ["/opt/aeternus"]="0:0:755"
+    ["/opt/vortex"]="0:0:755"
     ["/root"]="0:0:700"
 )

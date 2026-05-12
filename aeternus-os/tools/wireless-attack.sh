@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# AETERNUS OS — Wireless Attack Suite
+# V0rtexOS — Wireless Attack Suite
 # Ataques completos a redes Wi-Fi
 # Uso: wireless-attack.sh <modo> [args]
 
@@ -233,7 +233,7 @@ mac_spoof() {
 }
 
 usage() {
-    echo -e "\n${CYN}AETERNUS OS — Wireless Attack Suite${RST}"
+    echo -e "\n${CYN}V0rtexOS — Wireless Attack Suite${RST}"
     echo
     echo "Modos:"
     echo "  monitor-on    [iface]"

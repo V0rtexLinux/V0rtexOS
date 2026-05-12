@@ -1,4 +1,4 @@
-# AETERNUS OS — AppArmor profile para aet-scan
+# V0rtexOS — AppArmor profile para aet-scan
 #include <tunables/global>
 
 /usr/local/bin/aet-scan {
@@ -19,7 +19,7 @@
   /proc/net/**                     r,
 
   # Escrita — apenas em /tmp
-  /tmp/aeternus-scans/**           rw,
+  /tmp/vortex-scans/**           rw,
   /tmp/                            rw,
 
   profile child_nmap /usr/bin/nmap {
@@ -32,6 +32,6 @@
     /usr/share/nmap/**             r,
     /etc/nmap/**                   r,
     /proc/net/**                   r,
-    /tmp/aeternus-scans/**         rw,
+    /tmp/vortex-scans/**         rw,
   }
 }

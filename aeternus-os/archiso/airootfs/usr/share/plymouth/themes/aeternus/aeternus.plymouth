@@ -1,8 +1,0 @@
-[Plymouth Theme]
-Name=Aeternus OS
-Description=Aeternus OS — Grey Hat Linux Boot Theme
-ModuleName=script
-
-[script]
-ImageDir=/usr/share/plymouth/themes/aeternus
-ScriptFile=/usr/share/plymouth/themes/aeternus/aeternus.script

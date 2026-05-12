@@ -1,4 +1,4 @@
-# AETERNUS OS — i3wm Configuration
+# V0rtexOS — i3wm Configuration
 # Foco em produtividade com múltiplas colunas de comando
 # Instale: i3-wm i3status i3lock picom dmenu feh dunst alacritty
 
@@ -9,13 +9,13 @@ set $mod Mod4
 set $alt Mod1
 
 # Fontes
-font pango:JetBrains Mono Nerd Font 10
+font pango:Michroma 10
 
 # Terminal principal
 set $term alacritty
 
 # Launcher
-set $launcher dmenu_run -nb "#0d0d0d" -nf "#00ff41" -sb "#00ff41" -sf "#0d0d0d" -fn "JetBrains Mono-11"
+set $launcher dmenu_run -nb "#000000" -nf "#888888" -sb "#ffffff" -sf "#000000" -fn "Michroma-11"
 
 # Workspaces nomeados (8 terminais + 1 browser + 1 monitor)
 set $ws1  "1:TERM-A"
@@ -30,15 +30,15 @@ set $ws9  "9:MONITOR"
 set $ws10 "10:MISC"
 
 # ─────────────────────────────────────────────────
-# APARÊNCIA — Matrix Dark Theme
+# APARÊNCIA — Monochrome Theme
 # ─────────────────────────────────────────────────
 # class                 border  backgr  text    indicator child_border
-client.focused          #00ff41 #0d0d0d #00ff41 #00ff41   #00ff41
-client.focused_inactive #1a1a1a #0d0d0d #4d4d4d #1a1a1a   #1a1a1a
-client.unfocused        #1a1a1a #0d0d0d #333333 #1a1a1a   #1a1a1a
-client.urgent           #ff0040 #0d0d0d #ff0040 #ff0040   #ff0040
-client.placeholder      #0d0d0d #0d0d0d #00ff41 #0d0d0d   #0d0d0d
-client.background       #0d0d0d
+client.focused          #888888 #000000 #ffffff #888888   #888888
+client.focused_inactive #333333 #000000 #555555 #333333   #333333
+client.unfocused        #1a1a1a #000000 #333333 #1a1a1a   #1a1a1a
+client.urgent           #ffffff #000000 #000000 #ffffff   #ffffff
+client.placeholder      #000000 #000000 #888888 #000000   #000000
+client.background       #000000
 
 # Gaps entre janelas (i3-gaps ou i3 >= 4.22)
 gaps inner 8
@@ -199,22 +199,22 @@ bindsym $mod+r mode "resize"
 bar {
     position top
     status_command i3status --config ~/.config/i3/i3status.conf
-    font pango:JetBrains Mono Nerd Font 10
+    font pango:Zekton 10
     separator_symbol " | "
     workspace_buttons yes
     binding_mode_indicator yes
 
     colors {
-        background #0d0d0d
-        statusline #00ff41
-        separator  #1a1a1a
+        background #000000
+        statusline #aaaaaa
+        separator  #333333
 
         # class            border  backgr  text
-        focused_workspace  #00ff41 #0d0d0d #00ff41
-        active_workspace   #1a1a1a #0d0d0d #4d4d4d
-        inactive_workspace #0d0d0d #0d0d0d #333333
-        urgent_workspace   #ff0040 #0d0d0d #ff0040
-        binding_mode       #ffaa00 #0d0d0d #ffaa00
+        focused_workspace  #ffffff #000000 #000000
+        active_workspace   #888888 #000000 #ffffff
+        inactive_workspace #000000 #000000 #555555
+        urgent_workspace   #ffffff #000000 #000000
+        binding_mode       #aaaaaa #000000 #ffffff
     }
 }
 

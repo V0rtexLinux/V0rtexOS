@@ -1,4 +1,4 @@
-# AETERNUS OS — Lista de pacotes da ISO (SLIM)
+# V0rtexOS — Lista de pacotes da ISO (SLIM)
 # Kernel: linux-hardened | Repos: Arch oficial + BlackArch
 # REGRA: pacotes pesados vão para install-tools.sh (pós-boot)
 # Ferramentas de dev/compiladores/frameworks ficam no install-tools

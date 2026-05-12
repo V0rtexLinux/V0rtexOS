@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# AETERNUS OS — Web Enumeration Pipeline
+# V0rtexOS — Web Enumeration Pipeline
 # Pipeline completo de enumeração web em um comando
 # Uso: web-enum.sh <url> [wordlist]
 
@@ -16,7 +16,7 @@ log() { echo -e "${CYN}[*]${RST} $*"; }
 mkdir -p "$OUT"/{headers,dirs,tech,vulns,params,js}
 
 echo -e "\n${CYN}╔══════════════════════════════════════════════════╗"
-echo    "║  AETERNUS OS — Web Enumeration Pipeline         ║"
+echo    "║  V0rtexOS — Web Enumeration Pipeline         ║"
 echo -e "╚══════════════════════════════════════════════════╝${RST}\n"
 log "Alvo: $URL"
 log "Output: $OUT"
@@ -75,7 +75,7 @@ arjun -u "$URL" \
 # ── 8. JavaScript parsing ─────────────────────────
 log "[8/9] Extraindo endpoints de JS..."
 DOMAIN=$(echo "$URL" | sed 's|https\?://||' | cut -d/ -f1)
-python3 /opt/aeternus/Photon/photon.py \
+python3 /opt/vortex/Photon/photon.py \
     -u "$URL" \
     --level 3 \
     -o "$OUT/js" \

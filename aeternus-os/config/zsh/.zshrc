@@ -1,4 +1,4 @@
-# AETERNUS OS — .zshrc
+# V0rtexOS — .zshrc
 # Caminho: ~/.zshrc
 
 # ─────────────────────────────────────────────────
@@ -37,8 +37,8 @@ setopt INTERACTIVE_COMMENTS
 if command -v starship &>/dev/null; then
     eval "$(starship init zsh)"
 else
-    # Prompt manual: usuário@host em verde, diretório em ciano
-    PROMPT='%F{green}%n@aeternus%f %F{cyan}%~%f %F{red}❯%f %F{yellow}❯%f %F{green}❯%f '
+    # Prompt manual: usuário@host em cinza, diretório em branco
+    PROMPT='%F{white}%n@v0rtex%f %F{white}%~%f %F{gray}❯%f %F{white}❯%f '
 fi
 
 # ─────────────────────────────────────────────────
@@ -57,9 +57,9 @@ fi
 [[ -f /usr/share/fzf/completion.zsh    ]] && source /usr/share/fzf/completion.zsh
 
 export FZF_DEFAULT_OPTS="
-    --color=bg:#0d0d0d,bg+:#1a1a1a,fg:#00ff41,fg+:#00ff41
-    --color=hl:#ffaa00,hl+:#ffcc00,prompt:#00ff41,pointer:#ff0040
-    --color=marker:#00ff41,spinner:#00ff41,header:#cc00ff
+    --color=bg:#000000,bg+:#1a1a1a,fg:#aaaaaa,fg+:#ffffff
+    --color=hl:#ffffff,hl+:#ffffff,prompt:#aaaaaa,pointer:#ffffff
+    --color=marker:#888888,spinner:#aaaaaa,header:#888888
     --border rounded --height 40% --layout reverse --info inline"
 
 export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --exclude .git"
@@ -74,11 +74,11 @@ export PAGER="less"
 export LESS="-R --use-color"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
-# PATH — Adicionar binários de justiça
+# PATH — Adicionar binários do sistema
 export PATH="$PATH:/usr/local/bin"
 
 # Proxychains/Tor
-export AETERNUS_OUTPUT="/tmp/aeternus-scans"
+export VORTEX_OUTPUT="/tmp/vortex-scans"
 export TORSOCKS_CONF="/etc/tor/torsocks.conf"
 
 # Desativar telemetria de ferramentas
@@ -110,7 +110,7 @@ alias vim='nvim'
 alias cls='clear'
 
 # ─────────────────────────────────────────────────
-# ALIASES — Segurança / AETERNUS
+# ALIASES — Segurança / V0rtexOS
 # ─────────────────────────────────────────────────
 
 # Ghost Protocol
@@ -212,15 +212,14 @@ recon-session() {
 # BANNER DE BOAS-VINDAS
 # ─────────────────────────────────────────────────
 if [[ $- == *i* ]]; then
-    echo -e "\033[1;32m"
+    echo -e "\033[1;37m"
     cat <<'BANNER'
-    ___   _____________________  _   ____  _______
-   /   | / ____/_  __/ ____/ \ | | / / / / / ___/
-  / /| |/ __/   / / / __/ /  \| |/ / / / /\__ \ 
- / ___ / /___  / / / /___/ /|  / /_/ / /___/ __/ 
-/_/  |_/_____/ /_/ /_____/_/ |_/\____/\____/____/ 
+ __   ___  ____  ____  _______  __    ___  ___ 
+ \ \ / / \| _ \|_  _||   __\ \/ /   / _ \/ __|
+  \ V /| o| v /  | |   | |_  >  <  | |_| \__ \
+   \_/ |___|_|_\ |_|  |____/_/\_\  \___/ |___/
 BANNER
-    echo -e "\033[2;32m  Ghost Protocol: $(systemctl is-active ghost-protocol.service 2>/dev/null || echo 'inactive')\033[0m"
-    echo -e "\033[2;32m  $(date '+%Y-%m-%d %H:%M:%S') | $(uname -r)\033[0m"
+    echo -e "\033[2;37m  Ghost Protocol: $(systemctl is-active ghost-protocol.service 2>/dev/null || echo 'inactive')\033[0m"
+    echo -e "\033[2;37m  $(date '+%Y-%m-%d %H:%M:%S') | $(uname -r)\033[0m"
     echo -e "\033[0m"
 fi

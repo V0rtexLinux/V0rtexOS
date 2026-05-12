@@ -1,15 +1,15 @@
 GRUB_DEFAULT=0
 GRUB_TIMEOUT=5
 GRUB_TIMEOUT_STYLE=menu
-GRUB_DISTRIBUTOR="AETERNUS OS"
+GRUB_DISTRIBUTOR="V0rtexOS"
 GRUB_CMDLINE_LINUX_DEFAULT="quiet loglevel=0 rd.systemd.show_status=auto rd.udev.log_level=3 apparmor=1 security=apparmor page_poison=1 slab_nomerge pti=on vsyscall=none spectre_v2=on spec_store_bypass_disable=on l1tf=full,force mds=full,nosmt tsx=off tsx_async_abort=full,nosmt kvm.nx_huge_pages=force nosmt=force mitigations=auto,nosmt"
 GRUB_CMDLINE_LINUX=""
 GRUB_PRELOAD_MODULES="part_gpt part_msdos"
 GRUB_TERMINAL_OUTPUT="console"
 GRUB_GFXMODE="1920x1080x32,1280x720x32,auto"
 GRUB_GFXPAYLOAD_LINUX="keep"
-GRUB_COLOR_NORMAL="light-green/black"
-GRUB_COLOR_HIGHLIGHT="black/light-green"
-GRUB_BACKGROUND="/boot/grub/aeternus-bg.png"
+GRUB_COLOR_NORMAL="light-gray/black"
+GRUB_COLOR_HIGHLIGHT="black/white"
+GRUB_BACKGROUND="/boot/grub/v0rtex-bg.png"
 GRUB_DISABLE_RECOVERY=false
 GRUB_ENABLE_CRYPTODISK=y

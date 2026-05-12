@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# AETERNUS OS — Active Directory Attack Toolkit
+# V0rtexOS — Active Directory Attack Toolkit
 # Pipeline de ataques a ambientes Windows/AD
 # Uso: ad-attack.sh <modo> [args]
 
@@ -10,7 +10,7 @@ ok()  { echo -e "${GRN}[+]${RST} $*"; }
 log() { echo -e "${CYN}[*]${RST} $*"; }
 err() { echo -e "${RED}[!]${RST} $*"; }
 
-IMP="/opt/aeternus/impacket/examples"
+IMP="/opt/vortex/impacket/examples"
 LOOT="/tmp/aeternus-loot"
 mkdir -p "$LOOT"
 
@@ -190,7 +190,7 @@ lateral_move() {
 }
 
 usage() {
-    echo -e "\n${CYN}AETERNUS OS — AD Attack Toolkit${RST}"
+    echo -e "\n${CYN}V0rtexOS — AD Attack Toolkit${RST}"
     echo
     echo "Modos:"
     echo "  enum-domain  <domain> <dc_ip> <user> <pass>"

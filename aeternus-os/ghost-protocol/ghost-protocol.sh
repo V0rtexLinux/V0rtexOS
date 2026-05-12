@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# AETERNUS OS — Ghost Protocol
+# V0rtexOS — Ghost Protocol
 # Força todo o tráfego por VPN → Tor com Kill Switch via iptables.
 # Ativado pelo systemd no boot. Sem VPN/Tor ativos = sem conexão (zero leak).
 

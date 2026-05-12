@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# AETERNUS OS — Tunnel & Pivoting Setup
+# V0rtexOS — Tunnel & Pivoting Setup
 # Configura túneis para pivoting em redes internas
 # Uso: tunnel-setup.sh <modo> [args]
 
@@ -126,7 +126,7 @@ icmp_tunnel() {
 }
 
 usage() {
-    echo -e "\n${CYN}AETERNUS OS — Tunnel & Pivoting${RST}"
+    echo -e "\n${CYN}V0rtexOS — Tunnel & Pivoting${RST}"
     echo
     echo "Modos:"
     echo "  ssh-local  <lport> <rhost> <rport> <ssh_host> [user]"

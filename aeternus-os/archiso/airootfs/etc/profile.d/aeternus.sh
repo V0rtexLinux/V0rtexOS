@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
-# AETERNUS OS — Variáveis globais de ambiente
+# V0rtexOS — Variáveis globais de ambiente
 
 # ── Diretórios de ferramentas ──────────────────
-export AETERNUS_HOME="/opt/aeternus"
-export TOOLS="$AETERNUS_HOME"
+export VORTEX_HOME="/opt/vortex"
+export TOOLS="$VORTEX_HOME"
 export EXPLOITS="/opt/exploits"
 export CVE_DIR="/opt/cve"
 export WORDLISTS="/opt/wordlists"
 export SCRIPTS="/opt/scripts"
-export AETERNUS_OUTPUT="/tmp/aeternus-scans"
+export VORTEX_OUTPUT="/tmp/vortex-scans"
 
 # ── Path estendido ─────────────────────────────
-export PATH="$PATH:/usr/local/bin:/opt/aeternus/bin:$HOME/.local/bin:$HOME/go/bin"
+export PATH="$PATH:/usr/local/bin:/opt/vortex/bin:$HOME/.local/bin:$HOME/go/bin"
 
 # ── Python pip usuário ─────────────────────────
 export PYTHONUSERBASE="$HOME/.local"
@@ -46,8 +46,8 @@ export FREETYPE_PROPERTIES="truetype:interpreter-version=40"
 
 # ── Cores ANSI para scripts ────────────────────
 export C_RED='\033[1;31m'
-export C_GREEN='\033[1;32m'
-export C_CYAN='\033[1;36m'
+export C_GRAY='\033[1;37m'
+export C_WHITE='\033[0;37m'
 export C_RESET='\033[0m'
 
 # ── Proteger ptrace por padrão ─────────────────

@@ -1,5 +1,5 @@
 # ══════════════════════════════════════════════════════
-#  AETERNUS OS — Alacritty Terminal
+#  V0rtexOS — Alacritty Terminal
 #  Theme: Black / Gray / White | JetBrainsMono Nerd Font
 # ══════════════════════════════════════════════════════
 
@@ -10,7 +10,7 @@ decorations      = "None"
 opacity          = 0.93
 blur             = true
 startup_mode     = "Windowed"
-title            = "AETERNUS"
+title            = "V0rtexOS"
 dynamic_title    = true
 class            = { instance = "alacritty", general = "alacritty" }
 

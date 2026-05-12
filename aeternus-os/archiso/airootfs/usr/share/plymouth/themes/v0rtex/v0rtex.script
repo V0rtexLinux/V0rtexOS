@@ -1,9 +1,9 @@
 // ══════════════════════════════════════════════════════
-//  AETERNUS OS — Plymouth Boot Animation
+//  V0rtexOS — Plymouth Boot Animation
 // ══════════════════════════════════════════════════════
 
-// Background gradient: near-black with subtle blue tint
-Window.SetBackgroundTopColor(0.04, 0.04, 0.07);
+// Background: pure black
+Window.SetBackgroundTopColor(0.02, 0.02, 0.02);
 Window.SetBackgroundBottomColor(0.0, 0.0, 0.0);
 
 screen_w = Window.GetWidth();
@@ -32,7 +32,7 @@ logo_sprite.SetZ(10);
 logo_sprite.SetOpacity(0);
 
 // ── Title text ────────────────────────────────────────
-title_img    = Image.Text("AETERNUS OS", 1.0, 1.0, 1.0, 1.0);
+title_img    = Image.Text("V0rtexOS", 1.0, 1.0, 1.0, 1.0);
 title_sprite = Sprite(title_img);
 title_sprite.SetX((screen_w - title_img.GetWidth()) / 2);
 title_sprite.SetY(logo_sprite.GetY() + logo_h + 20);
@@ -40,7 +40,7 @@ title_sprite.SetZ(10);
 title_sprite.SetOpacity(0);
 
 // ── Subtitle ──────────────────────────────────────────
-sub_img    = Image.Text("Grey Hat Linux — Hardened", 0.0, 0.85, 0.4, 1.0);
+sub_img    = Image.Text("Grey Hat Linux — Hardened", 0.53, 0.53, 0.53, 1.0);
 sub_sprite = Sprite(sub_img);
 sub_sprite.SetX((screen_w - sub_img.GetWidth()) / 2);
 sub_sprite.SetY(title_sprite.GetY() + title_img.GetHeight() + 8);
@@ -54,7 +54,7 @@ dot_total = num_dots * dot_gap;
 dots      = [];
 
 for (i = 0; i < num_dots; i++) {
-    d_img    = Image.Text("●", 0.0, 0.85, 0.4, 1.0);
+    d_img    = Image.Text("●", 0.53, 0.53, 0.53, 1.0);
     d_sprite = Sprite(d_img);
     d_sprite.SetX((screen_w - dot_total) / 2 + i * dot_gap);
     d_sprite.SetY(sub_sprite.GetY() + sub_img.GetHeight() + 30);

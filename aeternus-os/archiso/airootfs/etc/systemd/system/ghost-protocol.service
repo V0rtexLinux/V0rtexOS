@@ -1,5 +1,5 @@
 [Unit]
-Description=AETERNUS Ghost Protocol — VPN+Tor Kill Switch
+Description=V0RTEX Ghost Protocol — VPN+Tor Kill Switch
 After=network-online.target tor.service
 Wants=network-online.target tor.service
 Requires=tor.service

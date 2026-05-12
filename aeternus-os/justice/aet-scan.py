@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-AETERNUS OS — aet-scan
+V0rtexOS — aet-scan
 Automatiza o nmap com scripts NSE de detecção de vulnerabilidades críticas.
 Uso: aet-scan [opções] <alvo>
 """
@@ -22,7 +22,7 @@ from typing import Optional
 # ─────────────────────────────────────────────────
 VERSION = "1.0.0"
 NMAP_BIN = shutil.which("nmap") or "/usr/bin/nmap"
-OUTPUT_DIR = Path(os.environ.get("AETERNUS_OUTPUT", "/tmp/aeternus-scans"))
+OUTPUT_DIR = Path(os.environ.get("VORTEX_OUTPUT", "/tmp/vortex-scans"))
 
 # Perfis de scan pré-definidos
 SCAN_PROFILES = {
@@ -309,7 +309,7 @@ def parse_xml_results(xml_path: Path) -> dict:
 def print_summary(results: dict, output_base: Path) -> None:
     print()
     cprint("cyan", "═" * 60, "")
-    cprint("cyan", "  AETERNUS SCAN — RELATÓRIO FINAL", "")
+    cprint("cyan", "  V0RTEX SCAN — RELATÓRIO FINAL", "")
     cprint("cyan", "═" * 60, "")
 
     for host in results["hosts"]:
@@ -382,7 +382,7 @@ def run_scan(args: argparse.Namespace) -> int:
     )
 
     cprint("cyan", "═" * 60, "")
-    cprint("cyan", "  AETERNUS OS — aet-scan", "")
+    cprint("cyan", "  V0rtexOS — aet-scan", "")
     cprint("cyan", f"  Alvo   : {args.target}", "")
     cprint("cyan", f"  Perfil : {args.profile} — {SCAN_PROFILES[args.profile]['desc']}", "")
     if cats:
@@ -416,7 +416,7 @@ def run_scan(args: argparse.Namespace) -> int:
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="aet-scan",
-        description=f"AETERNUS OS — Scanner de Vulnerabilidades v{VERSION}",
+        description=f"V0rtexOS — Scanner de Vulnerabilidades v{VERSION}",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Exemplos:

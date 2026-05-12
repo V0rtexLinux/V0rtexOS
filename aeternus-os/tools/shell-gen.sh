@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# AETERNUS OS — Shell Generator / Cheatsheet
+# V0rtexOS — Shell Generator / Cheatsheet
 # Gera one-liners de shell reverso para qualquer plataforma
 # Uso: shell-gen.sh <LHOST> <LPORT> [tipo]
 
@@ -10,7 +10,7 @@ sec() { echo -e "\n${CYN}── $* ───────────────
 
 header() {
     echo -e "\n${CYN}╔══════════════════════════════════════════════════╗"
-    echo    "║  AETERNUS OS — Reverse Shell Generator          ║"
+    echo    "║  V0rtexOS — Reverse Shell Generator          ║"
     printf  "║  LHOST: %-15s | LPORT: %-14s║\n" "$LHOST" "$LPORT"
     echo -e "╚══════════════════════════════════════════════════╝${RST}\n"
 }

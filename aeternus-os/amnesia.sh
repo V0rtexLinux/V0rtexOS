@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# AETERNUS OS — Script de Amnésia
+# V0rtexOS — Script de Amnésia
 # Limpa RAM, /tmp, /var/log e artefatos sensíveis antes do poweroff.
 # Uso: sudo /usr/local/bin/amnesia [--confirm]
 #
@@ -56,7 +56,7 @@ check_tools() {
 confirm() {
     if [[ "${1:-}" != "--confirm" && "${1:-}" != "--force" ]]; then
         echo -e "\n${RED}╔══════════════════════════════════════════╗"
-        echo -e "║  AETERNUS OS — PROTOCOLO DE AMNÉSIA     ║"
+        echo -e "║  V0rtexOS — PROTOCOLO DE AMNÉSIA     ║"
         echo -e "║  Esta operação é IRREVERSÍVEL            ║"
         echo -e "╚══════════════════════════════════════════╝${RST}\n"
         echo -e "Será apagado:"
@@ -320,7 +320,7 @@ clean_credentials() {
 print_report() {
     echo
     echo -e "${CYN}═══════════════════════════════════════════${RST}"
-    echo -e "${CYN}  AETERNUS — AMNÉSIA CONCLUÍDA${RST}"
+    echo -e "${CYN}  V0RTEX — AMNÉSIA CONCLUÍDA${RST}"
     echo -e "${CYN}  $(date '+%Y-%m-%d %H:%M:%S')${RST}"
     echo -e "${CYN}═══════════════════════════════════════════${RST}"
     echo -e "  ${GRN}✓ RAM limpa${RST}"

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-AETERNUS OS — aet-nuke
+V0rtexOS — aet-nuke
 Defesa ativa automatizada com bibliotecas de rede assíncronas.
 Monitora, detecta e responde a atividades hostis em tempo real.
 
@@ -39,8 +39,8 @@ from typing import Optional
 # ─────────────────────────────────────────────────
 VERSION = "1.0.0"
 
-LOG_DIR = Path("/var/log/aeternus")
-BAN_FILE = Path("/var/lib/aeternus/banned_ips.json")
+LOG_DIR = Path("/var/log/vortex")
+BAN_FILE = Path("/var/lib/vortex/banned_ips.json")
 WHITELIST_FILE = Path("/etc/aeternus/whitelist.conf")
 
 # Limiares de detecção
@@ -512,7 +512,7 @@ async def run_monitor(args: argparse.Namespace) -> None:
     _load_whitelist()
 
     cprint("cyan", "═" * 50)
-    cprint("cyan", "  AETERNUS OS — aet-nuke  v" + VERSION)
+    cprint("cyan", "  V0rtexOS — aet-nuke  v" + VERSION)
     cprint("cyan", "  Defesa Ativa Assíncrona")
     cprint("cyan", "═" * 50)
 
@@ -556,7 +556,7 @@ async def run_monitor(args: argparse.Namespace) -> None:
 def main() -> int:
     p = argparse.ArgumentParser(
         prog="aet-nuke",
-        description=f"AETERNUS OS — Defesa Ativa v{VERSION}",
+        description=f"V0rtexOS — Defesa Ativa v{VERSION}",
     )
     sub = p.add_subparsers(dest="cmd")
 

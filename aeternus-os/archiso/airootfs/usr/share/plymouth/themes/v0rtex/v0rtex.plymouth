@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=V0rtexOS
+Description=V0rtexOS — Grey Hat Linux Boot Theme
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/v0rtex
+ScriptFile=/usr/share/plymouth/themes/v0rtex/v0rtex.script

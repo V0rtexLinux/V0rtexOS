@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# AETERNUS OS — Master Build Script
+# V0rtexOS — Master Build Script
 # Gera a ISO completa baseada em Arch Linux com linux-hardened + BlackArch
 # Uso: sudo bash build.sh [--fast|--full]
 #
@@ -7,12 +7,12 @@
 
 set -euo pipefail
 
-AETERNUS_VERSION="2.0.$(date +%Y%m%d)"
+VORTEX_VERSION="2.0.$(date +%Y%m%d)"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROFILE_DIR="$SCRIPT_DIR/aeternus-profile"
-WORK_DIR="/tmp/aeternus-build-work"
+PROFILE_DIR="$SCRIPT_DIR/v0rtex-profile"
+WORK_DIR="/tmp/v0rtex-build-work"
 OUT_DIR="$SCRIPT_DIR/release"
-LOG_FILE="/tmp/aeternus-build.log"
+LOG_FILE="/tmp/v0rtex-build.log"
 FAST_MODE="${1:-}"
 
 # Detectar CI (GitHub Actions, GitLab CI, etc.)
@@ -20,19 +20,19 @@ CI="${CI:-false}"
 [[ -n "${GITHUB_ACTIONS:-}" ]] && CI="true"
 [[ -n "${GITLAB_CI:-}"      ]] && CI="true"
 
-RED='\033[1;31m' GRN='\033[1;32m' YEL='\033[1;33m' CYN='\033[1;36m'
-BOLD='\033[1m' DIM='\033[2m' RST='\033[0m'
+RED='\033[1;31m' GRY='\033[1;37m' WHT='\033[0;37m' DIM='\033[2;37m'
+BOLD='\033[1m' RST='\033[0m'
 
 ts()   { date '+%H:%M:%S'; }
-log()  { echo -e "${DIM}[$(ts)]${RST} ${CYN}[BUILD]${RST} $*" | tee -a "$LOG_FILE"; }
-ok()   { echo -e "${DIM}[$(ts)]${RST} ${GRN}[ OK  ]${RST} $*" | tee -a "$LOG_FILE"; }
-warn() { echo -e "${DIM}[$(ts)]${RST} ${YEL}[WARN ]${RST} $*" | tee -a "$LOG_FILE"; }
+log()  { echo -e "${DIM}[$(ts)]${RST} ${GRY}[BUILD]${RST} $*" | tee -a "$LOG_FILE"; }
+ok()   { echo -e "${DIM}[$(ts)]${RST} ${WHT}[ OK  ]${RST} $*" | tee -a "$LOG_FILE"; }
+warn() { echo -e "${DIM}[$(ts)]${RST} ${GRY}[WARN ]${RST} $*" | tee -a "$LOG_FILE"; }
 err()  { echo -e "${DIM}[$(ts)]${RST} ${RED}[FAIL ]${RST} $*" | tee -a "$LOG_FILE"; exit 1; }
 sec()  {
     echo | tee -a "$LOG_FILE"
-    echo -e "${CYN}${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RST}" | tee -a "$LOG_FILE"
-    echo -e "${CYN}${BOLD}  $*${RST}" | tee -a "$LOG_FILE"
-    echo -e "${CYN}${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RST}" | tee -a "$LOG_FILE"
+    echo -e "${GRY}${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RST}" | tee -a "$LOG_FILE"
+    echo -e "${GRY}${BOLD}  $*${RST}" | tee -a "$LOG_FILE"
+    echo -e "${GRY}${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RST}" | tee -a "$LOG_FILE"
 }
 
 # ════════════════════════════════════════════════
@@ -133,7 +133,7 @@ init_profile() {
     # Syslinux (boot BIOS) — sobrescreve o releng padrão com o nosso label
     mkdir -p "$PROFILE_DIR/syslinux"
     cp -rT "$SCRIPT_DIR/archiso/syslinux/" "$PROFILE_DIR/syslinux/"
-    ok "Syslinux configurado (archisolabel=AETERNUS_OS)"
+    ok "Syslinux configurado (archisolabel=V0RTEX_OS)"
 }
 
 # ════════════════════════════════════════════════
@@ -144,8 +144,6 @@ populate_airootfs() {
     local air="$PROFILE_DIR/airootfs"
 
     # ── 1. Copiar TODA a árvore airootfs de uma vez ───────
-    # Elimina cp individuais que quebram se um arquivo faltar.
-    # cp -rT: copia o CONTEÚDO de archiso/airootfs/ dentro de $air/
     log "Copiando árvore airootfs completa..."
     mkdir -p "$air"
     cp -rT "$SCRIPT_DIR/archiso/airootfs/" "$air/"
@@ -154,16 +152,15 @@ populate_airootfs() {
     # ── 2. Diretórios extras não cobertos pelo airootfs ───
     mkdir -p \
         "$air/usr/local/bin" \
-        "$air/opt/aeternus" \
+        "$air/opt/vortex" \
         "$air/opt/wordlists" \
         "$air/opt/cve" \
         "$air/opt/exploits" \
         "$air/opt/scripts" \
-        "$air/var/lib/aeternus" \
-        "$air/var/log/aeternus"
+        "$air/var/lib/vortex" \
+        "$air/var/log/vortex"
 
     # ── 3. Configs extras de config/ ─────────────────────
-    # (arquivos não presentes em archiso/airootfs/)
     log "Copiando configs extras..."
     install -Dm644 "$SCRIPT_DIR/config/i3/i3status.conf" \
         "$air/root/.config/i3/i3status.conf"
@@ -174,7 +171,6 @@ populate_airootfs() {
     ok "Configs extras copiados"
 
     # ── 4. Binários principais ────────────────────────────
-    # install -Dm755 cria diretório pai automaticamente
     log "Instalando binários principais..."
     install -Dm755 "$SCRIPT_DIR/ghost-protocol/ghost-protocol.sh" \
         "$air/usr/local/bin/ghost-protocol.sh"
@@ -195,8 +191,6 @@ populate_airootfs() {
     ok "Binários instalados"
 
     # ── 5. Serviços systemd ───────────────────────────────
-    # ghost-protocol e amnesia-shutdown vêm de ghost-protocol/
-    # Os outros já foram copiados pelo cp -rT acima
     log "Instalando serviços systemd..."
     install -Dm644 "$SCRIPT_DIR/ghost-protocol/ghost-protocol.service" \
         "$air/etc/systemd/system/ghost-protocol.service"
@@ -218,9 +212,9 @@ populate_airootfs() {
     # ── 6. Kernel hardening ───────────────────────────────
     log "Configurando hardening de kernel..."
     install -Dm644 "$SCRIPT_DIR/kernel/hardened.conf" \
-        "$air/etc/modprobe.d/aeternus-blacklist.conf"
+        "$air/etc/modprobe.d/v0rtex-blacklist.conf"
     install -Dm644 "$SCRIPT_DIR/kernel/hardened-sysctl.conf" \
-        "$air/etc/sysctl.d/99-aeternus.conf"
+        "$air/etc/sysctl.d/99-v0rtex.conf"
     install -Dm644 "$SCRIPT_DIR/kernel/mkinitcpio-hardened.conf" \
         "$air/etc/mkinitcpio.conf"
     ok "Kernel hardening configurado"
@@ -228,18 +222,17 @@ populate_airootfs() {
     # ── 7. Shell padrão root + Banner + MOTD ─────────────
     echo "chsh -s /bin/zsh root" >> "$air/etc/profile.d/aeternus.sh"
 
-    cat > "$air/etc/aeternus-banner" <<'BANNER'
-    ___   _____________________  _   ____  _______
-   /   | / ____/_  __/ ____/ \ | | / / / / / ___/
-  / /| |/ __/   / / / __/ /  \| |/ / / / /\__ \
- / ___ / /___  / / / /___/ /|  / /_/ / /___/ __/
-/_/  |_/_____/ /_/ /_____/_/ |_/\____/\____/____/
+    cat > "$air/etc/v0rtex-banner" <<'BANNER'
+ __   ___  ____  ____  _______  __    ___  ___ 
+ \ \ / / \| _ \|_  _||   __\ \/ /   / _ \/ __|
+  \ V /| o| v /  | |   | |_  >  <  | |_| \__ \
+   \_/ |___|_|_\ |_|  |____/_/\_\  \___/ |___/
                           Grey Hat Linux — Hardened
 BANNER
 
     cat > "$air/etc/motd" <<'MOTD'
 ╔══════════════════════════════════════════════════════════╗
-║  AETERNUS OS — Grey Hat Security Distribution           ║
+║  V0rtexOS — Grey Hat Security Distribution              ║
 ║  Kernel: linux-hardened | Tor+VPN Kill Switch           ║
 ╠══════════════════════════════════════════════════════════╣
 ║  TOOLS:  aet-scan  aet-nuke  payload-gen  web-enum      ║
@@ -262,7 +255,6 @@ configure_boot() {
 
     local air="$PROFILE_DIR/airootfs"
 
-    # archiso espera o grub.cfg em $PROFILE_DIR/grub/grub.cfg
     mkdir -p "$PROFILE_DIR/grub"
     mkdir -p "$air/boot/grub"
     cat > "$PROFILE_DIR/grub/grub.cfg" <<'GRUBCFG'
@@ -278,11 +270,11 @@ insmod gcry_rijndael
 insmod gcry_sha256
 insmod ext2
 
-menuentry "AETERNUS OS" --class aeternus --class gnu-linux --class gnu --class os {
+menuentry "V0rtexOS" --class v0rtex --class gnu-linux --class gnu --class os {
     set gfxpayload=keep
     linux /arch/boot/x86_64/vmlinuz-linux-hardened \
         archisobasedir=arch \
-        archisolabel=AETERNUS_OS \
+        archisolabel=V0RTEX_OS \
         quiet splash loglevel=0 \
         apparmor=1 security=apparmor \
         page_poison=1 slab_nomerge \
@@ -295,9 +287,9 @@ menuentry "AETERNUS OS" --class aeternus --class gnu-linux --class gnu --class o
     initrd /arch/boot/x86_64/initramfs-linux-hardened.img
 }
 
-menuentry "AETERNUS OS (Debug/Verbose)" --class aeternus {
+menuentry "V0rtexOS (Debug/Verbose)" --class v0rtex {
     linux /arch/boot/x86_64/vmlinuz-linux-hardened \
-        archisobasedir=arch archisolabel=AETERNUS_OS \
+        archisobasedir=arch archisolabel=V0RTEX_OS \
         apparmor=1 security=apparmor
     initrd /arch/boot/x86_64/initramfs-linux-hardened.img
 }
@@ -351,7 +343,7 @@ post_build() {
     sec "PÓS-BUILD"
 
     local iso
-    iso=$(find "$OUT_DIR" -name "aeternus-os-*.iso" | sort | tail -1)
+    iso=$(find "$OUT_DIR" -name "v0rtex-os-*.iso" | sort | tail -1)
     [[ -z "$iso" ]] && err "ISO não encontrada em $OUT_DIR"
 
     local size
@@ -364,19 +356,19 @@ post_build() {
     ok "SHA256: $(cat "${iso}.sha256" | awk '{print $1}')"
 
     echo
-    echo -e "${GRN}${BOLD}╔═══════════════════════════════════════════════════════╗${RST}"
-    echo -e "${GRN}${BOLD}║  AETERNUS OS BUILD CONCLUÍDO                         ║${RST}"
-    echo -e "${GRN}${BOLD}╠═══════════════════════════════════════════════════════╣${RST}"
-    printf "${GRN}${BOLD}║  ISO     : %-43s║${RST}\n" "$(basename "$iso")"
-    printf "${GRN}${BOLD}║  Tamanho : %-43s║${RST}\n" "$size"
-    printf "${GRN}${BOLD}║  Versão  : %-43s║${RST}\n" "$AETERNUS_VERSION"
-    echo -e "${GRN}${BOLD}╠═══════════════════════════════════════════════════════╣${RST}"
-    echo -e "${GRN}${BOLD}║  Gravar em USB:                                      ║${RST}"
-    printf "${GRN}${BOLD}║  sudo dd if=%s of=/dev/sdX bs=4M status=progress ║${RST}\n" "$(basename "$iso")"
-    echo -e "${GRN}${BOLD}║  sync                                                ║${RST}"
-    echo -e "${GRN}${BOLD}╚═══════════════════════════════════════════════════════╝${RST}"
+    echo -e "${WHT}${BOLD}╔═══════════════════════════════════════════════════════╗${RST}"
+    echo -e "${WHT}${BOLD}║  V0rtexOS BUILD CONCLUÍDO                            ║${RST}"
+    echo -e "${WHT}${BOLD}╠═══════════════════════════════════════════════════════╣${RST}"
+    printf "${WHT}${BOLD}║  ISO     : %-43s║${RST}\n" "$(basename "$iso")"
+    printf "${WHT}${BOLD}║  Tamanho : %-43s║${RST}\n" "$size"
+    printf "${WHT}${BOLD}║  Versão  : %-43s║${RST}\n" "$VORTEX_VERSION"
+    echo -e "${WHT}${BOLD}╠═══════════════════════════════════════════════════════╣${RST}"
+    echo -e "${WHT}${BOLD}║  Gravar em USB:                                      ║${RST}"
+    printf "${WHT}${BOLD}║  sudo dd if=%s of=/dev/sdX bs=4M status=progress ║${RST}\n" "$(basename "$iso")"
+    echo -e "${WHT}${BOLD}║  sync                                                ║${RST}"
+    echo -e "${WHT}${BOLD}╚═══════════════════════════════════════════════════════╝${RST}"
     echo
-    echo -e "${YEL}  Após o boot:${RST}"
+    echo -e "${GRY}  Após o boot:${RST}"
     echo -e "  • Ghost Protocol ativa automaticamente (VPN+Tor kill switch)"
     echo -e "  • Instalar tools: sudo install-tools all"
     echo -e "  • Scanner: sudo aet-scan -p vuln <alvo>"
@@ -391,15 +383,14 @@ post_build() {
 main() {
     # clear só em terminal interativo — não em CI
     [[ "$CI" != "true" ]] && clear
-    echo -e "${CYN}${BOLD}"
+    echo -e "${GRY}${BOLD}"
     cat <<'HEADER'
-    ___   _____________________  _   ____  _______
-   /   | / ____/_  __/ ____/ \ | | / / / / / ___/
-  / /| |/ __/   / / / __/ /  \| |/ / / / /\__ \
- / ___ / /___  / / / /___/ /|  / /_/ / /___/ __/
-/_/  |_/_____/ /_/ /_____/_/ |_/\____/\____/____/
+ __   ___  ____  ____  _______  __    ___  ___ 
+ \ \ / / \| _ \|_  _||   __\ \/ /   / _ \/ __|
+  \ V /| o| v /  | |   | |_  >  <  | |_| \__ \
+   \_/ |___|_|_\ |_|  |____/_/\_\  \___/ |___/
 HEADER
-    echo -e "${RST}${CYN}  Grey Hat Linux — Build System v2.0${RST}"
+    echo -e "${RST}${GRY}  Grey Hat Linux — Build System v2.0${RST}"
     echo -e "${DIM}  Log: $LOG_FILE${RST}"
     echo
 

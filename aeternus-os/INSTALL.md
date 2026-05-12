@@ -1,4 +1,4 @@
-# AETERNUS OS — Guia de Build e Instalação
+# V0rtexOS — Guia de Build e Instalação
 
 > Grey Hat Linux — linux-hardened · Ghost Protocol · BlackArch · i3wm
 
@@ -26,7 +26,7 @@ pacman -Sy --needed archiso git curl python3 unzip openssl
 
 ```bash
 sudo bash build.sh
-# ISO → ./release/aeternus-os-YYYY.MM.DD-x86_64.iso
+# ISO → ./release/v0rtex-os-YYYY.MM.DD-x86_64.iso
 ```
 
 ---
@@ -34,7 +34,7 @@ sudo bash build.sh
 ## Gravar em USB
 
 ```bash
-sudo dd if=release/aeternus-os-*.iso of=/dev/sdX bs=4M status=progress && sync
+sudo dd if=release/v0rtex-os-*.iso of=/dev/sdX bs=4M status=progress && sync
 ```
 
 ---
@@ -67,8 +67,8 @@ aeternus-os/
 │   └── amnesia-shutdown.service      # Systemd unit — roda amnésia no shutdown
 │
 ├── kernel/
-│   ├── hardened.conf                 # → /etc/modprobe.d/aeternus-blacklist.conf
-│   ├── hardened-sysctl.conf          # → /etc/sysctl.d/99-aeternus.conf
+│   ├── hardened.conf                 # → /etc/modprobe.d/v0rtex-blacklist.conf
+│   ├── hardened-sysctl.conf          # → /etc/sysctl.d/99-v0rtex.conf
 │   └── mkinitcpio-hardened.conf      # → /etc/mkinitcpio.conf
 │
 ├── config/
@@ -101,9 +101,9 @@ cd aeternus-os
 # 3. Executar o build (requer root)
 sudo bash build.sh
 
-# A ISO será gerada em ./out/aeternus-os-YYYY.MM.DD-x86_64.iso
+# A ISO será gerada em ./release/v0rtex-os-YYYY.MM.DD-x86_64.iso
 # Gravar em USB:
-sudo dd if=out/aeternus-os-*.iso of=/dev/sdX bs=4M status=progress oflag=sync
+sudo dd if=release/v0rtex-os-*.iso of=/dev/sdX bs=4M status=progress oflag=sync
 ```
 
 ---
@@ -119,8 +119,8 @@ sudo pacman -S linux-hardened linux-hardened-headers
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 
 # Copiar configurações de kernel
-sudo cp kernel/hardened.conf /etc/modprobe.d/aeternus-blacklist.conf
-sudo cp kernel/hardened-sysctl.conf /etc/sysctl.d/99-aeternus.conf
+sudo cp kernel/hardened.conf /etc/modprobe.d/v0rtex-blacklist.conf
+sudo cp kernel/hardened-sysctl.conf /etc/sysctl.d/99-v0rtex.conf
 sudo cp kernel/mkinitcpio-hardened.conf /etc/mkinitcpio.conf
 
 # Regenerar initramfs para o kernel hardened
@@ -181,8 +181,10 @@ sudo systemctl enable amnesia-shutdown.service
 sudo pacman -S i3-wm i3status i3lock alacritty picom dmenu feh dunst \
     xorg-server xorg-xinit xorg-xrandr
 
-# Instalar fonte Nerd Font
+# Instalar fontes (Michroma e Zekton via AUR ou manual)
 sudo pacman -S ttf-jetbrains-mono-nerd
+# Michroma: https://fonts.google.com/specimen/Michroma
+# Zekton:   instalar via AUR (ttf-zekton) ou manual
 
 # Copiar configurações
 mkdir -p ~/.config/{i3,alacritty,picom}

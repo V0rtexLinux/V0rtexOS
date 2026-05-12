@@ -1,4 +1,4 @@
-# AETERNUS OS — Tor Configuration
+# V0rtexOS — Tor Configuration
 # /etc/tor/torrc — Configuração para Ghost Protocol (Tor-over-VPN)
 
 # Portas de controle e SOCKS

@@ -1,5 +1,5 @@
 [Unit]
-Description=AETERNUS Active Defense Monitor (aet-nuke)
+Description=V0RTEX Active Defense Monitor (aet-nuke)
 After=network.target ghost-protocol.service
 Wants=ghost-protocol.service
 

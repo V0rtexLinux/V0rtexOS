@@ -1,5 +1,5 @@
 [Unit]
-Description=AETERNUS Ghost Protocol — VPN+Tor Kill Switch
+Description=V0RTEX Ghost Protocol — VPN+Tor Kill Switch
 Documentation=man:iptables(8) man:tor(1)
 After=network-online.target tor.service openvpn.service
 Wants=network-online.target tor.service

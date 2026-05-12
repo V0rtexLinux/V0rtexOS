@@ -1,5 +1,5 @@
 [Unit]
-Description=AETERNUS Amnesia — Limpeza de memória e logs antes do poweroff
+Description=V0RTEX Amnesia — Limpeza de memória e logs antes do poweroff
 DefaultDependencies=no
 Before=shutdown.target reboot.target halt.target
 Requires=shutdown.target

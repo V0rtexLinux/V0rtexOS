@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# AETERNUS OS — Instalador de Tools e Exploits Reais
+# V0rtexOS — Instalador de Tools e Exploits Reais
 # Baixa ferramentas diretamente dos repositórios oficiais via curl/git
 # Uso: sudo bash install-tools.sh [categoria]
 # Categorias: all recon exploit wireless web post forensics maldev
 
 set -euo pipefail
 
-TOOLS_DIR="/opt/aeternus"
+TOOLS_DIR="/opt/vortex"
 WORDLISTS_DIR="/opt/wordlists"
 EXPLOITS_DIR="/opt/exploits"
 CVE_DIR="/opt/cve"
@@ -1003,7 +1003,7 @@ install_forensics() {
         mv "$TOOLS_DIR/ghidra_${GHIDRA_VER}_PUBLIC" "$TOOLS_DIR/ghidra"
         cat > /usr/local/bin/ghidra <<'GHIDRA_WRAPPER'
 #!/usr/bin/env bash
-exec /opt/aeternus/ghidra/ghidraRun "$@"
+exec /opt/vortex/ghidra/ghidraRun "$@"
 GHIDRA_WRAPPER
         chmod 755 /usr/local/bin/ghidra
         rm /tmp/ghidra.zip
@@ -1163,12 +1163,12 @@ install_misc() {
 
     # ── Aliases globais ───────────────────────────
     cat >> /etc/profile.d/aeternus.sh <<'ALIASES'
-# AETERNUS OS — Tool aliases
-export TOOLS=/opt/aeternus
+# V0rtexOS — Tool aliases
+export TOOLS=/opt/vortex
 export EXPLOITS=/opt/exploits
 export CVE=/opt/cve
 export WORDLISTS=/opt/wordlists
-alias impacket-dir='ls /opt/aeternus/impacket/examples/*.py'
+alias impacket-dir='ls /opt/vortex/impacket/examples/*.py'
 alias searchsploit='searchsploit --color'
 alias fix-msfdb='msfdb init'
 ALIASES
@@ -1183,7 +1183,7 @@ main() {
     local category="${1:-all}"
 
     echo -e "\n${CYN}╔══════════════════════════════════════════════════╗"
-    echo    "║  AETERNUS OS — Instalador de Tools Ofensivas    ║"
+    echo    "║  V0rtexOS — Instalador de Tools Ofensivas    ║"
     echo -e "╚══════════════════════════════════════════════════╝${RST}\n"
 
     case "$category" in
@@ -1221,7 +1221,7 @@ main() {
     esac
 
     echo -e "\n${GRN}╔══════════════════════════════════════════════════╗"
-    echo    "║  AETERNUS OS — Instalação Concluída!            ║"
+    echo    "║  V0rtexOS — Instalação Concluída!            ║"
     printf  "║  Tools em: %-38s║\n" "$TOOLS_DIR"
     printf  "║  CVEs em : %-38s║\n" "$CVE_DIR"
     printf  "║  Wordlists: %-37s║\n" "$WORDLISTS_DIR"

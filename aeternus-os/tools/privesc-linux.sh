@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# AETERNUS OS — Linux Privilege Escalation Toolkit
+# V0rtexOS — Linux Privilege Escalation Toolkit
 # Executa automaticamente os principais vetores de privesc
 # Uso: sudo privesc-linux.sh [--auto]
 
@@ -18,7 +18,7 @@ USER=$(id -un)
 GROUPS=$(id -Gn)
 
 echo -e "\n${CYN}╔══════════════════════════════════════════════════╗"
-echo    "║  AETERNUS — Linux PrivEsc Checker              ║"
+echo    "║  V0RTEX — Linux PrivEsc Checker              ║"
 echo -e "╚══════════════════════════════════════════════════╝${RST}"
 echo -e "  Host   : $HOSTNAME | $OS | $KERNEL | $ARCH"
 echo -e "  User   : $USER | $GROUPS"
