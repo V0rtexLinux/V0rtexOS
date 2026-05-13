@@ -19,18 +19,14 @@ if not exist "%QEMU%" (
     echo Marque "Add to PATH" durante a instalacao.
     echo Ou edite a variavel QEMU neste arquivo .bat
     echo.
-    popd
-    pause
-    exit /b 1
+    popd & pause & exit /b 1
 )
 
 if not exist "%ISO%" (
     echo [ERRO] ISO nao encontrada: %ISO%
     echo Coloque o arquivo na mesma pasta deste script.
     echo.
-    popd
-    pause
-    exit /b 1
+    popd & pause & exit /b 1
 )
 
 echo  ISO  : %~dp0%ISO%
@@ -48,18 +44,26 @@ set "ARGS=%ARGS% -net nic,model=virtio -net user"
 set "ARGS=%ARGS% -usb -device usb-tablet"
 set "ARGS=%ARGS% -no-reboot"
 
-echo [1/2] Tentando WHPX (aceleracao nativa Windows)...
+:: CPU sem MPX e APX (evita o conflito em CPUs Intel recentes com APX)
+set "CPUFIX=host,-mpx,-apxf"
+
+echo [1/3] WHPX com kernel-irqchip=on (fix VP exit code 4)...
 echo.
-"%QEMU%" -machine type=q35,accel=whpx,kernel-irqchip=off -cpu host %ARGS%
-set RC=%ERRORLEVEL%
-if %RC% equ 0 goto :fim
+"%QEMU%" -machine type=q35,accel=whpx,kernel-irqchip=on -cpu %CPUFIX% %ARGS% 2>nul
+if %ERRORLEVEL% equ 0 goto :fim
 
 echo.
-echo [AVISO] WHPX falhou (codigo %RC%). Usando TCG sem aceleracao.
-echo Para ativar WHPX: Painel de Controle - Programas - Recursos do Windows
+echo [2/3] WHPX com kernel-irqchip=off...
+echo.
+"%QEMU%" -machine type=q35,accel=whpx,kernel-irqchip=off -cpu %CPUFIX% %ARGS% 2>nul
+if %ERRORLEVEL% equ 0 goto :fim
+
+echo.
+echo [AVISO] WHPX indisponivel nesta maquina.
+echo Para habilitar: Painel de Controle - Programas - Recursos do Windows
 echo Marcar "Windows Hypervisor Platform" e reiniciar o PC.
 echo.
-echo [2/2] Iniciando em modo TCG (boot mais lento)...
+echo [3/3] Iniciando em modo TCG (sem aceleracao, mais lento)...
 echo.
 timeout /t 3 /nobreak >nul
 
