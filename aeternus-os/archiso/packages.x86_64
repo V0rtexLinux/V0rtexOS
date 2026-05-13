@@ -232,6 +232,9 @@ python
 python-pip
 python-setuptools
 python-wheel
+python-gobject
+gtk3
+gdk-pixbuf2
 python-requests
 python-scapy
 python-cryptography

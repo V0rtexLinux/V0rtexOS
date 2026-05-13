@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=V0rtex Control Center
+GenericName=Security Control Panel
+Comment=Painel de controle gráfico do V0rtexOS
+Exec=/usr/local/bin/vortex-center
+Icon=preferences-system
+Terminal=false
+Type=Application
+Categories=System;Security;
+Keywords=vortex;security;hacking;pentest;control;
+StartupNotify=true
+StartupWMClass=vortex-center

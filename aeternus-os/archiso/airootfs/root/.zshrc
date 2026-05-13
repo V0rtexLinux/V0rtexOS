@@ -138,6 +138,11 @@ extract() {
     esac
 }
 
+# ── Auto-start Xorg no tty1 ────────────────────
+if [[ -z "$DISPLAY" ]] && [[ "$(tty)" == "/dev/tty1" ]]; then
+    exec startx ~/.xinitrc -- :0 vt1 &>/tmp/xorg.log
+fi
+
 # Banner
 if [[ $- == *i* ]]; then
     printf "\033[1;37m"

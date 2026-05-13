@@ -31,6 +31,8 @@ file_permissions=(
     ["/usr/local/bin/aet-nuke"]="0:0:755"
     ["/usr/local/bin/amnesia"]="0:0:755"
     ["/usr/local/bin/install-tools.sh"]="0:0:755"
+    ["/usr/local/bin/vortex-center"]="0:0:755"
     ["/opt/vortex"]="0:0:755"
     ["/root"]="0:0:700"
+    ["/root/.xinitrc"]="0:0:755"
 )

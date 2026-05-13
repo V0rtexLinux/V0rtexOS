@@ -154,6 +154,7 @@ bindsym $mod+Return exec $term
 bindsym $mod+p      exec $launcher
 bindsym $mod+F2     exec firefox
 bindsym $mod+F3     exec thunar
+bindsym $mod+F4     exec vortex-center
 
 # Screenshot
 bindsym Print exec scrot -q 95 ~/Pictures/screenshot-%Y%m%d-%H%M%S.png
@@ -226,6 +227,7 @@ for_window [class="feh"]             floating enable
 for_window [class="Arandr"]         floating enable
 for_window [title="File Transfer*"] floating enable
 for_window [class="Wireshark" title="^(?!Wireshark).*"] floating enable
+for_window [title="V0rtexOS Control Center"] floating enable, resize set 1100 720, move position center
 
 # ─────────────────────────────────────────────────
 # ASSIGN — Workspaces para apps

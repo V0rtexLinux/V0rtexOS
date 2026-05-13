@@ -162,6 +162,8 @@ populate_airootfs() {
 
     # ── 3. Configs extras de config/ ─────────────────────
     log "Copiando configs extras..."
+    install -Dm644 "$SCRIPT_DIR/config/i3/config" \
+        "$air/root/.config/i3/config"
     install -Dm644 "$SCRIPT_DIR/config/i3/i3status.conf" \
         "$air/root/.config/i3/i3status.conf"
     install -Dm644 "$SCRIPT_DIR/config/i3/picom.conf" \
@@ -190,6 +192,14 @@ populate_airootfs() {
     install -Dm755 "$SCRIPT_DIR/tools/exploit-db-search.py"  "$air/usr/local/bin/exploit-search"
     install -Dm755 "$SCRIPT_DIR/archiso/airootfs/usr/local/bin/mount-squashfs.sh" \
         "$air/usr/local/bin/mount-squashfs.sh"
+
+    # GUI — Centro de Controle GTK3
+    install -Dm755 "$SCRIPT_DIR/gui/vortex-center.py" \
+        "$air/usr/local/bin/vortex-center"
+    install -Dm644 "$SCRIPT_DIR/gui/vortex-center.desktop" \
+        "$air/usr/share/applications/vortex-center.desktop"
+    ok "GUI instalada (vortex-center)"
+
     ok "Binários instalados"
 
     # ── 5. Serviços systemd ───────────────────────────────
