@@ -1,0 +1,15 @@
+[Unit]
+Description=V0rtexOS — Monta airootfs squashfs no boot
+DefaultDependencies=no
+Before=sysinit.target local-fs.target
+After=systemd-udevd.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/mount-squashfs.sh
+StandardOutput=journal+console
+StandardError=journal+console
+
+[Install]
+WantedBy=sysinit.target

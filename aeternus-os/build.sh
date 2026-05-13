@@ -188,6 +188,8 @@ populate_airootfs() {
     install -Dm755 "$SCRIPT_DIR/tools/shell-gen.sh"          "$air/usr/local/bin/shell-gen"
     install -Dm755 "$SCRIPT_DIR/tools/tunnel-setup.sh"       "$air/usr/local/bin/tunnel-setup"
     install -Dm755 "$SCRIPT_DIR/tools/exploit-db-search.py"  "$air/usr/local/bin/exploit-search"
+    install -Dm755 "$SCRIPT_DIR/archiso/airootfs/usr/local/bin/mount-squashfs.sh" \
+        "$air/usr/local/bin/mount-squashfs.sh"
     ok "Binários instalados"
 
     # ── 5. Serviços systemd ───────────────────────────────
@@ -197,10 +199,19 @@ populate_airootfs() {
     install -Dm644 "$SCRIPT_DIR/ghost-protocol/amnesia-shutdown.service" \
         "$air/etc/systemd/system/amnesia-shutdown.service"
 
-    # Habilitar serviços no multi-user.target
+    install -Dm644 "$SCRIPT_DIR/archiso/airootfs/etc/systemd/system/mount-squashfs.service" \
+        "$air/etc/systemd/system/mount-squashfs.service"
+    ok "Serviço mount-squashfs instalado"
+
+    # Habilitar serviços no multi-user.target e sysinit.target
     mkdir -p \
         "$air/etc/systemd/system/multi-user.target.wants" \
-        "$air/etc/systemd/system/halt.target.wants"
+        "$air/etc/systemd/system/halt.target.wants" \
+        "$air/etc/systemd/system/sysinit.target.wants"
+
+    ln -sf "/etc/systemd/system/mount-squashfs.service" \
+        "$air/etc/systemd/system/sysinit.target.wants/mount-squashfs.service" 2>/dev/null || true
+
     for svc in ghost-protocol aet-nuke NetworkManager tor apparmor; do
         ln -sf "/etc/systemd/system/${svc}.service" \
             "$air/etc/systemd/system/multi-user.target.wants/${svc}.service" 2>/dev/null || true
