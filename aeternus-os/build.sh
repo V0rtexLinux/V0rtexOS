@@ -286,21 +286,35 @@ menuentry "V0rtexOS" --class v0rtex --class gnu-linux --class gnu --class os {
     linux /arch/boot/x86_64/vmlinuz-linux-hardened \
         archisobasedir=arch \
         archisolabel=V0RTEX_OS \
-        quiet loglevel=0 nomodeset plymouth.enable=0 \
+        quiet loglevel=3 \
         apparmor=1 security=apparmor \
         page_poison=1 slab_nomerge \
         pti=on vsyscall=none \
         spectre_v2=on spec_store_bypass_disable=on \
-        l1tf=full,force mds=full,nosmt \
         mitigations=auto,nosmt \
-        rd.systemd.show_status=auto
+        systemd.show_status=auto \
+        console=tty0 console=ttyS0,115200
+    initrd /arch/boot/x86_64/initramfs-linux-hardened.img
+}
+
+menuentry "V0rtexOS (VM/Fast Boot)" --class v0rtex {
+    linux /arch/boot/x86_64/vmlinuz-linux-hardened \
+        archisobasedir=arch \
+        archisolabel=V0RTEX_OS \
+        quiet loglevel=3 \
+        apparmor=1 security=apparmor \
+        mitigations=off \
+        systemd.show_status=auto \
+        console=tty0 console=ttyS0,115200
     initrd /arch/boot/x86_64/initramfs-linux-hardened.img
 }
 
 menuentry "V0rtexOS (Debug/Verbose)" --class v0rtex {
     linux /arch/boot/x86_64/vmlinuz-linux-hardened \
         archisobasedir=arch archisolabel=V0RTEX_OS \
-        apparmor=1 security=apparmor
+        loglevel=7 \
+        apparmor=1 security=apparmor \
+        console=tty0 console=ttyS0,115200
     initrd /arch/boot/x86_64/initramfs-linux-hardened.img
 }
 

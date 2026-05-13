@@ -9,6 +9,7 @@ linux-hardened-headers
 linux-firmware
 mkinitcpio
 mkinitcpio-archiso
+squashfs-tools
 
 # ── BASE DO SISTEMA ──────────────────────────────────
 base
