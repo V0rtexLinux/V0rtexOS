@@ -230,7 +230,37 @@ populate_airootfs() {
         "$air/etc/mkinitcpio.conf"
     ok "Kernel hardening configurado"
 
-    # ── 7. Shell padrão root + Banner + MOTD ─────────────
+    # ── 7. Senha padrão root + autologin no tty1 ──────────
+    # Senha padrão: v0rtex
+    # Hash gerado com: openssl passwd -6 v0rtex
+    local ROOT_HASH='$6$v0rtexOS$8tgAGFSO2RW9fJyTCwsvRGnwcnGNPQGnYdxU3DbVsWkZd.8nq889R4rC5ABr84VGguHbDHcBBvJsQop7zIEs..'
+
+    # Atualiza APENAS a entrada do root no /etc/shadow (não sobrescreve o arquivo inteiro)
+    if [[ -f "$air/etc/shadow" ]]; then
+        # Arquivo já existe — substitui só o hash do root
+        sed -i "s|^root:[^:]*:|root:${ROOT_HASH}:|" "$air/etc/shadow"
+    else
+        # Arquivo não existe — cria apenas a linha do root
+        printf 'root:%s:19800:0:99999:7:::\n' "$ROOT_HASH" > "$air/etc/shadow"
+    fi
+    chmod 400 "$air/etc/shadow"
+
+    # Garante que root usa zsh no /etc/passwd sem sobrescrever o arquivo inteiro
+    if [[ -f "$air/etc/passwd" ]]; then
+        sed -i 's|^root:x:0:0:.*|root:x:0:0:root:/root:/bin/zsh|' "$air/etc/passwd"
+    fi
+
+    ok "Senha root definida: v0rtex"
+
+    # Autologin root no tty1 (live ISO — sem prompt de senha)
+    mkdir -p "$air/etc/systemd/system/getty@tty1.service.d"
+    cat > "$air/etc/systemd/system/getty@tty1.service.d/autologin.conf" <<'AUTOLOGIN'
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --autologin root --noclear %I $TERM
+AUTOLOGIN
+    ok "Autologin root em tty1 configurado"
+
     echo "chsh -s /bin/zsh root" >> "$air/etc/profile.d/aeternus.sh"
 
     cat > "$air/etc/v0rtex-banner" <<'BANNER'
