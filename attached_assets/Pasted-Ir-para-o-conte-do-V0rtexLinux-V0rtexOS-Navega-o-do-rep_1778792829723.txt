@@ -1,0 +1,84 @@
+Ir para o conteúdo
+V0rtexLinux
+V0rtexOS
+Navegação do repositório
+Código
+Problemas
+Solicitações de pull
+Agentes
+Ações
+Projetos
+Segurança e qualidade
+Percepções
+Configurações
+Build AETERNUS OS ISO
+Update package list to fix build errors and remove duplicates #25
+Todos os empregos
+Detalhes da execução
+construir
+failed agora in 2m 4s
+Registros de pesquisa
+1s
+1s
+1m 26s
+7s
+25s
+[mkarchiso] INFO:                   Profile:   /build/aeternus-os/v0rtex-profile
+[mkarchiso] INFO: Pacman configuration file:   /build/aeternus-os/v0rtex-profile/pacman.conf
+[mkarchiso] INFO:           Image file name:   v0rtex-os-2026.05.14-x86_64.iso
+[mkarchiso] INFO:          ISO volume label:   V0RTEX_OS
+[mkarchiso] INFO:             ISO publisher:   V0rtex Security
+[mkarchiso] INFO:           ISO application:   V0rtexOS — Grey Hat Linux Hardened
+[mkarchiso] INFO:                Boot modes:   bios.syslinux uefi.grub
+[mkarchiso] INFO:             Packages File:   /build/aeternus-os/v0rtex-profile/packages.x86_64
+[mkarchiso] INFO:                  Packages:   linux-hardened linux-hardened-headers linux-firmware linux-firmware-whence mkinitcpio mkinitcpio-archiso squashfs-tools dracut base base-devel archlinux-keyring bash bash-completion bzip2 coreutils diffutils file findutils gawk gcc-libs gettext glibc grep gzip iproute2 iputils kbd keyutils less licenses pciutils procps-ng psmisc sed shadow systemd systemd-sysvcompat tar texinfo usbutils util-linux which xz grub efibootmgr efitools os-prober syslinux plymouth memtest86+ cryptsetup lvm2 device-mapper dosfstools e2fsprogs exfatprogs btrfs-progs f2fs-tools ntfs-3g parted gptfdisk hdparm sdparm nvme-cli networkmanager network-manager-applet openvpn networkmanager-openvpn wireguard-tools openresolv nftables iptables-nft ipset net-tools bridge-utils dnsmasq bind openssh openssl libpcap openbsd-netcat socat tcpdump iw wireless_tools wpa_supplicant macchanger mtr iftop nethogs bmon vnstat nmap ncat masscan rustscan tor torsocks privoxy proxychains-ng obfs4proxy onionshare
+[mkarchiso] INFO: Copying custom pacman.conf to work directory...
+[mkarchiso] INFO: Using pacman CacheDir: /var/cache/pacman/pkg/ 
+[mkarchiso] INFO: Copying custom airootfs files...
+[mkarchiso] WARNING: Cannot change permissions of '/tmp/v0rtex-build-work/x86_64/airootfs/usr/local/bin/aeternus-panel'. The file or directory does not exist.
+[mkarchiso] WARNING: Cannot change permissions of '/tmp/v0rtex-build-work/x86_64/airootfs/usr/local/bin/aeternus-splash'. The file or directory does not exist.
+[mkarchiso] WARNING: Cannot change permissions of '/tmp/v0rtex-build-work/x86_64/airootfs/usr/local/bin/aeternus-taskbar'. The file or directory does not exist.
+[mkarchiso] WARNING: Cannot change permissions of '/tmp/v0rtex-build-work/x86_64/airootfs/usr/local/bin/install-tools.sh'. The file or directory does not exist.
+[mkarchiso] WARNING: Cannot change permissions of '/tmp/v0rtex-build-work/x86_64/airootfs/etc/gshadow'. The file or directory does not exist.
+[mkarchiso] INFO: Done!
+[mkarchiso] INFO: Installing packages to '/tmp/v0rtex-build-work/x86_64/airootfs/'...
+==> Creating install root at /tmp/v0rtex-build-work/x86_64/airootfs
+==> Installing packages to /tmp/v0rtex-build-work/x86_64/airootfs
+:: Synchronizing package databases...
+ core downloading...
+ extra downloading...
+ multilib downloading...
+ blackarch downloading...
+error: target not found: ncat
+error: target not found: multitail
+error: target not found: nitrogen
+error: target not found: aide
+error: target not found: tripwire
+error: target not found: cdncheck
+error: target not found: knockpy
+error: target not found: katana
+error: target not found: byp4xx
+error: target not found: neo4j
+error: target not found: ldapdomaindump
+error: target not found: lsassy
+error: target not found: pypykatz
+error: target not found: certipy-ad
+error: target not found: bluewalker
+error: target not found: apktool
+error: target not found: apktool
+error: target not found: wordlists
+==> ERROR: Failed to install packages to new root
+Error: Process completed with exit code 1.
+0s
+0s
+Run cat /tmp/aeternus-build.log 2>/dev/null || \
+(log não encontrado)
+0s
+Run actions/upload-artifact@v4
+  
+Warning: No files were found with the provided path: aeternus-os/release/*.iso
+aeternus-os/release/checksum.sha256
+aeternus-os/release/checksum.md5. No artifacts will be uploaded.
+0s
+0s
+0s
