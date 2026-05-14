@@ -1,0 +1,103 @@
+Skip to content
+V0rtexLinux
+V0rtexOS
+Repository navigation
+Code
+Issues
+Pull requests
+Agents
+Actions
+Projects
+Security and quality
+Insights
+Settings
+Build AETERNUS OS ISO
+Add robust ISO compilation methods with extensive package inclusion #24
+All jobs
+Run details
+build
+failed 2 minutes ago in 1m 27s
+Search logs
+0s
+1s
+48s
+6s
+28s
+error: target not found: pwntools
+error: target not found: frida-tools
+error: target not found: ROPgadget
+error: target not found: apktool
+error: target not found: apksigner
+error: target not found: objdump
+error: target not found: readelf
+error: target not found: strings
+:: There are 3 providers available for xxd:
+:: Repository extra
+   1) gvim  2) tinyxxd  3) vim
+Enter a number (default=1): error: target not found: yara-tools
+error: target not found: urlsnarf
+error: target not found: webspy
+error: target not found: bulk_extractor
+error: target not found: gnu-ddrescue
+error: target not found: photorec
+error: target not found: chkdsk
+error: target not found: fsck
+error: target not found: gpg2
+error: target not found: stegosuite
+error: target not found: spectrology
+error: target not found: ccrypt
+error: target not found: g++
+error: target not found: masm
+error: target not found: perl-modules
+error: target not found: ruby-dev
+error: target not found: python-neo4j
+error: target not found: python-impacket
+error: target not found: python-bloodhound
+error: target not found: python-certipy
+error: target not found: python-angr
+error: target not found: python-z3
+error: target not found: python-keystone-engine
+error: target not found: python-manticore
+error: target not found: python-malduck
+error: target not found: python-yara-python
+error: target not found: python-volatility3
+error: target not found: fastboot
+error: target not found: apktool
+error: target not found: apksigner
+error: target not found: vagrant
+error: target not found: mongodb-tools
+error: target not found: git-secrets
+error: target not found: gh
+error: target not found: neofetch
+error: target not found: cheat
+error: target not found: whiptail
+error: target not found: watch
+error: target not found: delta
+error: target not found: wordlists
+error: target not found: rockyou
+error: target not found: dirb-wordlists
+==> ERROR: Failed to install packages to new root
+Error: Process completed with exit code 1.
+0s
+0s
+Run cat /tmp/aeternus-build.log 2>/dev/null || \
+(log não encontrado)
+0s
+Run actions/upload-artifact@v4
+0s
+0s
+Post job cleanup.
+/usr/bin/git version
+git version 2.54.0
+Temporarily overriding HOME='/home/runner/work/_temp/75d946f3-5bb6-40d3-9926-e5588d1c8f00' before making global git config changes
+Adding repository directory to the temporary git global config as a safe directory
+/usr/bin/git config --global --add safe.directory /home/runner/work/V0rtexOS/V0rtexOS
+/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+http.https://github.com/.extraheader
+/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+0s

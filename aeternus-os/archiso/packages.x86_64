@@ -1,6 +1,5 @@
 # V0rtexOS — Lista completa de pacotes da ISO
 # Kernel: linux-hardened | Repos: Arch oficial + BlackArch
-# Total: 620+ pacotes
 
 # ══════════════════════════════════════════════════════════
 # KERNEL HARDENED
@@ -139,7 +138,6 @@ zsh
 zsh-completions
 zsh-syntax-highlighting
 zsh-autosuggestions
-bash-completion
 alacritty
 tmux
 screen
@@ -159,13 +157,9 @@ starship
 zoxide
 jq
 yq
-gron
-fx
 moreutils
 multitail
-lnav
 glow
-tput
 
 # ══════════════════════════════════════════════════════════
 # X.ORG / DISPLAY
@@ -264,7 +258,6 @@ audit
 yara
 aide
 clamav
-clamav-db
 tripwire
 
 # ══════════════════════════════════════════════════════════
@@ -308,11 +301,9 @@ sherlock
 holehe
 phoneinfoga
 photon
-osint-spy
 maltego
 exiftool
 metagoofil
-goofile
 
 # ══════════════════════════════════════════════════════════
 # WEB / API / PROXY
@@ -357,13 +348,11 @@ gobuster
 ffuf
 feroxbuster
 dirb
-wfuzz
 dirsearch
 cewl
 crunch
 cupp
 wordlistctl
-pydictor
 maskprocessor
 statsprocessor
 princeprocessor
@@ -392,7 +381,6 @@ coercer
 ldeep
 enum4linux
 smbclient
-rpcclient
 
 # ══════════════════════════════════════════════════════════
 # FORÇA BRUTA / CREDENCIAIS
@@ -407,9 +395,6 @@ ophcrack
 fcrackzip
 pdfcrack
 rarcrack
-zip2john
-pdf2john
-office2john
 
 # ══════════════════════════════════════════════════════════
 # WIRELESS / RF
@@ -441,8 +426,6 @@ bluewalker
 bluesnarfer
 bluelog
 ubertooth
-btlejuice
-btle-sniffer
 rfkill
 
 # ══════════════════════════════════════════════════════════
@@ -458,29 +441,21 @@ ltrace
 strace
 checksec
 patchelf
-pwntools
 python-pwntools
 python-capstone
 python-frida
 frida
-frida-tools
 ropper
-ROPgadget
 one_gadget
 jadx
 apktool
 dex2jar
 android-tools
-apksigner
-objdump
-readelf
-strings
 hexedit
-xxd
+tinyxxd
 bsdiff
 patchutils
 yara
-yara-tools
 
 # ══════════════════════════════════════════════════════════
 # ANÁLISE DE REDE / IDS / SNIFFER
@@ -498,8 +473,6 @@ ettercap
 bettercap
 netsniff-ng
 driftnet
-urlsnarf
-webspy
 dsniff
 arpwatch
 arp-scan
@@ -513,38 +486,28 @@ foremost
 sleuthkit
 autopsy
 volatility3
-bulk_extractor
 dc3dd
-gnu-ddrescue
+ddrescue
 guymager
 safecopy
-ddrescue
-photorec
 testdisk
 scalpel
 recoverjpeg
-exiftool
 perl-image-exiftool
-chkdsk
-fsck
 
 # ══════════════════════════════════════════════════════════
 # CRYPTO / ESTEGANOGRAFIA
 # ══════════════════════════════════════════════════════════
 gnupg
-gpg2
 hashid
 steghide
 stegcracker
 zsteg
 outguess
-stegosuite
-spectrology
 openstego
 snow
 cryptsetup
 age
-ccrypt
 
 # ══════════════════════════════════════════════════════════
 # DESENVOLVIMENTO — CORE
@@ -556,18 +519,14 @@ python-setuptools
 python-wheel
 python-virtualenv
 gcc
-g++
 make
 cmake
 ninja
 nasm
 yasm
-masm
 perl
-perl-modules
 ruby
 ruby-bundler
-ruby-dev
 lua
 lua-socket
 php
@@ -619,10 +578,6 @@ python-scikit-learn
 python-shodan
 python-censys
 python-ldap3
-python-neo4j
-python-impacket
-python-bloodhound
-python-certipy
 python-pyautogui
 python-selenium
 python-playwright
@@ -645,34 +600,25 @@ python-elasticsearch
 # ══════════════════════════════════════════════════════════
 python-pwntools
 python-frida
-python-angr
-python-z3
 python-ropper
-python-keystone-engine
 python-unicorn
-python-manticore
 python-miasm
-python-malduck
-python-yara-python
 python-ssdeep
 python-tlsh
-python-volatility3
 python-oletools
 python-pefile
 python-macholib
+python-yara
+z3
 
 # ══════════════════════════════════════════════════════════
 # SEGURANÇA MOBILE / APK
 # ══════════════════════════════════════════════════════════
 android-tools
-adb
-fastboot
 jadx
 apktool
 dex2jar
-apksigner
 androguard
-mobsf
 
 # ══════════════════════════════════════════════════════════
 # CLOUD / DEVOPS
@@ -683,7 +629,6 @@ kubectl
 helm
 terraform
 ansible
-vagrant
 packer
 
 # ══════════════════════════════════════════════════════════
@@ -707,7 +652,6 @@ postgresql
 postgresql-libs
 mariadb-clients
 redis
-mongodb-tools
 
 # ══════════════════════════════════════════════════════════
 # UTILITÁRIOS — SISTEMA
@@ -726,8 +670,7 @@ rsync
 git
 git-lfs
 git-crypt
-git-secrets
-gh
+github-cli
 p7zip
 unzip
 zip
@@ -743,12 +686,10 @@ lshw
 smartmontools
 hdparm
 inxi
-neofetch
 fastfetch
 screenfetch
 tealdeer
 tldr
-cheat
 navi
 fzf
 tmux
@@ -756,11 +697,10 @@ asciinema
 reptyr
 expect
 dialog
-whiptail
+libnewt
 inotify-tools
 parallel
 entr
-watch
 stress-ng
 fio
 sysbench
@@ -774,7 +714,7 @@ dust
 sd
 choose
 xh
-delta
+git-delta
 
 # ══════════════════════════════════════════════════════════
 # COMUNICAÇÃO / TRANSFER
@@ -801,5 +741,3 @@ v4l-utils
 # ══════════════════════════════════════════════════════════
 wordlists
 seclists
-rockyou
-dirb-wordlists
