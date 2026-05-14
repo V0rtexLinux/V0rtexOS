@@ -1,0 +1,19 @@
+/**
+ * V0rtexOS — Rofi main config
+ */
+@theme "/root/.config/rofi/v0rtex.rasi"
+
+configuration {
+    modi:                "drun,run,window";
+    terminal:            "alacritty";
+    ssh-client:          "ssh";
+    show-icons:          false;
+    drun-display-format: "{name}";
+    window-format:       "{w}  {c}  {t}";
+    case-sensitive:      false;
+    cycle:               true;
+    filter:              "";
+    scroll-method:       0;
+    normalize-match:     true;
+    tokenize:            true;
+}

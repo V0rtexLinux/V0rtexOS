@@ -287,7 +287,16 @@ GUISCRIPT
     cp -r "$SCRIPT_DIR/gui/wallpaper" "$air/usr/local/src/aeternus-gui/" 2>/dev/null || true
     cp    "$SCRIPT_DIR/gui/Makefile"  "$air/usr/local/src/aeternus-gui/" 2>/dev/null || true
 
-    ok "Binários instalados"
+    # ── Rofi — tema V0rtexOS ──────────────────────────────
+    log "Instalando tema Rofi V0rtexOS..."
+    mkdir -p "$air/root/.config/rofi"
+    install -Dm644 "$SCRIPT_DIR/config/rofi/v0rtex.rasi" \
+        "$air/root/.config/rofi/v0rtex.rasi"
+    install -Dm644 "$SCRIPT_DIR/config/rofi/config.rasi" \
+        "$air/root/.config/rofi/config.rasi"
+    ok "Rofi tema instalado"
+
+    ok "Binários e configs GUI instalados"
 
     # ── 5. Serviços systemd ───────────────────────────────
     log "Instalando serviços systemd..."
@@ -315,6 +324,61 @@ GUISCRIPT
     done
     ln -sf "/etc/systemd/system/amnesia-shutdown.service" \
         "$air/etc/systemd/system/halt.target.wants/amnesia-shutdown.service" 2>/dev/null || true
+    ok "Serviços habilitados"
+
+    # ── Mascarar serviços lentos desnecessários (live ISO) ────
+    log "Mascarando serviços desnecessários para boot rápido..."
+    mkdir -p "$air/etc/systemd/system"
+    local MASK_SVCS=(
+        lvm2-monitor.service
+        lvm2-lvmpolld.service
+        dm-event.service
+        mdmon.service
+        mdadm.service
+        man-db.service
+        man-db-cache-update.service
+        updatedb.service
+        ldconfig.service
+        systemd-update-utmp.service
+        systemd-update-utmp-runlevel.service
+        systemd-update-done.service
+        alsa-restore.service
+        alsa-state.service
+        bluetooth.service
+        ModemManager.service
+        cups.service
+        avahi-daemon.service
+        avahi-daemon.socket
+        wpa_supplicant.service
+        iwd.service
+    )
+    for svc in "${MASK_SVCS[@]}"; do
+        ln -sf /dev/null "$air/etc/systemd/system/${svc}" 2>/dev/null || true
+    done
+    ok "$(echo "${#MASK_SVCS[@]}" serviços desnecessários mascarados)"
+
+    # ── Zram swap para boot mais rápido (compressão em RAM) ───
+    cat > "$air/etc/systemd/zram-generator.conf" <<'ZRAM'
+[zram0]
+zram-size = min(ram / 2, 4096)
+compression-algorithm = zstd
+swap-priority = 100
+ZRAM
+    ok "Zram swap configurado (lz4/zstd)"
+
+    # ── Systemd journal em RAM — evitar writes lentos ─────────
+    mkdir -p "$air/etc/systemd/journald.conf.d"
+    cat > "$air/etc/systemd/journald.conf.d/v0rtex.conf" <<'JRN'
+[Journal]
+Storage=volatile
+Compress=yes
+SystemMaxUse=64M
+RuntimeMaxUse=64M
+RateLimitIntervalSec=0
+RateLimitBurst=0
+JRN
+    ok "Journal em RAM configurado"
+
     ok "Serviços configurados"
 
     # ── 6. Kernel hardening ───────────────────────────────
@@ -397,7 +461,8 @@ configure_boot() {
     mkdir -p "$air/boot/grub"
     cat > "$PROFILE_DIR/grub/grub.cfg" <<'GRUBCFG'
 set default=0
-set timeout=5
+set timeout=1
+set timeout_style=countdown
 set gfxpayload=keep
 insmod all_video
 insmod gzio
@@ -412,13 +477,15 @@ menuentry "V0rtexOS" --class v0rtex --class gnu-linux --class gnu --class os {
     linux /arch/boot/x86_64/vmlinuz-linux-hardened \
         archisobasedir=arch \
         archisolabel=V0RTEX_OS \
-        nomodeset loglevel=5 \
+        quiet loglevel=0 rd.udev.log_level=3 \
+        rd.systemd.show_status=auto \
+        systemd.show_status=0 \
+        vt.handoff=7 \
         apparmor=1 security=apparmor \
         page_poison=1 slab_nomerge \
         pti=on vsyscall=none \
         spectre_v2=on spec_store_bypass_disable=on \
         mitigations=auto,nosmt \
-        systemd.show_status=yes \
         console=tty0
     initrd /arch/boot/x86_64/initramfs-linux-hardened.img
 }
@@ -427,10 +494,13 @@ menuentry "V0rtexOS (VM/Fast Boot)" --class v0rtex {
     linux /arch/boot/x86_64/vmlinuz-linux-hardened \
         archisobasedir=arch \
         archisolabel=V0RTEX_OS \
-        nomodeset loglevel=5 \
+        quiet loglevel=0 \
+        rd.systemd.show_status=false \
+        systemd.show_status=0 \
+        vt.handoff=7 \
         apparmor=1 security=apparmor \
         mitigations=off \
-        systemd.show_status=yes \
+        nowatchdog \
         console=tty0
     initrd /arch/boot/x86_64/initramfs-linux-hardened.img
 }

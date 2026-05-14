@@ -1,23 +1,30 @@
-# V0rtexOS — Lista de pacotes da ISO (SLIM)
+# V0rtexOS — Lista completa de pacotes da ISO
 # Kernel: linux-hardened | Repos: Arch oficial + BlackArch
-# REGRA: pacotes pesados vão para install-tools.sh (pós-boot)
-# Ferramentas de dev/compiladores/frameworks ficam no install-tools
+# Total: 620+ pacotes
 
-# ── KERNEL HARDENED ──────────────────────────────────
+# ══════════════════════════════════════════════════════════
+# KERNEL HARDENED
+# ══════════════════════════════════════════════════════════
 linux-hardened
 linux-hardened-headers
 linux-firmware
+linux-firmware-whence
 mkinitcpio
 mkinitcpio-archiso
 squashfs-tools
+dracut
 
-# ── BASE DO SISTEMA ──────────────────────────────────
+# ══════════════════════════════════════════════════════════
+# BASE DO SISTEMA
+# ══════════════════════════════════════════════════════════
 base
 base-devel
 archlinux-keyring
 bash
+bash-completion
 bzip2
 coreutils
+diffutils
 file
 findutils
 gawk
@@ -28,6 +35,9 @@ grep
 gzip
 iproute2
 iputils
+kbd
+keyutils
+less
 licenses
 pciutils
 procps-ng
@@ -37,18 +47,26 @@ shadow
 systemd
 systemd-sysvcompat
 tar
+texinfo
+usbutils
 util-linux
+which
 xz
 
-# ── BOOT ─────────────────────────────────────────────
+# ══════════════════════════════════════════════════════════
+# BOOT
+# ══════════════════════════════════════════════════════════
 grub
 efibootmgr
 efitools
 os-prober
 syslinux
 plymouth
+memtest86+
 
-# ── CRIPTOGRAFIA / DISCO ─────────────────────────────
+# ══════════════════════════════════════════════════════════
+# CRIPTOGRAFIA / DISCO
+# ══════════════════════════════════════════════════════════
 cryptsetup
 lvm2
 device-mapper
@@ -60,20 +78,21 @@ f2fs-tools
 ntfs-3g
 parted
 gptfdisk
+hdparm
+sdparm
+nvme-cli
 
-# ── REDE ─────────────────────────────────────────────
+# ══════════════════════════════════════════════════════════
+# REDE — CORE
+# ══════════════════════════════════════════════════════════
 networkmanager
 network-manager-applet
 openvpn
 networkmanager-openvpn
 wireguard-tools
 openresolv
-tor
-torsocks
-privoxy
-proxychains-ng
-iptables-nft
 nftables
+iptables-nft
 ipset
 net-tools
 bridge-utils
@@ -85,16 +104,37 @@ libpcap
 openbsd-netcat
 socat
 tcpdump
-wireshark-cli
 iw
 wireless_tools
 wpa_supplicant
 macchanger
-aircrack-ng
-hcxtools
-hcxdumptool
+mtr
+iftop
+nethogs
+bmon
+vnstat
+nmap
+ncat
+masscan
+rustscan
 
-# ── SHELL / TERMINAL ─────────────────────────────────
+# ══════════════════════════════════════════════════════════
+# ANONIMATO / TOR / PROXY
+# ══════════════════════════════════════════════════════════
+tor
+torsocks
+privoxy
+proxychains-ng
+obfs4proxy
+onionshare
+torbrowser-launcher
+redsocks
+i2pd
+dnscrypt-proxy
+
+# ══════════════════════════════════════════════════════════
+# SHELL / TERMINAL
+# ══════════════════════════════════════════════════════════
 zsh
 zsh-completions
 zsh-syntax-highlighting
@@ -106,7 +146,10 @@ screen
 neovim
 vim
 nano
+emacs-nox
 ranger
+lf
+nnn
 bat
 eza
 fd
@@ -115,8 +158,18 @@ fzf
 starship
 zoxide
 jq
+yq
+gron
+fx
+moreutils
+multitail
+lnav
+glow
+tput
 
-# ── X.ORG / DISPLAY ──────────────────────────────────
+# ══════════════════════════════════════════════════════════
+# X.ORG / DISPLAY
+# ══════════════════════════════════════════════════════════
 xorg-server
 xorg-xinit
 xorg-xrandr
@@ -124,16 +177,32 @@ xorg-xdpyinfo
 xorg-xev
 xorg-xwininfo
 xorg-setxkbmap
+xorg-xset
+xorg-xprop
+xorg-xkill
+xorg-xhost
+xorg-xauth
+xdotool
+xclip
+xsel
+xdg-utils
+xdg-user-dirs
 arandr
 picom
 feh
+scrot
+flameshot
 
-# ── AETERNUS GUI (X11 + Cairo — compiled C) ───────────
+# ══════════════════════════════════════════════════════════
+# V0RTEX GUI — C/Xlib/Cairo
+# ══════════════════════════════════════════════════════════
 cairo
 libxrender
 libx11
 
-# ── WINDOW MANAGER ───────────────────────────────────
+# ══════════════════════════════════════════════════════════
+# WINDOW MANAGER / COMPOSITOR
+# ══════════════════════════════════════════════════════════
 i3-wm
 i3status
 i3lock
@@ -143,38 +212,64 @@ rofi
 polybar
 dunst
 xss-lock
+redshift
+nitrogen
+lxappearance
+qt5ct
 
-# ── FONTES ───────────────────────────────────────────
+# ══════════════════════════════════════════════════════════
+# FONTES
+# ══════════════════════════════════════════════════════════
 ttf-jetbrains-mono-nerd
 ttf-hack-nerd
 ttf-liberation
+ttf-font-awesome
+ttf-roboto
+ttf-fira-code
 noto-fonts
 noto-fonts-emoji
+noto-fonts-cjk
 
-# ── APPS GUI ─────────────────────────────────────────
+# ══════════════════════════════════════════════════════════
+# APPS GUI
+# ══════════════════════════════════════════════════════════
 firefox
 thunar
+mousepad
+geany
+evince
+mpv
+viewnior
+file-roller
+xarchiver
+galculator
+gnome-calculator
+nm-connection-editor
+pavucontrol
+gthumb
+eog
 
-# ── SEGURANÇA BASE ────────────────────────────────────
+# ══════════════════════════════════════════════════════════
+# SEGURANÇA BASE / HARDENING
+# ══════════════════════════════════════════════════════════
 apparmor
 firejail
 libseccomp
 rkhunter
 lynis
+chkrootkit
 fail2ban
 ufw
 audit
 yara
+aide
+clamav
+clamav-db
+tripwire
 
-# ── SECURE DELETE / FORENSE LEVE ──────────────────────
-secure-delete
-wipe
-foremost
-sleuthkit
-perl-image-exiftool
-testdisk
-
-# ── RECONHECIMENTO / SCANNING ────────────────────────
+# ══════════════════════════════════════════════════════════
+# RECONHECIMENTO / SCANNING
+# ══════════════════════════════════════════════════════════
 nmap
 masscan
 rustscan
@@ -184,14 +279,44 @@ nbtscan
 onesixtyone
 enum4linux-ng
 smbmap
+dnsx
+naabu
+subfinder
+amass
+assetfinder
+sslscan
+tlsx
+cdncheck
+mapcidr
+dnsrecon
+fierce
+whois
+sublist3r
+knockpy
+shuffledns
+puredns
+altdns
+dnstwist
 
-# ── FUZZING / DISCOVERY ──────────────────────────────
-gobuster
-ffuf
-feroxbuster
-dirb
+# ══════════════════════════════════════════════════════════
+# OSINT
+# ══════════════════════════════════════════════════════════
+theharvester
+recon-ng
+spiderfoot
+sherlock
+holehe
+phoneinfoga
+photon
+osint-spy
+maltego
+exiftool
+metagoofil
+goofile
 
-# ── WEB / PROXY ──────────────────────────────────────
+# ══════════════════════════════════════════════════════════
+# WEB / API / PROXY
+# ══════════════════════════════════════════════════════════
 nikto
 whatweb
 curl
@@ -199,44 +324,266 @@ wget
 httpie
 mitmproxy
 sslsplit
+arjun
+wfuzz
+dalfox
+xsstrike
+jwt-tool
+tplmap
+sstimap
+graphqlmap
+linkfinder
+gitleaks
+trufflehog
+gau
+waybackurls
+hakrawler
+gospider
+katana
+httpx
+nuclei
+byp4xx
+smuggler
+corscanner
+wafw00f
+sslyze
+wapiti
+zaproxy
 
-# ── EXPLORAÇÃO (LEVE) ─────────────────────────────────
+# ══════════════════════════════════════════════════════════
+# FUZZING / DISCOVERY
+# ══════════════════════════════════════════════════════════
+gobuster
+ffuf
+feroxbuster
+dirb
+wfuzz
+dirsearch
+cewl
+crunch
+cupp
+wordlistctl
+pydictor
+maskprocessor
+statsprocessor
+princeprocessor
+
+# ══════════════════════════════════════════════════════════
+# EXPLORAÇÃO / POST-EXPLOITATION
+# ══════════════════════════════════════════════════════════
+metasploit
+exploitdb
 sqlmap
+commix
+nosqlmap
+sqlninja
+evil-winrm
+crackmapexec
+impacket
+responder
+kerbrute
+bloodhound
+neo4j
+ldapdomaindump
+lsassy
+pypykatz
+certipy-ad
+coercer
+ldeep
+enum4linux
+smbclient
+rpcclient
+
+# ══════════════════════════════════════════════════════════
+# FORÇA BRUTA / CREDENCIAIS
+# ══════════════════════════════════════════════════════════
 hydra
 medusa
+ncrack
 hashcat
 hashcat-utils
 john
-crunch
+ophcrack
+fcrackzip
+pdfcrack
+rarcrack
+zip2john
+pdf2john
+office2john
 
-# ── WIRELESS (LEVE) ──────────────────────────────────
+# ══════════════════════════════════════════════════════════
+# WIRELESS / RF
+# ══════════════════════════════════════════════════════════
+aircrack-ng
+hcxtools
+hcxdumptool
 reaver
 bully
 pixiewps
+cowpatty
+asleap
+mdk4
+kismet
+bettercap
+wifite2
+wifiphisher
+airgeddon
+eaphammer
+freeradius
+hostapd-wpe
 
-# ── BLUETOOTH ─────────────────────────────────────────
+# ══════════════════════════════════════════════════════════
+# BLUETOOTH / RF
+# ══════════════════════════════════════════════════════════
 bluez
 bluez-utils
+bluewalker
+bluesnarfer
+bluelog
+ubertooth
+btlejuice
+btle-sniffer
+rfkill
 
-# ── ANÁLISE BINÁRIA LEVE ──────────────────────────────
+# ══════════════════════════════════════════════════════════
+# ANÁLISE BINÁRIA / REVERSE ENGINEERING
+# ══════════════════════════════════════════════════════════
 gdb
+gdb-common
+radare2
+cutter
+r2ghidra
 binwalk
 ltrace
 strace
 checksec
 patchelf
+pwntools
+python-pwntools
 python-capstone
+python-frida
+frida
+frida-tools
+ropper
+ROPgadget
+one_gadget
+jadx
+apktool
+dex2jar
+android-tools
+apksigner
+objdump
+readelf
+strings
+hexedit
+xxd
+bsdiff
+patchutils
+yara
+yara-tools
 
-# ── CRYPTO / ESTEGANOGRAFIA ───────────────────────────
+# ══════════════════════════════════════════════════════════
+# ANÁLISE DE REDE / IDS / SNIFFER
+# ══════════════════════════════════════════════════════════
+wireshark-cli
+wireshark-qt
+zeek
+snort
+suricata
+tcpflow
+tcpreplay
+tcptrace
+p0f
+ettercap
+bettercap
+netsniff-ng
+driftnet
+urlsnarf
+webspy
+dsniff
+arpwatch
+arp-scan
+
+# ══════════════════════════════════════════════════════════
+# FORENSE / RECUPERAÇÃO
+# ══════════════════════════════════════════════════════════
+secure-delete
+wipe
+foremost
+sleuthkit
+autopsy
+volatility3
+bulk_extractor
+dc3dd
+gnu-ddrescue
+guymager
+safecopy
+ddrescue
+photorec
+testdisk
+scalpel
+recoverjpeg
+exiftool
+perl-image-exiftool
+chkdsk
+fsck
+
+# ══════════════════════════════════════════════════════════
+# CRYPTO / ESTEGANOGRAFIA
+# ══════════════════════════════════════════════════════════
 gnupg
+gpg2
 hashid
 steghide
+stegcracker
+zsteg
+outguess
+stegosuite
+spectrology
+openstego
+snow
+cryptsetup
+age
+ccrypt
 
-# ── DEV ESSENCIAL (LEVE) ──────────────────────────────
+# ══════════════════════════════════════════════════════════
+# DESENVOLVIMENTO — CORE
+# ══════════════════════════════════════════════════════════
 python
 python-pip
+python-pipx
 python-setuptools
 python-wheel
+python-virtualenv
+gcc
+g++
+make
+cmake
+ninja
+nasm
+yasm
+masm
+perl
+perl-modules
+ruby
+ruby-bundler
+ruby-dev
+lua
+lua-socket
+php
+php-cgi
+go
+rust
+nodejs
+npm
+yarn
+jdk17-openjdk
+maven
+gradle
+
+# ══════════════════════════════════════════════════════════
+# PYTHON — LIBS ESSENCIAIS
+# ══════════════════════════════════════════════════════════
 python-gobject
 gtk3
 gdk-pixbuf2
@@ -246,13 +593,6 @@ python-cryptography
 python-paramiko
 python-pexpect
 python-pyjwt
-gcc
-make
-cmake
-nasm
-perl
-
-# ── PYTHON SECURITY LIBS ──────────────────────────────
 python-dnspython
 python-netaddr
 python-psutil
@@ -260,24 +600,124 @@ python-bs4
 python-lxml
 python-aiohttp
 python-httpx
+python-flask
+python-fastapi
+python-sqlalchemy
+python-click
+python-colorama
+python-tabulate
+python-xmltodict
+python-toml
+python-pyyaml
+python-pyotp
+python-qrcode
+python-pillow
+python-matplotlib
+python-numpy
+python-pandas
+python-scikit-learn
+python-shodan
+python-censys
+python-ldap3
+python-neo4j
+python-impacket
+python-bloodhound
+python-certipy
+python-pyautogui
+python-selenium
+python-playwright
+python-mechanize
+python-html5lib
+python-cssselect
+python-six
+python-charset-normalizer
+python-certifi
+python-urllib3
+python-idna
+python-pyzmq
+python-msgpack
+python-redis
+python-pymongo
+python-elasticsearch
 
-# ── BLACKARCH — RECONHECIMENTO (LEVE) ─────────────────
-dnsrecon
-fierce
-whois
+# ══════════════════════════════════════════════════════════
+# PYTHON — SEGURANÇA
+# ══════════════════════════════════════════════════════════
+python-pwntools
+python-frida
+python-angr
+python-z3
+python-ropper
+python-keystone-engine
+python-unicorn
+python-manticore
+python-miasm
+python-malduck
+python-yara-python
+python-ssdeep
+python-tlsh
+python-volatility3
+python-oletools
+python-pefile
+python-macholib
 
-# ── BLACKARCH — ATAQUES DE REDE ───────────────────────
-hping
-nemesis
+# ══════════════════════════════════════════════════════════
+# SEGURANÇA MOBILE / APK
+# ══════════════════════════════════════════════════════════
+android-tools
+adb
+fastboot
+jadx
+apktool
+dex2jar
+apksigner
+androguard
+mobsf
 
-# ── BLACKARCH — WEB ───────────────────────────────────
-wafw00f
-sslyze
+# ══════════════════════════════════════════════════════════
+# CLOUD / DEVOPS
+# ══════════════════════════════════════════════════════════
+aws-cli
+azure-cli
+kubectl
+helm
+terraform
+ansible
+vagrant
+packer
 
-# ── UTILIDADES ────────────────────────────────────────
+# ══════════════════════════════════════════════════════════
+# CONTAINERS / VM
+# ══════════════════════════════════════════════════════════
+docker
+docker-compose
+podman
+buildah
+skopeo
+qemu-base
+qemu-img
+libvirt
+virt-manager
+
+# ══════════════════════════════════════════════════════════
+# BANCO DE DADOS
+# ══════════════════════════════════════════════════════════
+sqlite
+postgresql
+postgresql-libs
+mariadb-clients
+redis
+mongodb-tools
+
+# ══════════════════════════════════════════════════════════
+# UTILITÁRIOS — SISTEMA
+# ══════════════════════════════════════════════════════════
 htop
 btop
+glances
 iotop
+bmon
+iftop
 nethogs
 duf
 ncdu
@@ -285,6 +725,9 @@ tree
 rsync
 git
 git-lfs
+git-crypt
+git-secrets
+gh
 p7zip
 unzip
 zip
@@ -298,4 +741,65 @@ sysstat
 dmidecode
 lshw
 smartmontools
+hdparm
+inxi
+neofetch
+fastfetch
+screenfetch
 tealdeer
+tldr
+cheat
+navi
+fzf
+tmux
+asciinema
+reptyr
+expect
+dialog
+whiptail
+inotify-tools
+parallel
+entr
+watch
+stress-ng
+fio
+sysbench
+hyperfine
+bandwhich
+dog
+gping
+hexyl
+procs
+dust
+sd
+choose
+xh
+delta
+
+# ══════════════════════════════════════════════════════════
+# COMUNICAÇÃO / TRANSFER
+# ══════════════════════════════════════════════════════════
+nfs-utils
+samba
+vsftpd
+filezilla
+transmission-cli
+rclone
+s3cmd
+
+# ══════════════════════════════════════════════════════════
+# MULTIMÍDIA
+# ══════════════════════════════════════════════════════════
+mpv
+ffmpeg
+imagemagick
+sox
+v4l-utils
+
+# ══════════════════════════════════════════════════════════
+# WORDLISTS
+# ══════════════════════════════════════════════════════════
+wordlists
+seclists
+rockyou
+dirb-wordlists

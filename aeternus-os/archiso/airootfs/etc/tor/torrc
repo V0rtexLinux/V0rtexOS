@@ -1,53 +1,115 @@
-# V0rtexOS — Tor Configuration
-# /etc/tor/torrc — Configuração para Ghost Protocol (Tor-over-VPN)
+# V0rtexOS — Tor Configuration (hardened)
+# /etc/tor/torrc — Ghost Protocol Engine
 
-# Portas de controle e SOCKS
+# ══════════════════════════════════════════════════════════
+# PORTAS PRINCIPAIS
+# ══════════════════════════════════════════════════════════
 SocksPort 9050
+SocksPort 9051 IsolateDestAddr IsolateDestPort
 SocksPolicy accept 127.0.0.1
+SocksPolicy accept 10.0.0.0/8
 SocksPolicy reject *
-ControlPort 9051
-HashedControlPassword ""
 
-# TransPort — Redirecionar todo TCP para o Tor
+ControlPort 9053
+ControlListenAddress 127.0.0.1
+HashedControlPassword ""
+CookieAuthentication 1
+CookieAuthFileGroupReadable 1
+
+# ══════════════════════════════════════════════════════════
+# TRANSPARENTE (redirecionar TODO tráfego via Tor)
+# ══════════════════════════════════════════════════════════
 TransPort 9040 IsolateClientAddr IsolateClientProtocol IsolateDestAddr IsolateDestPort
 TransListenAddress 127.0.0.1
+TransPort [::1]:9040
 
-# DNSPort — Resolver DNS via Tor
+# ══════════════════════════════════════════════════════════
+# DNS VIA TOR
+# ══════════════════════════════════════════════════════════
 DNSPort 5353
 DNSListenAddress 127.0.0.1
 AutomapHostsOnResolve 1
-AutomapHostsSuffixes .exit,.onion
+AutomapHostsSuffixes .exit,.onion,.onion.
 
-# Log mínimo (privacidade)
+# ══════════════════════════════════════════════════════════
+# PRIVACIDADE / LOGGING
+# ══════════════════════════════════════════════════════════
 Log notice syslog
 Log warn file /var/log/tor/warnings.log
+SafeLogging 1
+LogTimeGranularity 60
 
-# Segurança
+# ══════════════════════════════════════════════════════════
+# SEGURANÇA DO PROCESSO
+# ══════════════════════════════════════════════════════════
 DataDirectory /var/lib/tor
-CookieAuthentication 1
 DisableAllSwap 1
 HardwareAccel 1
 AvoidDiskWrites 1
+NoExec 1
 
-# Circuitos mais rápidos
-MaxCircuitDirtiness 600
+# ══════════════════════════════════════════════════════════
+# CIRCUITOS — OTIMIZAÇÕES
+# ══════════════════════════════════════════════════════════
+MaxCircuitDirtiness 300
 NewCircuitPeriod 30
 CircuitBuildTimeout 10
 LearnCircuitBuildTimeout 0
+MaxClientCircuitsPending 48
+CircuitStreamTimeout 60
+EnforceDistinctSubnets 1
 
-# Nós de saída — excluir países de vigilância (Five Eyes + parceiros)
-ExcludeExitNodes {us},{gb},{au},{ca},{nz},{de},{fr},{nl},{be},{se},{no},{dk},{fi},{it},{es},{jp},{kr},{sg}
+# ══════════════════════════════════════════════════════════
+# NÓS DE SAÍDA — EXCLUIR FIVE EYES + ALIADOS
+# ══════════════════════════════════════════════════════════
+ExcludeExitNodes {us},{gb},{au},{ca},{nz},{de},{fr},{nl},{be},{se},{no},{dk},{fi},{it},{es},{jp},{kr},{sg},{il},{tr}
+ExcludeNodes {us},{gb},{au},{ca},{nz}
 StrictNodes 1
 
-# Entry guards — priorizar nós em países neutros
-EntryNodes {ch},{is},{ro},{bg},{md},{rs},{cz},{pl}
-StrictNodes 0
+# Preferir nós de entrada em países neutros
+EntryNodes {ch},{is},{ro},{bg},{md},{rs},{cz},{sk},{si}
+NumEntryGuards 3
+GuardLifetime 2 months
 
-# Hidden Service se necessário (comentado por padrão)
+# ══════════════════════════════════════════════════════════
+# STREAM ISOLATION — separar circuitos por app
+# ══════════════════════════════════════════════════════════
+SocksPort 9100 IsolateDestAddr
+SocksPort 9101 IsolateDestAddr IsolateDestPort
+SocksPort 9102 IsolateClientAddr IsolateDestAddr IsolateDestPort
+
+# ══════════════════════════════════════════════════════════
+# BRIDGES — Descomentartcase Tor esteja bloqueado
+# ══════════════════════════════════════════════════════════
+# UseBridges 1
+# ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy
+# ClientTransportPlugin meek_lite exec /usr/bin/obfs4proxy
+# ClientTransportPlugin snowflake exec /usr/bin/snowflake-client \
+#     -url https://snowflake-broker.torproject.net.global.prod.fastly.net/ \
+#     -front cdn.sstatic.net \
+#     -ice stun:stun.l.google.com:19302,stun:stun.voip.blackberry.com:3478
+#
+# Bridge obfs4 <IP:PORTA> <FINGERPRINT> cert=<CERT> iat-mode=0
+# Obter bridges: https://bridges.torproject.org/?transport=obfs4
+
+# ══════════════════════════════════════════════════════════
+# ONION SERVICES (comentado — ativar se necessário)
+# ══════════════════════════════════════════════════════════
 # HiddenServiceDir /var/lib/tor/hidden_service/
 # HiddenServicePort 80 127.0.0.1:8080
+# HiddenServiceVersion 3
+# HiddenServiceDirGroupReadable 0
 
-# Bridge (descomentar se Tor estiver bloqueado)
-# UseBridges 1
-# Bridge obfs4 <bridge_address>
-# ClientTransportPlugin obfs4 exec /usr/bin/obfs4proxy
+# ══════════════════════════════════════════════════════════
+# PERFORMANCE NETWORK
+# ══════════════════════════════════════════════════════════
+BandwidthRate 10 MB
+BandwidthBurst 20 MB
+ConnLimit 1000
+MaxMemInQueues 256 MB
+ServerDNSResolvConfFile /etc/resolv.conf
+
+# ══════════════════════════════════════════════════════════
+# SANDBOX (requer kernel com seccomp)
+# ══════════════════════════════════════════════════════════
+Sandbox 1
