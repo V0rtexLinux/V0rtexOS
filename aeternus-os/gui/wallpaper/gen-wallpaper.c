@@ -1,5 +1,5 @@
 /*
- * AETERNUS OS — Wallpaper Generator
+ * V0rtexOS — Wallpaper Generator
  * Compile: gcc -O2 -o gen-wallpaper gen-wallpaper.c \
  *          $(pkg-config --libs --cflags cairo) -lm
  *
@@ -8,7 +8,7 @@
  *   · Subtle hex grid overlay (gray)
  *   · Corner geometric accents (white)
  *   · Center vertical gradient gradient line
- *   · "AETERNUS OS" watermark (dim)
+ *   · "V0RTEX OS" watermark (dim)
  *   · Scan-line texture
  */
 
@@ -201,7 +201,7 @@ int main(int argc, char **argv) {
         cairo_set_font_size(cr, 14.0);
         cairo_set_source_rgba(cr, 1, 1, 1, 0.04);
 
-        const char *wm = "AETERNUS OS";
+        const char *wm = "V0RTEX OS";
         cairo_text_extents_t te;
         cairo_text_extents(cr, wm, &te);
         cairo_move_to(cr,
@@ -223,7 +223,7 @@ int main(int argc, char **argv) {
         cairo_set_font_size(cr, 9.0);
         cairo_set_source_rgba(cr, 0.53, 0.53, 0.53, 0.2);
 
-        const char *tag = "SECURITY · ANONYMITY · CONTROL";
+        const char *tag = "V0RTEX OS · SECURITY · ANONYMITY · CONTROL";
         cairo_text_extents_t te;
         cairo_text_extents(cr, tag, &te);
         cairo_move_to(cr,

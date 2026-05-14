@@ -1,4 +1,4 @@
-# Aeternus OS — X11 GUI (C/Cairo)
+# V0rtexOS — X11 GUI (C/Cairo)
 
 GUI nativa em C puro usando Xlib + Cairo. Sem Python, sem web.
 
@@ -20,7 +20,7 @@ GUI nativa em C puro usando Xlib + Cairo. Sem Python, sem web.
 ## Animações do Splash
 
 1. **0.10s** — Barras horizontais deslizam (esquerda / direita)
-2. **0.45s** — "AETERNUS" entra deslizando da esquerda
+2. **0.45s** — "V0RTEX" entra deslizando da esquerda
 3. **0.65s** — "OS" entra deslizando da direita
 4. **0.85s** — Tagline fade-in
 5. **1.20s** — Hexagonal grid revela progressivamente

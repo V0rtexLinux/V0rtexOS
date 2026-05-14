@@ -1,5 +1,5 @@
 /*
- * AETERNUS OS — Splash Screen
+ * V0rtexOS — Splash Screen
  * Compile: gcc -O2 -o aeternus-splash aeternus-splash.c \
  *          $(pkg-config --libs --cflags x11 cairo xrender)
  *
@@ -7,7 +7,7 @@
  * Animation sequence (time in seconds):
  *   0.00 → black
  *   0.10 → top/bottom accent bars swipe in (left/right)
- *   0.45 → "AETERNUS" swipes in from left
+ *   0.45 → "V0RTEX" swipes in from left
  *   0.65 → "OS" swipes in from right
  *   0.85 → tagline fades in
  *   1.20 → hex grid draws in
@@ -212,7 +212,7 @@ static void render_frame(cairo_t *cr, int W, int H, double t) {
         }
     }
 
-    /* --- "AETERNUS" text swipes from left --- */
+    /* --- "V0RTEX" text swipes from left --- */
     {
         double p = ease_out(progress(t, T_LOGO_START, T_LOGO_END));
         if (p > 0.0) {
@@ -223,7 +223,7 @@ static void render_frame(cairo_t *cr, int W, int H, double t) {
             cairo_set_font_size(cr, 88.0);
 
             cairo_text_extents_t te;
-            cairo_text_extents(cr, "AETERNUS", &te);
+            cairo_text_extents(cr, "V0RTEX", &te);
 
             /* swipe: starts far left, ends at center */
             double dest_x = cx - te.width / 2.0 - te.x_bearing;
@@ -231,15 +231,14 @@ static void render_frame(cairo_t *cr, int W, int H, double t) {
             double tx     = src_x + (dest_x - src_x) * p;
             double ty     = cy - 28.0;
 
-            /* letter-spacing simulation via clip-and-clip */
             cairo_set_source_rgba(cr, C_PRI_R, C_PRI_G, C_PRI_B, 0.97);
             cairo_move_to(cr, tx, ty);
-            cairo_show_text(cr, "AETERNUS");
+            cairo_show_text(cr, "V0RTEX");
 
             /* subtle glow / shadow layer */
             cairo_set_source_rgba(cr, C_PRI_R, C_PRI_G, C_PRI_B, 0.06 * p);
             cairo_move_to(cr, tx + 2, ty + 2);
-            cairo_show_text(cr, "AETERNUS");
+            cairo_show_text(cr, "V0RTEX");
 
             cairo_restore(cr);
         }
@@ -259,7 +258,7 @@ static void render_frame(cairo_t *cr, int W, int H, double t) {
             cairo_select_font_face(cr, "Liberation Mono",
                 CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_BOLD);
             cairo_set_font_size(cr, 88.0);
-            cairo_text_extents(cr, "AETERNUS", &te_main);
+            cairo_text_extents(cr, "V0RTEX", &te_main);
 
             /* position "OS" label to the right of main text */
             double main_x   = cx - te_main.width / 2.0 - te_main.x_bearing;
@@ -294,7 +293,7 @@ static void render_frame(cairo_t *cr, int W, int H, double t) {
                 CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
             cairo_set_font_size(cr, 13.0);
 
-            const char *tag = "SECURITY  ·  ANONYMITY  ·  CONTROL";
+            const char *tag = "V0RTEX OS  ·  SECURITY  ·  ANONYMITY  ·  CONTROL";
             cairo_text_extents_t te;
             cairo_text_extents(cr, tag, &te);
 
@@ -318,7 +317,7 @@ static void render_frame(cairo_t *cr, int W, int H, double t) {
                 CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
             cairo_set_font_size(cr, 10.0);
 
-            const char *ver = "v2.0 · GREY HAT EDITION";
+            const char *ver = "V0RTEX OS  v2.0 · GREY HAT EDITION";
             cairo_text_extents_t te;
             cairo_text_extents(cr, ver, &te);
 
@@ -470,7 +469,7 @@ static void render_frame(cairo_t *cr, int W, int H, double t) {
 int main(int argc, char **argv) {
     Display *dpy = XOpenDisplay(NULL);
     if (!dpy) {
-        fprintf(stderr, "aeternus-splash: cannot open display\n");
+        fprintf(stderr, "v0rtex-splash: cannot open display\n");
         return 1;
     }
 

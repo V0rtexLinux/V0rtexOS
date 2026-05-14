@@ -1,4 +1,4 @@
-# AETERNUS OS — GUI Build System
+# V0rtexOS — GUI Build System
 # Targets: all, splash, panel, wallpaper, install, clean
 #
 # Dependencies (Arch packages):
@@ -6,7 +6,7 @@
 
 PREFIX     ?= /usr/local
 BINDIR     := $(PREFIX)/bin
-SHAREDIR   := $(PREFIX)/share/aeternus
+SHAREDIR   := $(PREFIX)/share/v0rtex
 
 CC         := gcc
 CFLAGS     := -O2 -Wall -Wextra -std=c11 \
@@ -21,7 +21,7 @@ SPLASH_BIN := splash/aeternus-splash
 PANEL_BIN  := panel/aeternus-panel
 WP_BIN     := wallpaper/gen-wallpaper
 
-WALLPAPER  := wallpaper/aeternus-wallpaper.png
+WALLPAPER  := wallpaper/v0rtex-wallpaper.png
 
 .PHONY: all splash panel wallpaper install clean
 
@@ -34,28 +34,28 @@ panel: $(PANEL_BIN)
 wallpaper: $(WP_BIN) $(WALLPAPER)
 
 $(SPLASH_BIN): $(SPLASH_SRC)
-	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
-	@echo "[OK] built $@"
+        $(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
+        @echo "[OK] built $@"
 
 $(PANEL_BIN): $(PANEL_SRC)
-	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
-	@echo "[OK] built $@"
+        $(CC) $(CFLAGS) -o $@ $< $(LDFLAGS)
+        @echo "[OK] built $@"
 
 $(WP_BIN): $(WP_SRC)
-	$(CC) $(CFLAGS) -o $@ $< \
-	    $(shell pkg-config --libs --cflags cairo 2>/dev/null) -lm
-	@echo "[OK] built $@"
+        $(CC) $(CFLAGS) -o $@ $< \
+            $(shell pkg-config --libs --cflags cairo 2>/dev/null) -lm
+        @echo "[OK] built $@"
 
 $(WALLPAPER): $(WP_BIN)
-	$(WP_BIN) $(WALLPAPER)
-	@echo "[OK] generated $(WALLPAPER)"
+        $(WP_BIN) $(WALLPAPER)
+        @echo "[OK] generated $(WALLPAPER)"
 
 install: all
-	install -Dm755 $(SPLASH_BIN) $(BINDIR)/aeternus-splash
-	install -Dm755 $(PANEL_BIN)  $(BINDIR)/aeternus-panel
-	install -Dm644 $(WALLPAPER)  $(SHAREDIR)/wallpaper.png
-	@echo "[OK] installed to $(BINDIR)"
+        install -Dm755 $(SPLASH_BIN) $(BINDIR)/aeternus-splash
+        install -Dm755 $(PANEL_BIN)  $(BINDIR)/aeternus-panel
+        install -Dm644 $(WALLPAPER)  $(SHAREDIR)/wallpaper.png
+        @echo "[OK] installed to $(BINDIR)"
 
 clean:
-	rm -f $(SPLASH_BIN) $(PANEL_BIN) $(WP_BIN) $(WALLPAPER)
-	@echo "[OK] cleaned"
+        rm -f $(SPLASH_BIN) $(PANEL_BIN) $(WP_BIN) $(WALLPAPER)
+        @echo "[OK] cleaned"

@@ -1,5 +1,5 @@
 #!/bin/sh
-# AETERNUS OS — xinitrc
+# V0rtexOS — xinitrc
 # Boot sequence: splash → panel → i3wm
 
 export XDG_SESSION_TYPE=x11
@@ -14,8 +14,8 @@ if command -v aeternus-splash >/dev/null 2>&1; then
 fi
 
 # ── Wallpaper ─────────────────────────────────────────────────────────────────
-if [ -f /usr/local/share/aeternus/wallpaper.png ]; then
-    feh --bg-scale /usr/local/share/aeternus/wallpaper.png &
+if [ -f /usr/local/share/v0rtex/wallpaper.png ]; then
+    feh --bg-scale /usr/local/share/v0rtex/wallpaper.png &
 elif [ -f ~/.config/i3/wallpaper.png ]; then
     feh --bg-scale ~/.config/i3/wallpaper.png &
 else

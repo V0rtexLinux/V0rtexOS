@@ -234,8 +234,8 @@ populate_airootfs() {
 
         # Gerar wallpaper PNG e instalar
         if [ -f /tmp/gen-wallpaper ]; then
-            mkdir -p "$air/usr/local/share/aeternus"
-            /tmp/gen-wallpaper "$air/usr/local/share/aeternus/wallpaper.png" \
+            mkdir -p "$air/usr/local/share/v0rtex"
+            /tmp/gen-wallpaper "$air/usr/local/share/v0rtex/wallpaper.png" \
                 && ok "Wallpaper gerado em airootfs" \
                 || warn "Falha ao gerar wallpaper"
         fi

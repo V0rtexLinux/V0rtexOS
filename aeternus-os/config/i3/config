@@ -231,8 +231,8 @@ exec --no-startup-id bash -c "pgrep -x aeternus-panel || aeternus-panel &"
 
 # Wallpaper via aeternus (fallback)
 exec_always --no-startup-id bash -c "\
-    if [ -f /usr/local/share/aeternus/wallpaper.png ]; then \
-        feh --bg-scale /usr/local/share/aeternus/wallpaper.png; \
+    if [ -f /usr/local/share/v0rtex/wallpaper.png ]; then \
+        feh --bg-scale /usr/local/share/v0rtex/wallpaper.png; \
     elif [ -f ~/.config/i3/wallpaper.png ]; then \
         feh --bg-scale ~/.config/i3/wallpaper.png; \
     else \

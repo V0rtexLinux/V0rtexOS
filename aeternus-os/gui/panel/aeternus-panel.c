@@ -1,5 +1,5 @@
 /*
- * AETERNUS OS — Desktop Panel (top bar)
+ * V0rtexOS — Desktop Panel (top bar)
  * Compile: gcc -O2 -o aeternus-panel aeternus-panel.c \
  *          $(pkg-config --libs --cflags x11 cairo xrender) -lm
  *
@@ -216,18 +216,18 @@ static void render_panel(cairo_t *cr, int W, int H, SysInfo *si) {
         cairo_set_source_rgba(cr, C_PRI, 0.9);
 
         cairo_text_extents_t te;
-        cairo_text_extents(cr, "AET", &te);
+        cairo_text_extents(cr, "V0RT", &te);
         cairo_move_to(cr, x, (H + te.height) / 2.0 - 1);
-        cairo_show_text(cr, "AET");
+        cairo_show_text(cr, "V0RT");
         x += te.x_advance;
 
         cairo_select_font_face(cr, "Liberation Mono",
             CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL);
         cairo_set_source_rgba(cr, C_SEC, 0.7);
         cairo_text_extents_t te2;
-        cairo_text_extents(cr, "ERNUS", &te2);
+        cairo_text_extents(cr, "EX OS", &te2);
         cairo_move_to(cr, x, (H + te2.height) / 2.0 - 1);
-        cairo_show_text(cr, "ERNUS");
+        cairo_show_text(cr, "EX OS");
         x += te2.x_advance;
 
         /* separator */
@@ -348,7 +348,7 @@ int main(void) {
 
     Display *dpy = XOpenDisplay(NULL);
     if (!dpy) {
-        fprintf(stderr, "aeternus-panel: cannot open display\n");
+        fprintf(stderr, "v0rtex-panel: cannot open display\n");
         return 1;
     }
 
