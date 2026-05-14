@@ -203,34 +203,44 @@ populate_airootfs() {
     # ── GUI C — Splash + Panel + Wallpaper ───────────────
     # Compilar os programas C da GUI Aeternus (Xlib + Cairo)
     if command -v gcc &>/dev/null && pkg-config --exists x11 cairo xrender 2>/dev/null; then
-        log "Compilando GUI C (aeternus-splash, aeternus-panel, gen-wallpaper)..."
+        log "Compilando GUI C (splash, panel, taskbar, wallpaper)..."
 
-        CFLAGS_GUI="-O2 -Wall -std=c11"
-        LIBS_X11_CAIRO="$(pkg-config --libs --cflags x11 cairo xrender)"
+        # Use arrays to avoid word-splitting on pkg-config flags
+        CFLAGS_GUI=(-O2 -Wall -Wextra -std=c11)
+        readarray -t LIBS_X11 < <(pkg-config --libs --cflags x11 cairo xrender | tr ' ' '\n')
+        readarray -t LIBS_CAIRO < <(pkg-config --libs --cflags cairo | tr ' ' '\n')
 
-        gcc $CFLAGS_GUI -o /tmp/aeternus-splash \
+        gcc "${CFLAGS_GUI[@]}" -o /tmp/aeternus-splash \
             "$SCRIPT_DIR/gui/splash/aeternus-splash.c" \
-            $LIBS_X11_CAIRO -lm \
+            "${LIBS_X11[@]}" -lm \
             && ok "aeternus-splash compilado" \
-            || warn "Falha ao compilar aeternus-splash (X11 não disponível no host)"
+            || warn "Falha ao compilar aeternus-splash"
 
-        gcc $CFLAGS_GUI -o /tmp/aeternus-panel \
+        gcc "${CFLAGS_GUI[@]}" -o /tmp/aeternus-panel \
             "$SCRIPT_DIR/gui/panel/aeternus-panel.c" \
-            $LIBS_X11_CAIRO -lm \
+            "${LIBS_X11[@]}" -lm \
             && ok "aeternus-panel compilado" \
             || warn "Falha ao compilar aeternus-panel"
 
-        gcc $CFLAGS_GUI -o /tmp/gen-wallpaper \
+        gcc "${CFLAGS_GUI[@]}" -o /tmp/aeternus-taskbar \
+            "$SCRIPT_DIR/gui/panel/aeternus-taskbar.c" \
+            "${LIBS_X11[@]}" -lm \
+            && ok "aeternus-taskbar compilado" \
+            || warn "Falha ao compilar aeternus-taskbar"
+
+        gcc "${CFLAGS_GUI[@]}" -o /tmp/gen-wallpaper \
             "$SCRIPT_DIR/gui/wallpaper/gen-wallpaper.c" \
-            $(pkg-config --libs --cflags cairo) -lm \
+            "${LIBS_CAIRO[@]}" -lm \
             && ok "gen-wallpaper compilado" \
             || warn "Falha ao compilar gen-wallpaper"
 
         # Instalar binários compilados no airootfs
-        [ -f /tmp/aeternus-splash ] && \
-            install -Dm755 /tmp/aeternus-splash "$air/usr/local/bin/aeternus-splash"
-        [ -f /tmp/aeternus-panel ] && \
-            install -Dm755 /tmp/aeternus-panel  "$air/usr/local/bin/aeternus-panel"
+        [ -f /tmp/aeternus-splash   ] && \
+            install -Dm755 /tmp/aeternus-splash   "$air/usr/local/bin/aeternus-splash"
+        [ -f /tmp/aeternus-panel    ] && \
+            install -Dm755 /tmp/aeternus-panel    "$air/usr/local/bin/aeternus-panel"
+        [ -f /tmp/aeternus-taskbar  ] && \
+            install -Dm755 /tmp/aeternus-taskbar  "$air/usr/local/bin/aeternus-taskbar"
 
         # Gerar wallpaper PNG e instalar
         if [ -f /tmp/gen-wallpaper ]; then
@@ -252,13 +262,19 @@ populate_airootfs() {
         # Script de compilação pós-boot
         cat > "$air/usr/local/bin/aeternus-gui-build" << 'GUISCRIPT'
 #!/bin/bash
-# Compila a GUI Aeternus (executar uma vez após instalar pacotes)
+# Compila a GUI V0rtexOS (executar uma vez após instalar pacotes)
+# Pacotes necessários: cairo libxrender libx11 gcc make
 set -e
 SRC=/usr/local/src/aeternus-gui
-echo "[aeternus-gui-build] Compilando GUI C..."
+echo "[v0rtex-gui-build] Verificando dependências..."
+pkg-config --exists x11 cairo xrender || {
+    echo "[v0rtex-gui-build] Instalando dependências..."
+    pacman -S --noconfirm cairo libxrender libx11 gcc make
+}
+echo "[v0rtex-gui-build] Compilando GUI C (splash, panel, taskbar, wallpaper)..."
 make -C "$SRC" all
 make -C "$SRC" install PREFIX=/usr/local
-echo "[aeternus-gui-build] Pronto. Execute 'startx' para iniciar."
+echo "[v0rtex-gui-build] Pronto. Execute 'startx' para iniciar o V0rtexOS."
 GUISCRIPT
         chmod +x "$air/usr/local/bin/aeternus-gui-build"
         ok "Fontes C da GUI copiadas para $air/usr/local/src/aeternus-gui"

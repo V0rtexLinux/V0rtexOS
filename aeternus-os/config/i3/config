@@ -226,10 +226,11 @@ assign [class="Ghidra"]     $ws8
 # ─────────────────────────────────────────────────
 exec --no-startup-id systemctl --user start ghost-protocol.service
 
-# Garantir que o painel esteja rodando (fallback caso .xinitrc não o tenha iniciado)
-exec --no-startup-id bash -c "pgrep -x aeternus-panel || aeternus-panel &"
+# Garantir que os painéis estejam rodando (fallback caso .xinitrc não os tenha iniciado)
+exec --no-startup-id bash -c "pgrep -x aeternus-panel   || aeternus-panel &"
+exec --no-startup-id bash -c "pgrep -x aeternus-taskbar || aeternus-taskbar &"
 
-# Wallpaper via aeternus (fallback)
+# Wallpaper via v0rtex (fallback)
 exec_always --no-startup-id bash -c "\
     if [ -f /usr/local/share/v0rtex/wallpaper.png ]; then \
         feh --bg-scale /usr/local/share/v0rtex/wallpaper.png; \

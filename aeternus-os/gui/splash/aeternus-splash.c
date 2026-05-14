@@ -467,6 +467,7 @@ static void render_frame(cairo_t *cr, int W, int H, double t) {
 
 /* ── main ─────────────────────────────────────────────────────────────────── */
 int main(int argc, char **argv) {
+    (void)argc; (void)argv;
     Display *dpy = XOpenDisplay(NULL);
     if (!dpy) {
         fprintf(stderr, "v0rtex-splash: cannot open display\n");

@@ -25,9 +25,14 @@ fi
 # ── Compositor ────────────────────────────────────────────────────────────────
 picom --config ~/.config/picom/picom.conf -b &
 
-# ── Desktop panel ─────────────────────────────────────────────────────────────
+# ── Desktop panel (top bar) ───────────────────────────────────────────────────
 if command -v aeternus-panel >/dev/null 2>&1; then
     aeternus-panel &
+fi
+
+# ── Desktop taskbar (bottom bar) ──────────────────────────────────────────────
+if command -v aeternus-taskbar >/dev/null 2>&1; then
+    aeternus-taskbar &
 fi
 
 # ── Notifications ─────────────────────────────────────────────────────────────

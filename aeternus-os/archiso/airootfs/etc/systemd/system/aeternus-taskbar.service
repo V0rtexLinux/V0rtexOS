@@ -1,0 +1,14 @@
+[Unit]
+Description=V0rtexOS Desktop Taskbar (X11/Cairo)
+After=graphical.target
+
+[Service]
+Type=simple
+Environment=DISPLAY=:0
+ExecStartPre=/bin/sleep 2
+ExecStart=/usr/local/bin/aeternus-taskbar
+Restart=on-failure
+RestartSec=3s
+
+[Install]
+WantedBy=graphical.target
