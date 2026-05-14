@@ -1,0 +1,91 @@
+Ir para o conteúdo
+V0rtexLinux
+V0rtexOS
+Navegação do repositório
+Código
+Problemas
+Solicitações de pull
+Agentes
+Ações
+Projetos
+Segurança e qualidade
+Percepções
+Configurações
+Build AETERNUS OS ISO
+Remove unavailable packages from system build dependencies #26
+Todos os empregos
+Detalhes da execução
+construir
+failed agora in 2m 37s
+Registros de pesquisa
+1s
+1s
+1m 51s
+7s
+33s
+[mkarchiso] INFO:                   Profile:   /build/aeternus-os/v0rtex-profile
+[mkarchiso] INFO: Pacman configuration file:   /build/aeternus-os/v0rtex-profile/pacman.conf
+[mkarchiso] INFO:           Image file name:   v0rtex-os-2026.05.14-x86_64.iso
+[mkarchiso] INFO:          ISO volume label:   V0RTEX_OS
+[mkarchiso] INFO:             ISO publisher:   V0rtex Security
+[mkarchiso] INFO:           ISO application:   V0rtexOS — Grey Hat Linux Hardened
+[mkarchiso] INFO:                Boot modes:   bios.syslinux uefi.grub
+[mkarchiso] INFO:             Packages File:   /build/aeternus-os/v0rtex-profile/packages.x86_64
+[mkarchiso] INFO:                  Packages:   linux-hardened linux-hardened-headers linux-firmware linux-firmware-whence mkinitcpio mkinitcpio-archiso squashfs-tools dracut base base-devel archlinux-keyring bash bash-completion bzip2 coreutils diffutils file findutils gawk gcc-libs gettext glibc grep gzip iproute2 iputils kbd keyutils less licenses pciutils procps-ng psmisc sed shadow systemd systemd-sysvcompat tar texinfo usbutils util-linux which xz grub efibootmgr efitools os-prober syslinux plymouth memtest86+ cryptsetup lvm2 device-mapper dosfstools e2fsprogs exfatprogs btrfs-progs f2fs-tools ntfs-3g parted gptfdisk hdparm sdparm nvme-cli networkmanager network-manager-applet openvpn networkmanager-openvpn wireguard-tools openresolv nftables iptables-nft ipset net-tools bridge-utils dnsmasq bind openssh openssl libpcap openbsd-netcat socat tcpdump iw wireless_tools wpa_supplicant macchanger mtr iftop nethogs bmon vnstat nmap masscan rustscan tor torsocks privoxy proxychains-ng obfs4proxy onionshare torb
+[mkarchiso] INFO: Copying custom pacman.conf to work directory...
+[mkarchiso] INFO: Using pacman CacheDir: /var/cache/pacman/pkg/ 
+[mkarchiso] INFO: Copying custom airootfs files...
+[mkarchiso] WARNING: Cannot change permissions of '/tmp/v0rtex-build-work/x86_64/airootfs/usr/local/bin/aeternus-panel'. The file or directory does not exist.
+[mkarchiso] WARNING: Cannot change permissions of '/tmp/v0rtex-build-work/x86_64/airootfs/usr/local/bin/aeternus-splash'. The file or directory does not exist.
+[mkarchiso] WARNING: Cannot change permissions of '/tmp/v0rtex-build-work/x86_64/airootfs/usr/local/bin/aeternus-taskbar'. The file or directory does not exist.
+[mkarchiso] WARNING: Cannot change permissions of '/tmp/v0rtex-build-work/x86_64/airootfs/usr/local/bin/install-tools.sh'. The file or directory does not exist.
+[mkarchiso] WARNING: Cannot change permissions of '/tmp/v0rtex-build-work/x86_64/airootfs/etc/gshadow'. The file or directory does not exist.
+[mkarchiso] INFO: Done!
+[mkarchiso] INFO: Installing packages to '/tmp/v0rtex-build-work/x86_64/airootfs/'...
+==> Creating install root at /tmp/v0rtex-build-work/x86_64/airootfs
+==> Installing packages to /tmp/v0rtex-build-work/x86_64/airootfs
+:: Synchronizing package databases...
+ core downloading...
+ extra downloading...
+ multilib downloading...
+ blackarch downloading...
+resolving dependencies...
+:: There are 2 providers available for jack:
+:: Repository extra
+   1) jack2  2) pipewire-jack
+Enter a number (default=1): 
+:: There are 2 providers available for qt6-multimedia-backend:
+:: Repository extra
+   1) qt6-multimedia-ffmpeg  2) qt6-multimedia-gstreamer
+Enter a number (default=1): 
+:: There are 5 providers available for smtp-forwarder:
+:: Repository extra
+   1) exim  2) msmtp-mta  3) nullmailer  4) opensmtpd  5) postfix
+Enter a number (default=1): 
+:: There are 6 providers available for java-environment>=21:
+:: Repository extra
+   1) jdk-openjdk  2) jdk21-openjdk  3) jdk25-openjdk
+:: Repository blackarch
+   4) java22-openjdk  5) java23-openjdk  6) java24-openjdk
+Enter a number (default=1): 
+looking for conflicting packages...
+warning: removing 'python-arsenic-21.8-8' from target list because it conflicts with 'python-wapiti-arsenic-28.5-2'
+warning: removing 'python-ropper-1.9.10-1' from target list because it conflicts with 'ropper-1.13.13-2'
+error: unresolvable package conflicts detected
+error: failed to prepare transaction (conflicting dependencies)
+:: tinyxxd-1.3.15-1 and vim-9.2.0450-1 are in conflict
+==> ERROR: Failed to install packages to new root
+Error: Process completed with exit code 1.
+0s
+0s
+Run cat /tmp/aeternus-build.log 2>/dev/null || \
+  
+(log não encontrado)
+0s
+Run actions/upload-artifact@v4
+Warning: No files were found with the provided path: aeternus-os/release/*.iso
+aeternus-os/release/checksum.sha256
+aeternus-os/release/checksum.md5. No artifacts will be uploaded.
+0s
+0s
+0s

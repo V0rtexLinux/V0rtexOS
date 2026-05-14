@@ -1,5 +1,6 @@
-# V0rtexOS — Lista completa de pacotes da ISO
+# V0rtexOS — Pacotes ESSENCIAIS da ISO
 # Kernel: linux-hardened | Repos: Arch oficial + BlackArch
+# Ferramentas ofensivas: instaladas via install-tools.sh (pós-boot)
 
 # ══════════════════════════════════════════════════════════
 # KERNEL HARDENED
@@ -110,25 +111,22 @@ macchanger
 mtr
 iftop
 nethogs
-bmon
 vnstat
 nmap
-masscan
-rustscan
+curl
+wget
 
 # ══════════════════════════════════════════════════════════
-# ANONIMATO / TOR / PROXY
+# ANONIMATO / TOR / PROXY — CORE
 # ══════════════════════════════════════════════════════════
 tor
 torsocks
 privoxy
 proxychains-ng
 obfs4proxy
-onionshare
-torbrowser-launcher
+dnscrypt-proxy
 redsocks
 i2pd
-dnscrypt-proxy
 
 # ══════════════════════════════════════════════════════════
 # SHELL / TERMINAL
@@ -143,10 +141,7 @@ screen
 neovim
 vim
 nano
-emacs-nox
 ranger
-lf
-nnn
 bat
 eza
 fd
@@ -186,14 +181,14 @@ scrot
 flameshot
 
 # ══════════════════════════════════════════════════════════
-# V0RTEX GUI — C/Xlib/Cairo
+# GUI LIBS — C/Xlib/Cairo
 # ══════════════════════════════════════════════════════════
 cairo
 libxrender
 libx11
 
 # ══════════════════════════════════════════════════════════
-# WINDOW MANAGER / COMPOSITOR
+# WINDOW MANAGER
 # ══════════════════════════════════════════════════════════
 i3-wm
 i3status
@@ -206,7 +201,6 @@ dunst
 xss-lock
 redshift
 lxappearance
-qt5ct
 
 # ══════════════════════════════════════════════════════════
 # FONTES
@@ -222,23 +216,19 @@ noto-fonts-emoji
 noto-fonts-cjk
 
 # ══════════════════════════════════════════════════════════
-# APPS GUI
+# APPS ESSENCIAIS
 # ══════════════════════════════════════════════════════════
 firefox
 thunar
 mousepad
 geany
-evince
-mpv
-viewnior
-file-roller
-xarchiver
-galculator
-gnome-calculator
 nm-connection-editor
 pavucontrol
-gthumb
-eog
+file-roller
+galculator
+mpv
+ffmpeg
+imagemagick
 
 # ══════════════════════════════════════════════════════════
 # SEGURANÇA BASE / HARDENING
@@ -246,252 +236,9 @@ eog
 apparmor
 firejail
 libseccomp
-rkhunter
-lynis
-chkrootkit
 fail2ban
 ufw
 audit
-yara
-clamav
-
-# ══════════════════════════════════════════════════════════
-# RECONHECIMENTO / SCANNING
-# ══════════════════════════════════════════════════════════
-nmap
-masscan
-rustscan
-arp-scan
-netdiscover
-nbtscan
-onesixtyone
-enum4linux-ng
-smbmap
-dnsx
-naabu
-subfinder
-amass
-assetfinder
-sslscan
-tlsx
-mapcidr
-dnsrecon
-fierce
-whois
-sublist3r
-shuffledns
-puredns
-altdns
-dnstwist
-
-# ══════════════════════════════════════════════════════════
-# OSINT
-# ══════════════════════════════════════════════════════════
-theharvester
-recon-ng
-spiderfoot
-sherlock
-holehe
-phoneinfoga
-photon
-maltego
-exiftool
-metagoofil
-
-# ══════════════════════════════════════════════════════════
-# WEB / API / PROXY
-# ══════════════════════════════════════════════════════════
-nikto
-whatweb
-curl
-wget
-httpie
-mitmproxy
-sslsplit
-arjun
-wfuzz
-dalfox
-xsstrike
-jwt-tool
-tplmap
-sstimap
-graphqlmap
-linkfinder
-gitleaks
-trufflehog
-gau
-waybackurls
-hakrawler
-gospider
-httpx
-nuclei
-smuggler
-corscanner
-wafw00f
-sslyze
-wapiti
-zaproxy
-
-# ══════════════════════════════════════════════════════════
-# FUZZING / DISCOVERY
-# ══════════════════════════════════════════════════════════
-gobuster
-ffuf
-feroxbuster
-dirb
-dirsearch
-cewl
-crunch
-cupp
-wordlistctl
-maskprocessor
-statsprocessor
-princeprocessor
-
-# ══════════════════════════════════════════════════════════
-# EXPLORAÇÃO / POST-EXPLOITATION
-# ══════════════════════════════════════════════════════════
-metasploit
-exploitdb
-sqlmap
-commix
-nosqlmap
-sqlninja
-evil-winrm
-crackmapexec
-impacket
-responder
-kerbrute
-bloodhound
-coercer
-ldeep
-enum4linux
-smbclient
-
-# ══════════════════════════════════════════════════════════
-# FORÇA BRUTA / CREDENCIAIS
-# ══════════════════════════════════════════════════════════
-hydra
-medusa
-ncrack
-hashcat
-hashcat-utils
-john
-ophcrack
-fcrackzip
-pdfcrack
-rarcrack
-
-# ══════════════════════════════════════════════════════════
-# WIRELESS / RF
-# ══════════════════════════════════════════════════════════
-aircrack-ng
-hcxtools
-hcxdumptool
-reaver
-bully
-pixiewps
-cowpatty
-asleap
-mdk4
-kismet
-bettercap
-wifite2
-wifiphisher
-airgeddon
-eaphammer
-freeradius
-hostapd-wpe
-
-# ══════════════════════════════════════════════════════════
-# BLUETOOTH / RF
-# ══════════════════════════════════════════════════════════
-bluez
-bluez-utils
-bluesnarfer
-bluelog
-ubertooth
-rfkill
-
-# ══════════════════════════════════════════════════════════
-# ANÁLISE BINÁRIA / REVERSE ENGINEERING
-# ══════════════════════════════════════════════════════════
-gdb
-gdb-common
-radare2
-cutter
-r2ghidra
-binwalk
-ltrace
-strace
-checksec
-patchelf
-python-pwntools
-python-capstone
-python-frida
-frida
-ropper
-one_gadget
-jadx
-dex2jar
-android-tools
-hexedit
-tinyxxd
-bsdiff
-patchutils
-yara
-
-# ══════════════════════════════════════════════════════════
-# ANÁLISE DE REDE / IDS / SNIFFER
-# ══════════════════════════════════════════════════════════
-wireshark-cli
-wireshark-qt
-zeek
-snort
-suricata
-tcpflow
-tcpreplay
-tcptrace
-p0f
-ettercap
-bettercap
-netsniff-ng
-driftnet
-dsniff
-arpwatch
-arp-scan
-
-# ══════════════════════════════════════════════════════════
-# FORENSE / RECUPERAÇÃO
-# ══════════════════════════════════════════════════════════
-secure-delete
-wipe
-foremost
-sleuthkit
-autopsy
-volatility3
-dc3dd
-ddrescue
-guymager
-safecopy
-testdisk
-scalpel
-recoverjpeg
-perl-image-exiftool
-
-# ══════════════════════════════════════════════════════════
-# CRYPTO / ESTEGANOGRAFIA
-# ══════════════════════════════════════════════════════════
-gnupg
-hashid
-steghide
-stegcracker
-zsteg
-outguess
-openstego
-snow
-cryptsetup
-age
 
 # ══════════════════════════════════════════════════════════
 # DESENVOLVIMENTO — CORE
@@ -505,31 +252,23 @@ python-virtualenv
 gcc
 make
 cmake
-ninja
 nasm
 yasm
 perl
 ruby
 ruby-bundler
 lua
-lua-socket
-php
-php-cgi
 go
 rust
 nodejs
 npm
-yarn
-jdk17-openjdk
-maven
-gradle
+git
+git-lfs
+git-crypt
 
 # ══════════════════════════════════════════════════════════
 # PYTHON — LIBS ESSENCIAIS
 # ══════════════════════════════════════════════════════════
-python-gobject
-gtk3
-gdk-pixbuf2
 python-requests
 python-scapy
 python-cryptography
@@ -544,122 +283,25 @@ python-lxml
 python-aiohttp
 python-httpx
 python-flask
-python-fastapi
-python-sqlalchemy
 python-click
 python-colorama
-python-tabulate
-python-xmltodict
-python-toml
 python-pyyaml
-python-pyotp
-python-qrcode
 python-pillow
-python-matplotlib
-python-numpy
-python-pandas
-python-scikit-learn
-python-shodan
-python-censys
-python-ldap3
-python-pyautogui
-python-selenium
-python-playwright
-python-mechanize
-python-html5lib
-python-cssselect
-python-six
-python-charset-normalizer
-python-certifi
-python-urllib3
-python-idna
-python-pyzmq
-python-msgpack
-python-redis
-python-pymongo
-python-elasticsearch
-
-# ══════════════════════════════════════════════════════════
-# PYTHON — SEGURANÇA
-# ══════════════════════════════════════════════════════════
-python-pwntools
-python-frida
-python-ropper
-python-unicorn
-python-miasm
-python-ssdeep
-python-tlsh
-python-oletools
-python-pefile
-python-macholib
-python-yara
-z3
-
-# ══════════════════════════════════════════════════════════
-# SEGURANÇA MOBILE / APK
-# ══════════════════════════════════════════════════════════
-android-tools
-jadx
-dex2jar
-androguard
-
-# ══════════════════════════════════════════════════════════
-# CLOUD / DEVOPS
-# ══════════════════════════════════════════════════════════
-aws-cli
-azure-cli
-kubectl
-helm
-terraform
-ansible
-packer
-
-# ══════════════════════════════════════════════════════════
-# CONTAINERS / VM
-# ══════════════════════════════════════════════════════════
-docker
-docker-compose
-podman
-buildah
-skopeo
-qemu-base
-qemu-img
-libvirt
-virt-manager
-
-# ══════════════════════════════════════════════════════════
-# BANCO DE DADOS
-# ══════════════════════════════════════════════════════════
-sqlite
-postgresql
-postgresql-libs
-mariadb-clients
-redis
 
 # ══════════════════════════════════════════════════════════
 # UTILITÁRIOS — SISTEMA
 # ══════════════════════════════════════════════════════════
 htop
 btop
-glances
 iotop
-bmon
-iftop
-nethogs
-duf
 ncdu
 tree
 rsync
-git
-git-lfs
-git-crypt
-github-cli
 p7zip
 unzip
 zip
 unrar
 zstd
-pigz
 pv
 bc
 lsof
@@ -670,56 +312,15 @@ smartmontools
 hdparm
 inxi
 fastfetch
-screenfetch
 tealdeer
-tldr
 navi
-fzf
-tmux
 asciinema
-reptyr
-expect
 dialog
-libnewt
 inotify-tools
 parallel
 entr
-stress-ng
-fio
-sysbench
-hyperfine
-bandwhich
-dog
-gping
-hexyl
-procs
-dust
-sd
-choose
-xh
-git-delta
-
-# ══════════════════════════════════════════════════════════
-# COMUNICAÇÃO / TRANSFER
-# ══════════════════════════════════════════════════════════
 nfs-utils
 samba
-vsftpd
-filezilla
-transmission-cli
 rclone
-s3cmd
-
-# ══════════════════════════════════════════════════════════
-# MULTIMÍDIA
-# ══════════════════════════════════════════════════════════
-mpv
-ffmpeg
-imagemagick
 sox
 v4l-utils
-
-# ══════════════════════════════════════════════════════════
-# WORDLISTS
-# ══════════════════════════════════════════════════════════
-seclists

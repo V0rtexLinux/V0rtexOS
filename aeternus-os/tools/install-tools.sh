@@ -1175,6 +1175,126 @@ ALIASES
 }
 
 # ════════════════════════════════════════════════
+# SEÇÃO 13 — PACOTES PACMAN (BlackArch + extra)
+# Ferramentas não incluídas na ISO — instaladas
+# via pacman após o primeiro boot.
+# ════════════════════════════════════════════════
+install_pacman_tools() {
+    sec "PACOTES PACMAN — BLACKARCH + EXTRA"
+
+    log "Sincronizando repositórios..."
+    pacman -Sy --noconfirm 2>/dev/null || true
+
+    local PKGS=(
+        # ── Scanning / Reconhecimento ──────────────
+        masscan rustscan arp-scan netdiscover nbtscan onesixtyone
+        enum4linux-ng smbmap dnsx naabu subfinder amass assetfinder
+        sslscan tlsx mapcidr dnsrecon fierce whois sublist3r
+        shuffledns puredns altdns dnstwist
+
+        # ── OSINT ─────────────────────────────────
+        theharvester recon-ng spiderfoot sherlock holehe
+        phoneinfoga photon maltego exiftool metagoofil
+
+        # ── Web / API / Proxy ──────────────────────
+        nikto whatweb httpie mitmproxy sslsplit arjun wfuzz
+        dalfox xsstrike jwt-tool tplmap sstimap graphqlmap
+        linkfinder gitleaks trufflehog gau waybackurls hakrawler
+        gospider httpx nuclei smuggler corscanner wafw00f
+        sslyze wapiti zaproxy
+
+        # ── Fuzzing / Discovery ────────────────────
+        gobuster ffuf feroxbuster dirb dirsearch cewl crunch cupp
+        wordlistctl maskprocessor statsprocessor princeprocessor
+
+        # ── Exploração / Post-exploitation ─────────
+        metasploit exploitdb sqlmap commix nosqlmap sqlninja
+        evil-winrm crackmapexec impacket responder kerbrute
+        bloodhound coercer ldeep enum4linux smbclient
+
+        # ── Força Bruta / Credenciais ──────────────
+        hydra medusa ncrack hashcat hashcat-utils john
+        ophcrack fcrackzip pdfcrack rarcrack
+
+        # ── Wireless / RF ──────────────────────────
+        aircrack-ng hcxtools hcxdumptool reaver bully pixiewps
+        cowpatty asleap mdk4 kismet bettercap wifite2 wifiphisher
+        airgeddon eaphammer freeradius hostapd-wpe
+
+        # ── Bluetooth ─────────────────────────────
+        bluez bluez-utils bluesnarfer bluelog ubertooth rfkill
+
+        # ── Análise Binária / Reverse Engineering ──
+        gdb gdb-common radare2 cutter r2ghidra binwalk
+        ltrace strace checksec patchelf python-pwntools
+        python-capstone python-frida frida ropper one_gadget
+        jadx dex2jar android-tools hexedit bsdiff patchutils yara
+
+        # ── Análise de Rede / IDS / Sniffer ────────
+        wireshark-cli wireshark-qt zeek snort suricata
+        tcpflow tcpreplay tcptrace p0f ettercap netsniff-ng
+        driftnet dsniff arpwatch
+
+        # ── Forense / Recuperação ──────────────────
+        secure-delete wipe foremost sleuthkit autopsy volatility3
+        dc3dd ddrescue guymager safecopy testdisk scalpel
+        recoverjpeg perl-image-exiftool rkhunter lynis chkrootkit clamav
+
+        # ── Crypto / Esteganografia ────────────────
+        gnupg hashid steghide stegcracker zsteg outguess
+        openstego snow age
+
+        # ── Python — Segurança ─────────────────────
+        python-pwntools python-frida python-ropper python-unicorn
+        python-miasm python-ssdeep python-tlsh python-oletools
+        python-pefile python-macholib python-yara z3
+
+        # ── Python — Libs extras ───────────────────
+        python-gobject gtk3 gdk-pixbuf2 python-sqlalchemy
+        python-tabulate python-xmltodict python-toml python-pyotp
+        python-qrcode python-matplotlib python-numpy python-pandas
+        python-scikit-learn python-shodan python-censys python-ldap3
+        python-pyautogui python-selenium python-playwright
+        python-mechanize python-html5lib python-cssselect python-six
+        python-charset-normalizer python-certifi python-urllib3
+        python-idna python-pyzmq python-msgpack python-redis
+        python-pymongo python-elasticsearch python-fastapi
+
+        # ── Mobile / APK ───────────────────────────
+        android-tools jadx dex2jar androguard
+
+        # ── Cloud / DevOps ─────────────────────────
+        aws-cli azure-cli kubectl helm terraform ansible packer
+
+        # ── Containers / VM ────────────────────────
+        docker docker-compose podman buildah skopeo
+        qemu-base qemu-img libvirt virt-manager
+
+        # ── Banco de Dados ─────────────────────────
+        sqlite postgresql postgresql-libs mariadb-clients redis
+
+        # ── Utilitários extras ─────────────────────
+        github-cli git-delta bandwhich dog gping hexyl procs
+        dust sd choose xh hyperfine sysbench fio stress-ng
+        bmon iftop nethogs duf glances btop unrar pigz
+        dmidecode lshw inxi fastfetch screenfetch tldr
+        yarn jdk-openjdk maven gradle ninja lua-socket php php-cgi
+
+        # ── Wordlists ──────────────────────────────
+        seclists
+    )
+
+    log "Instalando ${#PKGS[@]} pacotes via pacman (erros ignorados)..."
+    for pkg in "${PKGS[@]}"; do
+        pacman -S --noconfirm --needed "$pkg" 2>/dev/null \
+            && ok "$pkg instalado" \
+            || warn "$pkg não encontrado — pulando"
+    done
+
+    ok "Instalação pacman concluída"
+}
+
+# ════════════════════════════════════════════════
 # MENU PRINCIPAL
 # ════════════════════════════════════════════════
 main() {
@@ -1187,6 +1307,7 @@ main() {
     echo -e "╚══════════════════════════════════════════════════╝${RST}\n"
 
     case "$category" in
+        pacman)   install_pacman_tools ;;
         recon)    install_recon ;;
         exploit)  install_exploit_frameworks ;;
         cve)      install_cve_exploits ;;
@@ -1200,6 +1321,7 @@ main() {
         cloud)    install_cloud ;;
         misc)     install_misc ;;
         all)
+            install_pacman_tools
             install_recon
             install_exploit_frameworks
             install_cve_exploits
@@ -1215,7 +1337,7 @@ main() {
             ;;
         *)
             err "Categoria desconhecida: $category"
-            echo "Categorias: all recon exploit cve web wireless post crack words maldev forensics cloud misc"
+            echo "Categorias: all pacman recon exploit cve web wireless post crack words maldev forensics cloud misc"
             exit 1
             ;;
     esac
