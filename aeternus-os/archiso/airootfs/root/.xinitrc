@@ -1,28 +1,40 @@
 #!/bin/sh
-# V0rtexOS — xinitrc: inicia i3wm com todos os serviços gráficos
+# AETERNUS OS — xinitrc
+# Boot sequence: splash → panel → i3wm
 
-# Variáveis de ambiente
 export XDG_SESSION_TYPE=x11
 export XDG_CURRENT_DESKTOP=i3
 
-# Cursor padrão
-xsetroot -cursor_name left_ptr &
+# Cursor
+xsetroot -cursor_name left_ptr
 
-# Compositor (picom)
-picom --config ~/.config/picom/picom.conf -b &
+# ── Splash screen (blocks until animation finishes) ──────────────────────────
+if command -v aeternus-splash >/dev/null 2>&1; then
+    aeternus-splash
+fi
 
-# Notificações (dunst)
-dunst &
-
-# Wallpaper (feh) — usa fallback preto se não existir imagem
-if [ -f ~/.config/i3/wallpaper.png ]; then
+# ── Wallpaper ─────────────────────────────────────────────────────────────────
+if [ -f /usr/local/share/aeternus/wallpaper.png ]; then
+    feh --bg-scale /usr/local/share/aeternus/wallpaper.png &
+elif [ -f ~/.config/i3/wallpaper.png ]; then
     feh --bg-scale ~/.config/i3/wallpaper.png &
 else
     xsetroot -solid "#000000"
 fi
 
-# NetworkManager systray
+# ── Compositor ────────────────────────────────────────────────────────────────
+picom --config ~/.config/picom/picom.conf -b &
+
+# ── Desktop panel ─────────────────────────────────────────────────────────────
+if command -v aeternus-panel >/dev/null 2>&1; then
+    aeternus-panel &
+fi
+
+# ── Notifications ─────────────────────────────────────────────────────────────
+dunst &
+
+# ── Network tray ──────────────────────────────────────────────────────────────
 nm-applet &
 
-# Iniciar i3
+# ── Window manager ────────────────────────────────────────────────────────────
 exec i3

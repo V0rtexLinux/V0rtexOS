@@ -193,12 +193,83 @@ populate_airootfs() {
     install -Dm755 "$SCRIPT_DIR/archiso/airootfs/usr/local/bin/mount-squashfs.sh" \
         "$air/usr/local/bin/mount-squashfs.sh"
 
-    # GUI — Centro de Controle GTK3
+    # GUI — Centro de Controle GTK3 (Python)
     install -Dm755 "$SCRIPT_DIR/gui/vortex-center.py" \
         "$air/usr/local/bin/vortex-center"
     install -Dm644 "$SCRIPT_DIR/gui/vortex-center.desktop" \
         "$air/usr/share/applications/vortex-center.desktop"
     ok "GUI instalada (vortex-center)"
+
+    # ── GUI C — Splash + Panel + Wallpaper ───────────────
+    # Compilar os programas C da GUI Aeternus (Xlib + Cairo)
+    if command -v gcc &>/dev/null && pkg-config --exists x11 cairo xrender 2>/dev/null; then
+        log "Compilando GUI C (aeternus-splash, aeternus-panel, gen-wallpaper)..."
+
+        CFLAGS_GUI="-O2 -Wall -std=c11"
+        LIBS_X11_CAIRO="$(pkg-config --libs --cflags x11 cairo xrender)"
+
+        gcc $CFLAGS_GUI -o /tmp/aeternus-splash \
+            "$SCRIPT_DIR/gui/splash/aeternus-splash.c" \
+            $LIBS_X11_CAIRO -lm \
+            && ok "aeternus-splash compilado" \
+            || warn "Falha ao compilar aeternus-splash (X11 não disponível no host)"
+
+        gcc $CFLAGS_GUI -o /tmp/aeternus-panel \
+            "$SCRIPT_DIR/gui/panel/aeternus-panel.c" \
+            $LIBS_X11_CAIRO -lm \
+            && ok "aeternus-panel compilado" \
+            || warn "Falha ao compilar aeternus-panel"
+
+        gcc $CFLAGS_GUI -o /tmp/gen-wallpaper \
+            "$SCRIPT_DIR/gui/wallpaper/gen-wallpaper.c" \
+            $(pkg-config --libs --cflags cairo) -lm \
+            && ok "gen-wallpaper compilado" \
+            || warn "Falha ao compilar gen-wallpaper"
+
+        # Instalar binários compilados no airootfs
+        [ -f /tmp/aeternus-splash ] && \
+            install -Dm755 /tmp/aeternus-splash "$air/usr/local/bin/aeternus-splash"
+        [ -f /tmp/aeternus-panel ] && \
+            install -Dm755 /tmp/aeternus-panel  "$air/usr/local/bin/aeternus-panel"
+
+        # Gerar wallpaper PNG e instalar
+        if [ -f /tmp/gen-wallpaper ]; then
+            mkdir -p "$air/usr/local/share/aeternus"
+            /tmp/gen-wallpaper "$air/usr/local/share/aeternus/wallpaper.png" \
+                && ok "Wallpaper gerado em airootfs" \
+                || warn "Falha ao gerar wallpaper"
+        fi
+
+        ok "GUI C instalada no airootfs"
+    else
+        warn "gcc ou libcairo/libx11 não encontrado no host — copiando fontes C para compilação no target"
+        mkdir -p "$air/usr/local/src/aeternus-gui"
+        cp -r "$SCRIPT_DIR/gui/splash"    "$air/usr/local/src/aeternus-gui/"
+        cp -r "$SCRIPT_DIR/gui/panel"     "$air/usr/local/src/aeternus-gui/"
+        cp -r "$SCRIPT_DIR/gui/wallpaper" "$air/usr/local/src/aeternus-gui/"
+        cp    "$SCRIPT_DIR/gui/Makefile"  "$air/usr/local/src/aeternus-gui/"
+
+        # Script de compilação pós-boot
+        cat > "$air/usr/local/bin/aeternus-gui-build" << 'GUISCRIPT'
+#!/bin/bash
+# Compila a GUI Aeternus (executar uma vez após instalar pacotes)
+set -e
+SRC=/usr/local/src/aeternus-gui
+echo "[aeternus-gui-build] Compilando GUI C..."
+make -C "$SRC" all
+make -C "$SRC" install PREFIX=/usr/local
+echo "[aeternus-gui-build] Pronto. Execute 'startx' para iniciar."
+GUISCRIPT
+        chmod +x "$air/usr/local/bin/aeternus-gui-build"
+        ok "Fontes C da GUI copiadas para $air/usr/local/src/aeternus-gui"
+    fi
+
+    # Sempre copiar as fontes C para referência e recompilação
+    mkdir -p "$air/usr/local/src/aeternus-gui"
+    cp -r "$SCRIPT_DIR/gui/splash"    "$air/usr/local/src/aeternus-gui/" 2>/dev/null || true
+    cp -r "$SCRIPT_DIR/gui/panel"     "$air/usr/local/src/aeternus-gui/" 2>/dev/null || true
+    cp -r "$SCRIPT_DIR/gui/wallpaper" "$air/usr/local/src/aeternus-gui/" 2>/dev/null || true
+    cp    "$SCRIPT_DIR/gui/Makefile"  "$air/usr/local/src/aeternus-gui/" 2>/dev/null || true
 
     ok "Binários instalados"
 

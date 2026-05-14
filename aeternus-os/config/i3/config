@@ -195,29 +195,11 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # ─────────────────────────────────────────────────
-# STATUS BAR
+# STATUS BAR — aeternus-panel (C/Xlib/Cairo)
+# i3bar desabilitado: substituído pelo aeternus-panel
+# O painel é iniciado no .xinitrc antes do i3
 # ─────────────────────────────────────────────────
-bar {
-    position top
-    status_command i3status --config ~/.config/i3/i3status.conf
-    font pango:Zekton 10
-    separator_symbol " | "
-    workspace_buttons yes
-    binding_mode_indicator yes
-
-    colors {
-        background #000000
-        statusline #aaaaaa
-        separator  #333333
-
-        # class            border  backgr  text
-        focused_workspace  #ffffff #000000 #000000
-        active_workspace   #888888 #000000 #ffffff
-        inactive_workspace #000000 #000000 #555555
-        urgent_workspace   #ffffff #000000 #000000
-        binding_mode       #aaaaaa #000000 #ffffff
-    }
-}
+# bar { ... }  ← removido: aeternus-panel ocupa o topo
 
 # ─────────────────────────────────────────────────
 # FLOATING — Janelas que devem flutuar
@@ -239,11 +221,24 @@ assign [class="Ghidra"]     $ws8
 
 # ─────────────────────────────────────────────────
 # AUTOSTART
+# Nota: picom, feh/wallpaper, dunst e aeternus-panel
+# já são iniciados no .xinitrc antes do i3 carregar.
 # ─────────────────────────────────────────────────
-exec_always --no-startup-id picom --config ~/.config/picom/picom.conf -b
-exec_always --no-startup-id feh --bg-scale ~/.config/i3/wallpaper.png
-exec_always --no-startup-id dunst
 exec --no-startup-id systemctl --user start ghost-protocol.service
+
+# Garantir que o painel esteja rodando (fallback caso .xinitrc não o tenha iniciado)
+exec --no-startup-id bash -c "pgrep -x aeternus-panel || aeternus-panel &"
+
+# Wallpaper via aeternus (fallback)
+exec_always --no-startup-id bash -c "\
+    if [ -f /usr/local/share/aeternus/wallpaper.png ]; then \
+        feh --bg-scale /usr/local/share/aeternus/wallpaper.png; \
+    elif [ -f ~/.config/i3/wallpaper.png ]; then \
+        feh --bg-scale ~/.config/i3/wallpaper.png; \
+    else \
+        xsetroot -solid '#000000'; \
+    fi"
+
 # Iniciar 3 terminais na ws1 ao abrir (layout de recon padrão)
 exec --no-startup-id i3-msg "workspace $ws1; append_layout ~/.config/i3/workspace-recon.json"
 exec --no-startup-id $term
