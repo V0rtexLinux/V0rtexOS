@@ -166,6 +166,8 @@ populate_airootfs() {
         "$air/root/.config/i3/config"
     install -Dm644 "$SCRIPT_DIR/config/i3/i3status.conf" \
         "$air/root/.config/i3/i3status.conf"
+    install -Dm644 "$SCRIPT_DIR/config/i3/workspace-recon.json" \
+        "$air/root/.config/i3/workspace-recon.json"
     install -Dm644 "$SCRIPT_DIR/config/i3/picom.conf" \
         "$air/root/.config/picom/picom.conf"
     install -Dm644 "$SCRIPT_DIR/config/alacritty/alacritty.toml" \

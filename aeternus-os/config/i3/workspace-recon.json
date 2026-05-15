@@ -1,0 +1,36 @@
+[
+  {
+    "type": "con",
+    "layout": "splith",
+    "percent": 1,
+    "nodes": [
+      {
+        "type": "con",
+        "percent": 0.34,
+        "swallows": [
+          {
+            "class": "^Alacritty$"
+          }
+        ]
+      },
+      {
+        "type": "con",
+        "percent": 0.33,
+        "swallows": [
+          {
+            "class": "^Alacritty$"
+          }
+        ]
+      },
+      {
+        "type": "con",
+        "percent": 0.33,
+        "swallows": [
+          {
+            "class": "^Alacritty$"
+          }
+        ]
+      }
+    ]
+  }
+]
