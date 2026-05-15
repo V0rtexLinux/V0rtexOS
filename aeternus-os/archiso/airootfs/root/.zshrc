@@ -139,8 +139,17 @@ extract() {
 }
 
 # ── Auto-start Xorg no tty1 ────────────────────
-if [[ -z "$DISPLAY" ]] && [[ "$(tty)" == "/dev/tty1" ]]; then
-    exec startx ~/.xinitrc -- :0 vt1 &>/tmp/xorg.log
+# Usa startx sem exec: se o X encerrar, o usuário volta ao shell
+# (útil para debug). Reinicia automaticamente se X sair com erro.
+if [[ -z "$DISPLAY" && -z "$WAYLAND_DISPLAY" && "$(tty)" == /dev/tty1 ]]; then
+    echo "[v0rtex] Iniciando Xorg... (log: /tmp/xorg.log)"
+    startx "$HOME/.xinitrc" -- :0 vt1 -keeptty \
+        -logfile /tmp/xorg.log -logverbose 3
+    EXIT_CODE=$?
+    if [[ $EXIT_CODE -ne 0 ]]; then
+        echo "[v0rtex] ERRO: Xorg encerrou com código $EXIT_CODE"
+        echo "[v0rtex] Verifique: /tmp/xorg.log  /tmp/v0rtex-session.log"
+    fi
 fi
 
 # Banner

@@ -1,27 +1,31 @@
 #!/bin/sh
 # V0rtexOS — xinitrc
-# Boot sequence: splash → panel → i3wm
+# Boot sequence: splash → compositor → panel → i3wm
 
 export XDG_SESSION_TYPE=x11
 export XDG_CURRENT_DESKTOP=i3
+export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp/runtime-root}"
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
 
 # Log file para diagnóstico
 XLOG=/tmp/v0rtex-session.log
-exec > "$XLOG" 2>&1
+exec >> "$XLOG" 2>&1
 
-echo "[xinitrc] $(date) — iniciando sessão X"
+echo "[xinitrc] $(date) — sessão X iniciada (DISPLAY=$DISPLAY)"
 
-# Cursor
+# ── Cursor ────────────────────────────────────────────────────────────────────
 xsetroot -cursor_name left_ptr 2>/dev/null || true
+xsetroot -solid "#000000"     2>/dev/null || true
 
-# ── Splash screen (blocks until animation finishes) ──────────────────────────
+# ── Splash screen (blocks até a animação terminar) ────────────────────────────
 if command -v aeternus-splash >/dev/null 2>&1; then
-    echo "[xinitrc] iniciando splash screen"
+    echo "[xinitrc] splash screen"
     aeternus-splash
 fi
 
 # ── Wallpaper ─────────────────────────────────────────────────────────────────
-echo "[xinitrc] configurando wallpaper"
+echo "[xinitrc] wallpaper"
 if [ -f /usr/local/share/v0rtex/wallpaper.png ]; then
     feh --bg-scale /usr/local/share/v0rtex/wallpaper.png &
 elif [ -f ~/.config/i3/wallpaper.png ]; then
@@ -31,35 +35,35 @@ else
 fi
 
 # ── Compositor ────────────────────────────────────────────────────────────────
-echo "[xinitrc] iniciando picom"
+echo "[xinitrc] picom"
 if command -v picom >/dev/null 2>&1; then
     if [ -f ~/.config/picom/picom.conf ]; then
-        picom --config ~/.config/picom/picom.conf -b 2>>/tmp/v0rtex-picom.log || \
-            picom -b 2>>/tmp/v0rtex-picom.log &
+        picom --config ~/.config/picom/picom.conf -b \
+            2>/dev/null || picom -b 2>/dev/null
     else
-        picom -b 2>>/tmp/v0rtex-picom.log &
+        picom -b 2>/dev/null
     fi
 fi
 
 # ── Desktop panel (top bar) ───────────────────────────────────────────────────
 if command -v aeternus-panel >/dev/null 2>&1; then
-    echo "[xinitrc] iniciando aeternus-panel"
+    echo "[xinitrc] aeternus-panel"
     aeternus-panel &
 fi
 
 # ── Desktop taskbar (bottom bar) ──────────────────────────────────────────────
 if command -v aeternus-taskbar >/dev/null 2>&1; then
-    echo "[xinitrc] iniciando aeternus-taskbar"
+    echo "[xinitrc] aeternus-taskbar"
     aeternus-taskbar &
 fi
 
 # ── Notifications ─────────────────────────────────────────────────────────────
-dunst & 2>/dev/null || true
+dunst &
 
 # ── Network tray ──────────────────────────────────────────────────────────────
-nm-applet & 2>/dev/null || true
+nm-applet &
 
-# ── Window manager ────────────────────────────────────────────────────────────
+# ── Window manager ─────────────────────────────────────────────────────────────
 echo "[xinitrc] iniciando i3"
-exec i3 2>>/tmp/v0rtex-i3.log
-echo "[xinitrc] i3 encerrado com código $?"
+exec i3
+echo "[xinitrc] AVISO: i3 encerrou — verifique /tmp/v0rtex-session.log"

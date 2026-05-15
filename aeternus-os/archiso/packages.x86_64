@@ -169,6 +169,7 @@ xorg-xprop
 xorg-xkill
 xorg-xhost
 xorg-xauth
+xorg-xsetroot
 xdotool
 xclip
 xsel
@@ -179,6 +180,27 @@ picom
 feh
 scrot
 flameshot
+
+# ── Drivers de vídeo — universais + VMs ──────────────────
+# modesetting: driver DRM/KMS do kernel (padrão moderno, incluído no xorg-server)
+# fbdev:       driver de framebuffer — fallback em VMs sem GPU dedicada
+# vesa:        driver VESA/VGA — fallback universal para hardware legado
+# vmware:      VMware + VirtualBox (via SVGA)
+xf86-video-fbdev
+xf86-video-vesa
+xf86-video-vmware
+
+# ── OpenGL / Mesa ─────────────────────────────────────────
+mesa
+libgl
+
+# ── Input ────────────────────────────────────────────────
+libinput
+xf86-input-libinput
+xf86-input-evdev
+
+# ── Integração com VMs (SPICE / QEMU) ────────────────────
+spice-vdagent
 
 # ══════════════════════════════════════════════════════════
 # GUI LIBS — C/Xlib/Cairo
