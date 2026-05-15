@@ -215,10 +215,8 @@ iso_version="$(date +%Y.%m.%d)"
 install_dir="arch"
 buildmodes=('iso')
 bootmodes=(
-    'bios.syslinux.mbr'
-    'bios.grub.eltorito'
-    'uefi-ia32.grub.esp'
-    'uefi-x64.grub.esp'
+    'bios.syslinux'
+    'uefi.grub'
 )
 arch="x86_64"
 pacman_conf="pacman.conf"
