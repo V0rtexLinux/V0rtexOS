@@ -122,7 +122,7 @@ preflight() {
     [[ "$(uname -s)" != "Linux" ]] && err "Requer Linux (Arch Linux preferido)"
 
     sec "PRE-FLIGHT CHECKS"
-    local deps=(archiso mkarchiso pacman git curl unzip python3 openssl)
+    local deps=(archiso mkarchiso pacman git curl unzip python3 openssl grub)
     local missing=()
     for d in "${deps[@]}"; do
         command -v "$d" &>/dev/null && ok "$d ✓" || missing+=("$d")
@@ -216,7 +216,7 @@ install_dir="arch"
 buildmodes=('iso')
 bootmodes=(
     'bios.syslinux.mbr'
-    'bios.syslinux.eltorito'
+    'bios.grub.eltorito'
     'uefi-ia32.grub.esp'
     'uefi-x64.grub.esp'
 )

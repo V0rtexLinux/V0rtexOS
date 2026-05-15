@@ -11,7 +11,7 @@ install_dir="arch"
 buildmodes=('iso')
 bootmodes=(
     'bios.syslinux.mbr'
-    'bios.syslinux.eltorito'
+    'bios.grub.eltorito'
     'uefi-ia32.grub.esp'
     'uefi-x64.grub.esp'
 )
