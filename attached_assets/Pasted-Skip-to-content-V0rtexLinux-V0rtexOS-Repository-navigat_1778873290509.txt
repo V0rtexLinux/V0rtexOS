@@ -1,0 +1,105 @@
+Skip to content
+V0rtexLinux
+V0rtexOS
+Repository navigation
+Code
+Issues
+Pull requests
+Agents
+Actions
+Projects
+Security and quality
+Insights
+Settings
+Build AETERNUS OS ISO
+Add essential video drivers and Xorg configuration for GUI compatibility #32
+All jobs
+Run details
+Annotations
+1 error and 2 warnings
+build
+failed 12 minutes ago in 1m 29s
+Search logs
+1s
+1s
+46s
+6s
+31s
+[19:14:42] [ OK  ] Rofi tema instalado
+[19:14:42] [ OK  ] Binários e configs GUI instalados
+[19:14:42] [BUILD] Instalando serviços systemd...
+[19:14:42] [ OK  ] Serviço mount-squashfs instalado
+[19:14:42] [ OK  ] Serviços habilitados
+[19:14:42] [BUILD] Mascarando serviços desnecessários para boot rápido...
+[19:14:42] [ OK  ] 21 serviços desnecessários mascarados
+[19:14:42] [ OK  ] Zram swap configurado (lz4/zstd)
+[19:14:42] [ OK  ] Journal em RAM configurado
+[19:14:42] [ OK  ] Serviços configurados
+[19:14:42] [BUILD] Configurando hardening de kernel...
+[19:14:42] [ OK  ] Kernel hardening configurado
+[19:14:42] [ OK  ] Senha root definida: v0rtex
+[19:14:42] [ OK  ] Autologin root em tty1 configurado
+[19:14:42] [ OK  ] Dotfiles, banner e MOTD configurados
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  CONFIGURANDO BOOTLOADER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[19:14:42] [ OK  ] GRUB configurado
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  CONSTRUINDO ISO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[19:14:42] [BUILD] Iniciando mkarchiso...
+[19:14:42] [BUILD] Isso pode levar 15-45 minutos dependendo do hardware e conexão.
+[19:14:42] [BUILD] Log completo: /tmp/v0rtex-build.log
+
+[mkarchiso] INFO: Validating options...
+[mkarchiso] INFO: 'edk2-shell' is not in the package list. The ISO will not contain a bootable UEFI shell.
+[mkarchiso] INFO: Validating 'uefi.grub': 'memtest86+-efi' is not in the package list. Memory testing will not be available from the UEFI boot loader.
+[mkarchiso] INFO: Done!
+[mkarchiso] INFO: mkarchiso configuration settings
+[mkarchiso] INFO:              Architecture:   x86_64
+[mkarchiso] INFO:         Working directory:   /mnt/v0rtex-build-work
+[mkarchiso] INFO:    Installation directory:   arch
+[mkarchiso] INFO:                Build date:   2026-05-15T19:14+0000
+[mkarchiso] INFO:          Output directory:   /mnt/v0rtex-release
+[mkarchiso] INFO:        Current build mode:   iso
+[mkarchiso] INFO:               Build modes:   iso
+[mkarchiso] INFO:                   GPG key:   None
+[mkarchiso] INFO:                GPG signer:   None
+[mkarchiso] INFO: Code signing certificates:   None
+[mkarchiso] INFO:                   Profile:   /build/aeternus-os/v0rtex-profile
+[mkarchiso] INFO: Pacman configuration file:   /build/aeternus-os/v0rtex-profile/pacman.conf
+[mkarchiso] INFO:           Image file name:   v0rtex-os-2026.05.15-x86_64.iso
+[mkarchiso] INFO:          ISO volume label:   V0RTEX_OS
+[mkarchiso] INFO:             ISO publisher:   V0rtex Security
+[mkarchiso] INFO:           ISO application:   V0rtexOS — Grey Hat Linux Hardened
+[mkarchiso] INFO:                Boot modes:   bios.syslinux uefi.grub
+[mkarchiso] INFO:             Packages File:   /build/aeternus-os/v0rtex-profile/packages.x86_64
+[mkarchiso] INFO:                  Packages:   linux-hardened linux-hardened-headers linux-firmware linux-firmware-whence mkinitcpio mkinitcpio-archiso squashfs-tools dracut base base-devel archlinux-keyring bash bash-completion bzip2 coreutils diffutils file findutils gawk gcc-libs gettext glibc grep gzip iproute2 iputils kbd keyutils less licenses pciutils procps-ng psmisc sed shadow systemd systemd-sysvcompat tar texinfo usbutils util-linux which xz grub efibootmgr efitools os-prober syslinux plymouth memtest86+ cryptsetup lvm2 device-mapper dosfstools e2fsprogs exfatprogs btrfs-progs f2fs-tools ntfs-3g parted gptfdisk hdparm sdparm nvme-cli networkmanager network-manager-applet openvpn networkmanager-openvpn wireguard-tools openresolv nftables iptables-nft ipset net-tools bridge-utils dnsmasq bind openssh openssl libpcap openbsd-netcat socat tcpdump iw wireless_tools wpa_supplicant macchanger mtr iftop nethogs vnstat nmap curl wget tor torsocks privoxy proxychains-ng obfs4proxy dnscrypt-proxy redsocks i2pd zsh zsh-completions zsh-syntax-highlighting zsh-autosuggestions alacritty tmux screen neovim vim nano ranger bat eza fd ripgrep fzf starship zoxide jq yq moreutils glow xorg-server xorg-xinit xorg-xrandr xorg-xdpyinfo xorg-xev xorg-xwininfo xorg-setxkbmap xorg-xset xorg-xprop xorg-xkill xorg-xhost xorg-xauth xorg-xsetroot xdotool xclip xsel xdg-utils xdg-user-dirs arandr picom feh scrot flameshot xf86-video-fbdev xf86-video-vesa xf86-video-vmware mesa libgl libinput xf86-input-libinput xf86-input-evdev spice-vdagent cairo libxrender libx11 i3-wm i3status i3lock i3blocks dmenu rofi polybar dunst xss-lock redshift lxappearance ttf-jetbrains-mono-nerd ttf-hack-nerd ttf-liberation ttf-font-awesome ttf-roboto ttf-fira-code noto-fonts noto-fonts-emoji noto-fonts-cjk firefox thunar mousepad geany nm-connection-editor pavucontrol file-roller galculator mpv ffmpeg imagemagick apparmor firejail libseccomp fail2ban ufw audit python python-pip python-pipx python-setuptools python-wheel python-virtualenv gcc make cmake nasm yasm perl ruby ruby-bundler lua go rust nodejs npm git git-lfs git-crypt python-requests python-scapy python-cryptography python-paramiko python-pexpect python-pyjwt python-dnspython python-netaddr python-psutil python-bs4 python-lxml python-aiohttp python-httpx python-flask python-click python-colorama python-pyyaml python-pillow htop btop iotop ncdu tree rsync p7zip unzip zip unrar zstd pv bc lsof sysstat dmidecode lshw smartmontools hdparm inxi fastfetch tealdeer navi asciinema dialog inotify-tools parallel entr nfs-utils samba rclone sox v4l-utils
+[mkarchiso] INFO: Copying custom pacman.conf to work directory...
+[mkarchiso] INFO: Using pacman CacheDir: /var/cache/pacman/pkg/ 
+[mkarchiso] INFO: Copying custom airootfs files...
+[mkarchiso] WARNING: Cannot change permissions of '/mnt/v0rtex-build-work/x86_64/airootfs/usr/local/bin/aeternus-panel'. The file or directory does not exist.
+[mkarchiso] WARNING: Cannot change permissions of '/mnt/v0rtex-build-work/x86_64/airootfs/usr/local/bin/aeternus-splash'. The file or directory does not exist.
+[mkarchiso] WARNING: Cannot change permissions of '/mnt/v0rtex-build-work/x86_64/airootfs/usr/local/bin/aeternus-taskbar'. The file or directory does not exist.
+[mkarchiso] WARNING: Cannot change permissions of '/mnt/v0rtex-build-work/x86_64/airootfs/usr/local/bin/install-tools.sh'. The file or directory does not exist.
+[mkarchiso] WARNING: Cannot change permissions of '/mnt/v0rtex-build-work/x86_64/airootfs/etc/gshadow'. The file or directory does not exist.
+[mkarchiso] INFO: Done!
+[mkarchiso] INFO: Installing packages to '/mnt/v0rtex-build-work/x86_64/airootfs/'...
+==> Creating install root at /mnt/v0rtex-build-work/x86_64/airootfs
+==> Installing packages to /mnt/v0rtex-build-work/x86_64/airootfs
+:: Synchronizing package databases...
+ core downloading...
+ extra downloading...
+ multilib downloading...
+ blackarch downloading...
+error: target not found: xf86-video-vmware
+==> ERROR: Failed to install packages to new root
+Error: Process completed with exit code 1.
+0s
+0s
+0s
+0s
+0s
+0s

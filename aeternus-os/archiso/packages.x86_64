@@ -185,10 +185,9 @@ flameshot
 # modesetting: driver DRM/KMS do kernel (padrão moderno, incluído no xorg-server)
 # fbdev:       driver de framebuffer — fallback em VMs sem GPU dedicada
 # vesa:        driver VESA/VGA — fallback universal para hardware legado
-# vmware:      VMware + VirtualBox (via SVGA)
+# VMware/VirtualBox/QEMU: cobertos pelo driver modesetting do kernel
 xf86-video-fbdev
 xf86-video-vesa
-xf86-video-vmware
 
 # ── OpenGL / Mesa ─────────────────────────────────────────
 mesa
