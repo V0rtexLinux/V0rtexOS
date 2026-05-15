@@ -325,6 +325,11 @@ populate_airootfs() {
     install -Dm755 "$SCRIPT_DIR/archiso/airootfs/usr/local/bin/mount-squashfs.sh" \
         "$air/usr/local/bin/mount-squashfs.sh"
 
+    # Detecção de ambiente (VM vs hardware real)
+    install -Dm755 "$SCRIPT_DIR/gui/vortex-detect-env.sh" \
+        "$air/usr/local/bin/vortex-detect-env"
+    ok "vortex-detect-env instalado"
+
     # GUI — Centro de Controle GTK3 (Python)
     install -Dm755 "$SCRIPT_DIR/gui/vortex-center.py" \
         "$air/usr/local/bin/vortex-center"
@@ -441,6 +446,10 @@ GUISCRIPT
         "$air/etc/systemd/system/mount-squashfs.service"
     ok "Serviço mount-squashfs instalado"
 
+    install -Dm644 "$SCRIPT_DIR/archiso/airootfs/etc/systemd/system/vortex-detect-env.service" \
+        "$air/etc/systemd/system/vortex-detect-env.service"
+    ok "Serviço vortex-detect-env instalado"
+
     # Habilitar serviços no multi-user.target e sysinit.target
     mkdir -p \
         "$air/etc/systemd/system/multi-user.target.wants" \
@@ -449,6 +458,10 @@ GUISCRIPT
 
     ln -sf "/etc/systemd/system/mount-squashfs.service" \
         "$air/etc/systemd/system/sysinit.target.wants/mount-squashfs.service" 2>/dev/null || true
+
+    # vortex-detect-env roda antes do getty/display-manager para o .xinitrc já ter o env
+    ln -sf "/etc/systemd/system/vortex-detect-env.service" \
+        "$air/etc/systemd/system/sysinit.target.wants/vortex-detect-env.service" 2>/dev/null || true
 
     for svc in ghost-protocol aet-nuke NetworkManager tor apparmor; do
         ln -sf "/etc/systemd/system/${svc}.service" \
