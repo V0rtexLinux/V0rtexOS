@@ -190,24 +190,6 @@ class DashboardPage(Gtk.Box):
 
         # Cards de status
         self.cards = {}
-        def _get_env_field(field, default="—"):
-            try:
-                with open("/run/v0rtex/env") as f:
-                    for line in f:
-                        line = line.strip()
-                        if line.startswith(field + "="):
-                            return line.split("=", 1)[1].strip()
-            except Exception:
-                pass
-            return default
-
-        def _get_ambiente():
-            vendor  = _get_env_field("VORTEX_VM_VENDOR", "—")
-            profile = _get_env_field("VORTEX_HW_PROFILE", "—")
-            is_vm   = _get_env_field("VORTEX_IS_VM", "—")
-            label   = "VM" if is_vm == "1" else "REAL"
-            return f"[{label}] {vendor} · {profile}"
-
         items = [
             ("hostname",    "HOSTNAME",      lambda: run_cmd("hostname")),
             ("ip",          "IP LOCAL",      lambda: run_cmd("ip -4 addr show | grep -oP '(?<=inet )\\d+\\.\\d+\\.\\d+\\.\\d+' | grep -v 127 | head -1")),
@@ -217,10 +199,9 @@ class DashboardPage(Gtk.Box):
             ("mem",         "RAM LIVRE",     lambda: run_cmd("free -h | awk '/^Mem/ {print $7 \" / \" $2}'")),
             ("disk",        "DISCO /",       lambda: run_cmd("df -h / | awk 'NR==2 {print $4 \" livre de \" $2}'")),
             ("ghost",       "GHOST PROTOCOL",lambda: "● ATIVO" if service_active("ghost-protocol") else "● INATIVO"),
-            ("ambiente",    "AMBIENTE",      _get_ambiente),
         ]
 
-        positions = [(0,0),(1,0),(2,0),(3,0),(0,1),(1,1),(2,1),(3,1),(0,2)]
+        positions = [(0,0),(1,0),(2,0),(3,0),(0,1),(1,1),(2,1),(3,1)]
         for (key, label, fn), (col, row) in zip(items, positions):
             card = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
             card.get_style_context().add_class("card")
