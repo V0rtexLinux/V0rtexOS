@@ -46,4 +46,9 @@ file_permissions=(
     ["/opt/vortex"]="0:0:755"
     ["/root"]="0:0:700"
     ["/root/.xinitrc"]="0:0:755"
+    ["/root/.bash_profile"]="0:0:644"
+    ["/root/.zprofile"]="0:0:644"
+    # customize_airootfs.sh NÃO está aqui: mkarchiso o executa e DELETA
+    # automaticamente antes de aplicar file_permissions. Adicioná-lo causaria
+    # um WARNING desnecessário ("file not found").
 )

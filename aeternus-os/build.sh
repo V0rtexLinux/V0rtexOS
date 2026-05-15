@@ -243,6 +243,8 @@ file_permissions=(
     ["/opt/vortex"]="0:0:755"
     ["/root"]="0:0:700"
     ["/root/.xinitrc"]="0:0:755"
+    ["/root/.bash_profile"]="0:0:644"
+    ["/root/.zprofile"]="0:0:644"
 )
 PROFILEDEF
     else
@@ -536,10 +538,37 @@ JRN
     fi
     chmod 400 "$air/etc/shadow"
 
-    # Garante que root usa zsh no /etc/passwd sem sobrescrever o arquivo inteiro
-    if [[ -f "$air/etc/passwd" ]]; then
-        sed -i 's|^root:x:0:0:.*|root:x:0:0:root:/root:/bin/zsh|' "$air/etc/passwd"
-    fi
+    # ── Garante que root usa zsh ────────────────────────────────────────────────
+    # A abordagem segura: criar um customize_airootfs.sh que roda em chroot
+    # DEPOIS da instalação dos pacotes, via arch-chroot chamado pelo build.sh.
+    # Isso evita depender do sed num arquivo que pode não existir no overlay.
+    mkdir -p "$air/root"
+    cat > "$air/root/customize_airootfs.sh" <<'CUSTSH'
+#!/usr/bin/env bash
+# Roda em chroot APÓS a instalação dos pacotes pelo mkarchiso
+# Chamado explicitamente pelo build.sh
+
+# Garante /etc/shells com entradas corretas
+{
+    echo /bin/sh
+    echo /bin/bash
+    echo /usr/bin/bash
+    echo /bin/zsh
+    echo /usr/bin/zsh
+} > /etc/shells
+
+# Define shell do root como zsh
+if command -v usermod >/dev/null 2>&1; then
+    usermod -s /usr/bin/zsh root 2>/dev/null || \
+    usermod -s /bin/zsh root 2>/dev/null || true
+fi
+
+# Garante que .bash_profile e .zprofile têm permissão correta
+chmod 644 /root/.bash_profile /root/.zprofile 2>/dev/null || true
+chmod 755 /root/.xinitrc 2>/dev/null || true
+CUSTSH
+    chmod 755 "$air/root/customize_airootfs.sh"
+    ok "Script customize_airootfs.sh criado"
 
     ok "Senha root definida: v0rtex"
 
@@ -552,7 +581,9 @@ ExecStart=-/sbin/agetty --autologin root --noclear %I $TERM
 AUTOLOGIN
     ok "Autologin root em tty1 configurado"
 
-    echo "chsh -s /bin/zsh root" >> "$air/etc/profile.d/aeternus.sh"
+    # REMOVIDO: echo "chsh -s /bin/zsh root" >> profile.d/aeternus.sh
+    # Motivo: profile.d roda em CADA login, causando "chsh: Shell not changed"
+    # na tela. Shell é definido via customize_airootfs.sh (chroot pós-install)
 
     cat > "$air/etc/v0rtex-banner" <<'BANNER'
  __   ___  ____  ____  _______  __    ___  ___ 
@@ -633,6 +664,8 @@ menuentry "V0rtexOS (VM/Fast Boot)" --class v0rtex {
         apparmor=1 security=apparmor \
         mitigations=off \
         nowatchdog \
+        nomodeset \
+        video=vesafb:ywrap,mtrr:3 \
         console=tty0
     initrd /arch/boot/x86_64/initramfs-linux-hardened.img
 }
