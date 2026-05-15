@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # V0rtexOS — ArchISO Profile Definition
+# NOTE: Este arquivo é o padrão para builds locais (erofs).
+# Em CI, o build.sh gera uma versão adaptada (squashfs) para economizar espaço.
 iso_name="v0rtex-os"
 iso_label="V0RTEX_OS"
 iso_publisher="V0rtex Security"
@@ -15,13 +17,21 @@ bootmodes=(
 )
 arch="x86_64"
 pacman_conf="pacman.conf"
-airootfs_image_type="squashfs"
+
+# ── Filesystem da imagem ──────────────────────────────────────────────────────
+# erofs: filesystem read-only moderno (kernel 4.19+)
+#   · Leitura aleatória ~3× mais rápida que squashfs
+#   · Suporte a dedup de blocos e compressão zstd nativa
+#   · Ideal para live ISO: boot mais rápido, menor latência de I/O
+# Fallback para squashfs em builds CI (veja build.sh)
+airootfs_image_type="erofs"
 airootfs_image_tool_options=(
-    '-comp' 'zstd'
-    '-Xcompression-level' '3'
-    '-b' '256K'
-    '-no-duplicates'
+    '--compress=zstd,level=5'
+    '--block-size=4096'
+    '--dedupe'
+    '--all-root'
 )
+
 bootstrap_tarball_compression=('zstd' '-c' '-T0' '--auto-threads=logical' '--long' '-19')
 file_permissions=(
     ["/etc/shadow"]="0:0:400"

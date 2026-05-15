@@ -10,8 +10,6 @@ set -euo pipefail
 VORTEX_VERSION="2.0.$(date +%Y%m%d)"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROFILE_DIR="$SCRIPT_DIR/v0rtex-profile"
-WORK_DIR="/tmp/v0rtex-build-work"
-OUT_DIR="$SCRIPT_DIR/release"
 LOG_FILE="/tmp/v0rtex-build.log"
 FAST_MODE="${1:-}"
 
@@ -19,6 +17,16 @@ FAST_MODE="${1:-}"
 CI="${CI:-false}"
 [[ -n "${GITHUB_ACTIONS:-}" ]] && CI="true"
 [[ -n "${GITLAB_CI:-}"      ]] && CI="true"
+
+# Em CI usa /mnt (disco de dados ~28 GB no GitHub Actions, vs ~14 GB em /)
+# Localmente usa /tmp para builds normais
+if [[ "$CI" == "true" ]]; then
+    WORK_DIR="/mnt/v0rtex-build-work"
+    OUT_DIR="/mnt/v0rtex-release"
+else
+    WORK_DIR="/tmp/v0rtex-build-work"
+    OUT_DIR="$SCRIPT_DIR/release"
+fi
 
 RED='\033[1;31m' GRY='\033[1;37m' WHT='\033[0;37m' DIM='\033[2;37m'
 BOLD='\033[1m' RST='\033[0m'
@@ -33,6 +41,77 @@ sec()  {
     echo -e "${GRY}${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RST}" | tee -a "$LOG_FILE"
     echo -e "${GRY}${BOLD}  $*${RST}" | tee -a "$LOG_FILE"
     echo -e "${GRY}${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RST}" | tee -a "$LOG_FILE"
+}
+
+# ════════════════════════════════════════════════
+# CI: LIBERAR ESPAÇO NO DISCO (GitHub Actions)
+# Remove toolchains e pacotes pré-instalados desnecessários.
+# Libera ~20-25 GB no runner ubuntu-latest.
+# ════════════════════════════════════════════════
+free_ci_disk() {
+    [[ "$CI" != "true" ]] && return 0
+
+    sec "LIBERANDO ESPAÇO EM DISCO (CI)"
+    log "Espaço antes da limpeza:"
+    df -h / /mnt 2>/dev/null | tee -a "$LOG_FILE" || true
+
+    # ── Remover toolchains grandes desnecessários ──────────────────────────
+    log "Removendo toolchains pré-instalados..."
+    sudo rm -rf \
+        /usr/share/dotnet \
+        /usr/local/lib/android \
+        /opt/ghc \
+        /usr/local/share/powershell \
+        /usr/share/swift \
+        /usr/local/.ghcup \
+        /usr/lib/jvm \
+        /opt/hostedtoolcache \
+        "${AGENT_TOOLSDIRECTORY:-/opt/hostedtoolcache}" \
+        /usr/local/share/chromium \
+        /usr/local/share/edge_driver \
+        /usr/local/share/gecko_driver \
+        /usr/share/miniconda \
+        /usr/local/share/vcpkg \
+        /usr/local/lib/node_modules \
+        2>/dev/null || true
+    ok "Toolchains removidos"
+
+    # ── Remover pacotes apt desnecessários ────────────────────────────────
+    log "Removendo pacotes apt desnecessários..."
+    sudo apt-get purge -y \
+        '^aspnet.*' '^dotnet.*' '^llvm-[0-9].*' \
+        '^php[0-9].*' 'php-common' \
+        '^mongodb-.*' '^mysql-.*' '^postgresql-.*' \
+        azure-cli google-cloud-cli google-cloud-sdk \
+        google-chrome-stable firefox \
+        powershell mono-devel libgl1-mesa-dri \
+        snapd temurin-* adoptopenjdk-* \
+        2>/dev/null || true
+    sudo apt-get autoremove -y 2>/dev/null || true
+    sudo apt-get clean 2>/dev/null || true
+    ok "Pacotes apt limpos"
+
+    # ── Remover imagens Docker ────────────────────────────────────────────
+    if command -v docker &>/dev/null; then
+        log "Removendo imagens Docker..."
+        docker system prune -af 2>/dev/null || true
+        ok "Docker limpo"
+    fi
+
+    # ── Remover swap do /mnt para liberar espaço lá ──────────────────────
+    if swapon --show | grep -q /mnt; then
+        log "Removendo swap em /mnt..."
+        sudo swapoff /mnt/swapfile 2>/dev/null || true
+        sudo rm -f /mnt/swapfile 2>/dev/null || true
+        ok "Swap removido"
+    fi
+
+    log "Espaço após limpeza:"
+    df -h / /mnt 2>/dev/null | tee -a "$LOG_FILE" || true
+
+    local free_mnt
+    free_mnt=$(df /mnt --output=avail -BG 2>/dev/null | tail -1 | tr -d 'G ' || echo "0")
+    ok "Espaço livre em /mnt: ${free_mnt}GB (work dir do build)"
 }
 
 # ════════════════════════════════════════════════
@@ -119,8 +198,59 @@ init_profile() {
     cp "$SCRIPT_DIR/archiso/pacman.conf" "$PROFILE_DIR/pacman.conf"
     ok "pacman.conf configurado (Arch + BlackArch)"
 
-    # Substituir profiledef.sh
-    cp "$SCRIPT_DIR/archiso/profiledef.sh" "$PROFILE_DIR/profiledef.sh"
+    # ── Gerar profiledef.sh adaptado ao ambiente ─────────────────────────
+    # Local: erofs (leitura aleatória ~3× mais rápida, boot mais ágil)
+    # CI:    squashfs+zstd nível 3 (consome menos espaço em disco no runner)
+    if [[ "$CI" == "true" ]] || ! command -v mkfs.erofs &>/dev/null; then
+        [[ "$CI" == "true" ]] && log "CI detectado — usando squashfs (economiza espaço no runner)"
+        ! command -v mkfs.erofs &>/dev/null && warn "mkfs.erofs não encontrado — usando squashfs como fallback"
+        cat > "$PROFILE_DIR/profiledef.sh" <<'PROFILEDEF'
+#!/usr/bin/env bash
+# V0rtexOS — ArchISO Profile (CI / squashfs)
+iso_name="v0rtex-os"
+iso_label="V0RTEX_OS"
+iso_publisher="V0rtex Security"
+iso_application="V0rtexOS — Grey Hat Linux Hardened"
+iso_version="$(date +%Y.%m.%d)"
+install_dir="arch"
+buildmodes=('iso')
+bootmodes=(
+    'bios.syslinux.mbr'
+    'bios.syslinux.eltorito'
+    'uefi-ia32.grub.esp'
+    'uefi-x64.grub.esp'
+)
+arch="x86_64"
+pacman_conf="pacman.conf"
+airootfs_image_type="squashfs"
+airootfs_image_tool_options=(
+    '-comp' 'zstd'
+    '-Xcompression-level' '3'
+    '-b' '256K'
+    '-no-duplicates'
+)
+bootstrap_tarball_compression=('zstd' '-c' '-T0' '--auto-threads=logical' '--long' '-19')
+file_permissions=(
+    ["/etc/shadow"]="0:0:400"
+    ["/etc/gshadow"]="0:0:400"
+    ["/usr/local/bin/ghost-protocol.sh"]="0:0:755"
+    ["/usr/local/bin/aet-scan"]="0:0:755"
+    ["/usr/local/bin/aet-nuke"]="0:0:755"
+    ["/usr/local/bin/amnesia"]="0:0:755"
+    ["/usr/local/bin/install-tools.sh"]="0:0:755"
+    ["/usr/local/bin/vortex-center"]="0:0:755"
+    ["/usr/local/bin/aeternus-splash"]="0:0:755"
+    ["/usr/local/bin/aeternus-panel"]="0:0:755"
+    ["/usr/local/bin/aeternus-taskbar"]="0:0:755"
+    ["/opt/vortex"]="0:0:755"
+    ["/root"]="0:0:700"
+    ["/root/.xinitrc"]="0:0:755"
+)
+PROFILEDEF
+    else
+        log "Build local — usando erofs (boot mais rápido, I/O otimizado)"
+        cp "$SCRIPT_DIR/archiso/profiledef.sh" "$PROFILE_DIR/profiledef.sh"
+    fi
     chmod +x "$PROFILE_DIR/profiledef.sh"
     ok "profiledef.sh configurado"
 
@@ -479,6 +609,7 @@ menuentry "V0rtexOS" --class v0rtex --class gnu-linux --class gnu --class os {
     linux /arch/boot/x86_64/vmlinuz-linux-hardened \
         archisobasedir=arch \
         archisolabel=V0RTEX_OS \
+        cow_spacesize=4G \
         quiet loglevel=0 rd.udev.log_level=3 \
         rd.systemd.show_status=auto \
         systemd.show_status=0 \
@@ -496,6 +627,7 @@ menuentry "V0rtexOS (VM/Fast Boot)" --class v0rtex {
     linux /arch/boot/x86_64/vmlinuz-linux-hardened \
         archisobasedir=arch \
         archisolabel=V0RTEX_OS \
+        cow_spacesize=4G \
         quiet loglevel=0 \
         rd.systemd.show_status=false \
         systemd.show_status=0 \
@@ -510,6 +642,7 @@ menuentry "V0rtexOS (VM/Fast Boot)" --class v0rtex {
 menuentry "V0rtexOS (Debug/Verbose)" --class v0rtex {
     linux /arch/boot/x86_64/vmlinuz-linux-hardened \
         archisobasedir=arch archisolabel=V0RTEX_OS \
+        cow_spacesize=4G \
         nomodeset loglevel=7 \
         apparmor=1 security=apparmor \
         console=tty0
@@ -577,6 +710,15 @@ post_build() {
     md5sum    "$iso" > "${iso}.md5"
     ok "SHA256: $(cat "${iso}.sha256" | awk '{print $1}')"
 
+    # Em CI a ISO fica em /mnt — copia para $SCRIPT_DIR/release
+    # para que o GitHub Actions possa fazer upload como artifact
+    if [[ "$CI" == "true" && "$OUT_DIR" != "$SCRIPT_DIR/release" ]]; then
+        log "CI: copiando ISO para $SCRIPT_DIR/release (artifact upload)..."
+        mkdir -p "$SCRIPT_DIR/release"
+        cp -v "$iso" "${iso}.sha256" "${iso}.md5" "$SCRIPT_DIR/release/"
+        ok "ISO copiada para $SCRIPT_DIR/release"
+    fi
+
     echo
     echo -e "${WHT}${BOLD}╔═══════════════════════════════════════════════════════╗${RST}"
     echo -e "${WHT}${BOLD}║  V0rtexOS BUILD CONCLUÍDO                            ║${RST}"
@@ -616,6 +758,7 @@ HEADER
     echo -e "${DIM}  Log: $LOG_FILE${RST}"
     echo
 
+    free_ci_disk
     preflight
     setup_keys
     init_profile
