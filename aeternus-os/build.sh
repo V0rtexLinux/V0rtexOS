@@ -640,7 +640,7 @@ menuentry "V0rtexOS" --class v0rtex --class gnu-linux --class gnu --class os {
         archisolabel=V0RTEX_OS \
         cow_spacesize=4G \
         quiet loglevel=0 rd.udev.log_level=3 \
-        rd.systemd.show_status=auto \
+        rd.systemd.show_status=false \
         systemd.show_status=0 \
         vt.handoff=7 \
         apparmor=1 security=apparmor \
@@ -648,34 +648,9 @@ menuentry "V0rtexOS" --class v0rtex --class gnu-linux --class gnu --class os {
         pti=on vsyscall=none \
         spectre_v2=on spec_store_bypass_disable=on \
         mitigations=auto,nosmt \
-        console=tty0
-    initrd /arch/boot/x86_64/initramfs-linux-hardened.img
-}
-
-menuentry "V0rtexOS (VM/Fast Boot)" --class v0rtex {
-    linux /arch/boot/x86_64/vmlinuz-linux-hardened \
-        archisobasedir=arch \
-        archisolabel=V0RTEX_OS \
-        cow_spacesize=4G \
-        quiet loglevel=0 \
-        rd.systemd.show_status=false \
-        systemd.show_status=0 \
-        vt.handoff=7 \
-        apparmor=1 security=apparmor \
-        mitigations=off \
         nowatchdog \
         nomodeset \
         video=vesafb:ywrap,mtrr:3 \
-        console=tty0
-    initrd /arch/boot/x86_64/initramfs-linux-hardened.img
-}
-
-menuentry "V0rtexOS (Debug/Verbose)" --class v0rtex {
-    linux /arch/boot/x86_64/vmlinuz-linux-hardened \
-        archisobasedir=arch archisolabel=V0RTEX_OS \
-        cow_spacesize=4G \
-        nomodeset loglevel=7 \
-        apparmor=1 security=apparmor \
         console=tty0
     initrd /arch/boot/x86_64/initramfs-linux-hardened.img
 }
