@@ -4,7 +4,14 @@
 
 export XDG_SESSION_TYPE=x11
 export XDG_CURRENT_DESKTOP=i3
-export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp/runtime-root}"
+
+# XAUTHORITY: deve estar definido antes de qualquer cliente X conectar
+# startx normalmente define isso, mas garantimos aqui como fallback
+export XAUTHORITY="${XAUTHORITY:-${HOME}/.Xauthority}"
+touch "$XAUTHORITY" 2>/dev/null || true
+chmod 600 "$XAUTHORITY" 2>/dev/null || true
+
+export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp/runtime-$(id -u)}"
 mkdir -p "$XDG_RUNTIME_DIR"
 chmod 700 "$XDG_RUNTIME_DIR"
 
