@@ -8,6 +8,9 @@ export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp/runtime-root}"
 mkdir -p "$XDG_RUNTIME_DIR"
 chmod 700 "$XDG_RUNTIME_DIR"
 
+export XAUTHORITY="${XAUTHORITY:-$HOME/.Xauthority}"
+touch "$XAUTHORITY"
+
 # Log file para diagnóstico
 XLOG=/tmp/v0rtex-session.log
 exec >> "$XLOG" 2>&1

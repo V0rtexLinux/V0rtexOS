@@ -10,6 +10,8 @@ fi
 # Fallback se zsh não estiver disponível: sobe X direto do bash
 if [[ -z "${DISPLAY}${WAYLAND_DISPLAY}" ]] && [[ "$(tty)" == /dev/tty1 ]]; then
     echo "[v0rtex] Iniciando Xorg (bash fallback)..."
+    export XAUTHORITY="${HOME}/.Xauthority"
+    touch "$XAUTHORITY"
     startx /root/.xinitrc -- :0 vt1 -keeptty \
         -logfile /tmp/xorg.log -logverbose 3
 fi

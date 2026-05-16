@@ -3,6 +3,8 @@
 
 if [[ -z "${DISPLAY}${WAYLAND_DISPLAY}" ]] && [[ "$(tty)" == /dev/tty1 ]]; then
     echo "[v0rtex] Iniciando Xorg... (log: /tmp/xorg.log)"
+    export XAUTHORITY="${HOME}/.Xauthority"
+    touch "$XAUTHORITY"
     startx "$HOME/.xinitrc" -- :0 vt1 -keeptty \
         -logfile /tmp/xorg.log -logverbose 3
     EXIT_CODE=$?
