@@ -649,8 +649,6 @@ menuentry "V0rtexOS" --class v0rtex --class gnu-linux --class gnu --class os {
         spectre_v2=on spec_store_bypass_disable=on \
         mitigations=auto,nosmt \
         nowatchdog \
-        nomodeset \
-        video=vesafb:ywrap,mtrr:3 \
         console=tty0
     initrd /arch/boot/x86_64/initramfs-linux-hardened.img
 }
