@@ -143,8 +143,7 @@ extract() {
 # Este bloco é um fallback para sessões interativas sem login que cheguem no tty1.
 if [[ -z "${DISPLAY}${WAYLAND_DISPLAY}" ]] && [[ "$(tty)" == /dev/tty1 ]]; then
     echo "[v0rtex] Iniciando Xorg (fallback .zshrc)..."
-    startx "$HOME/.xinitrc" -- :0 vt1 -keeptty \
-        -logfile /tmp/xorg.log -logverbose 3
+    /usr/local/bin/v0rtex-startx
     EXIT_CODE=$?
     if [[ $EXIT_CODE -ne 0 ]]; then
         echo "[v0rtex] ERRO: Xorg encerrou (código $EXIT_CODE)"

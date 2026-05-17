@@ -1,0 +1,85 @@
+name: Build V0rtexOS ISO
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+    paths:
+      - 'aeternus-os/**'
+      - '.github/workflows/build-iso.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-iso-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Free disk space on runner
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: true
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+
+      - name: Show disk space
+        run: df -h / /mnt
+
+      - name: Build ISO (Arch Linux container)
+        run: |
+          docker run --privileged --rm \
+            -v "${{ github.workspace }}:/workspace" \
+            -v /mnt:/mnt \
+            -w /workspace/aeternus-os \
+            -e CI=true \
+            -e GITHUB_ACTIONS=true \
+            archlinux:latest \
+            bash -euxo pipefail -c '
+              pacman -Syu --noconfirm --needed \
+                archiso git curl base-devel gcc make cmake \
+                cairo libxrender libx11 pkg-config \
+                squashfs-tools libisoburn dosfstools mtools \
+                grub efibootmgr syslinux python openssl haveged
+
+              haveged -w 1024 &
+              pacman-key --init
+              pacman-key --populate archlinux
+
+              curl -fsSL https://blackarch.org/strap.sh -o /tmp/strap.sh
+              bash /tmp/strap.sh
+              pacman -Syu --noconfirm
+
+              bash build.sh
+            '
+
+      - name: List release artifacts
+        run: ls -lah aeternus-os/release/ || ls -lah /mnt/v0rtex-release/ || true
+
+      - name: Copy ISO to workspace (artifact upload)
+        run: |
+          mkdir -p aeternus-os/release
+          find /mnt/v0rtex-release -name '*.iso' -exec cp -v {} aeternus-os/release/ \; 2>/dev/null || true
+          find aeternus-os/release -name '*.iso' | head -1 | xargs -r ls -lah
+
+      - name: Upload ISO artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: v0rtexos-iso-${{ github.run_number }}
+          path: |
+            aeternus-os/release/*.iso
+            aeternus-os/release/*.sha256
+          if-no-files-found: error
+          retention-days: 14

@@ -43,6 +43,7 @@ file_permissions=(
     ["/usr/local/bin/aeternus-splash"]="0:0:755"
     ["/usr/local/bin/aeternus-panel"]="0:0:755"
     ["/usr/local/bin/aeternus-taskbar"]="0:0:755"
+    ["/usr/local/bin/v0rtex-startx"]="0:0:755"
     ["/opt/vortex"]="0:0:755"
     ["/root"]="0:0:700"
     ["/root/.xinitrc"]="0:0:755"

@@ -1,0 +1,32 @@
+#!/bin/bash
+# V0rtexOS — inicia Xorg após display/DRM estar pronto (evita falha no boot)
+
+set -euo pipefail
+
+export XAUTHORITY="${HOME}/.Xauthority"
+touch "$XAUTHORITY"
+chmod 600 "$XAUTHORITY"
+
+export XDG_RUNTIME_DIR="/tmp/runtime-$(id -u)"
+mkdir -p "$XDG_RUNTIME_DIR"
+chmod 700 "$XDG_RUNTIME_DIR"
+
+# Plymouth pode ainda segurar o DRM no autologin rápido
+if command -v plymouth >/dev/null 2>&1; then
+    for _ in $(seq 1 40); do
+        plymouth --ping >/dev/null 2>&1 || break
+        sleep 0.25
+    done
+fi
+
+udevadm settle -t 15 2>/dev/null || udevadm settle 2>/dev/null || true
+
+# Aguarda card DRM (QEMU virtio, bochs, bare metal)
+for _ in $(seq 1 30); do
+    [[ -e /dev/dri/card0 ]] && break
+    sleep 0.5
+done
+
+echo "[v0rtex] Iniciando Xorg... (log: /tmp/xorg.log)"
+exec startx "$HOME/.xinitrc" -- :0 vt1 -keeptty \
+    -logfile /tmp/xorg.log -logverbose 3

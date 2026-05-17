@@ -48,6 +48,5 @@ Thumbs.db
 .cache/
 .local/
 
-# GitHub Actions — workflow files ficam no GitHub, não são gerenciados pelo Replit
-# (token do Replit não tem escopo 'workflow' para fazer push desses arquivos)
-.github/workflows/
+# GitHub Actions — instruções locais do editor (workflows ficam versionados)
+.github/instructions/

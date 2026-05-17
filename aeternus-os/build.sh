@@ -245,6 +245,7 @@ file_permissions=(
     ["/root/.xinitrc"]="0:0:755"
     ["/root/.bash_profile"]="0:0:644"
     ["/root/.zprofile"]="0:0:644"
+    ["/usr/local/bin/v0rtex-startx"]="0:0:755"
 )
 PROFILEDEF
     else
@@ -565,7 +566,7 @@ fi
 
 # Garante que .bash_profile e .zprofile têm permissão correta
 chmod 644 /root/.bash_profile /root/.zprofile 2>/dev/null || true
-chmod 755 /root/.xinitrc 2>/dev/null || true
+chmod 755 /root/.xinitrc /usr/local/bin/v0rtex-startx 2>/dev/null || true
 CUSTSH
     chmod 755 "$air/root/customize_airootfs.sh"
     ok "Script customize_airootfs.sh criado"
