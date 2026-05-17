@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --vortex-accent: #22d3ee;
+  --vortex-accent2: #a78bfa;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-vortex-bg text-vortex-text antialiased;
+}
+
+::selection {
+  background: rgba(34, 211, 238, 0.25);
+}
+
+@layer components {
+  .vortex-container {
+    @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .vortex-card {
+    @apply rounded-xl border border-vortex-border bg-vortex-card/80 backdrop-blur-sm transition-colors hover:border-cyan-500/30;
+  }
+
+  .vortex-btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-500 to-violet-500 px-5 py-2.5 text-sm font-semibold text-vortex-bg transition hover:opacity-90;
+  }
+
+  .vortex-btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-vortex-border px-5 py-2.5 text-sm font-medium text-vortex-text transition hover:border-cyan-500/50 hover:bg-vortex-card;
+  }
+
+  .prose-vortex h2 {
+    @apply mb-4 mt-8 text-xl font-semibold text-white;
+  }
+
+  .prose-vortex p {
+    @apply mb-4 leading-relaxed text-slate-300;
+  }
+
+  .prose-vortex ul {
+    @apply mb-4 list-disc space-y-2 pl-6 text-slate-300;
+  }
+
+  .prose-vortex code {
+    @apply rounded bg-vortex-surface px-1.5 py-0.5 font-mono text-sm text-cyan-300;
+  }
+}
